@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dolce Cura</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Playfair+Display:ital@1&family=Manrope:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF4EF; --card:#FFFCFA; --blush:#F7E1DF; --blush2:#F1CFCF; --rose:#E2A2AA; --rose-deep:#B96C79;
+  --cocoa:#5B3F40; --muted:#9E8683; --line:#F0E1DC; --milk:#FFF8F2; --sage:#B7C4A8; --lemon:#F3DD8C;
+  color-scheme:light;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--cream);color:var(--cocoa);font:16px/1.5 'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--rose-deep);outline-offset:2px}
+img{max-width:100%}
+.app{max-width:500px;margin:0 auto;padding:18px 18px 110px}
+.hand{font-family:'Caveat','Segoe Print',cursive;font-size:22px;line-height:1.2;color:var(--rose-deep)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+
+header{display:flex;justify-content:space-between;align-items:flex-start;margin:4px 0 18px}
+.hello{display:flex;gap:10px;align-items:center}
+.hello svg{width:44px;height:44px;flex:none}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:30px;line-height:1.05;margin:0}
+.brand{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;color:var(--rose-deep);line-height:1;margin-bottom:2px}
+.date{font-size:14px;color:var(--muted);margin-top:4px}
+.gear{border:none;background:var(--blush);width:40px;height:40px;border-radius:50%;font-size:17px;color:var(--rose-deep)}
+
+.card{background:var(--card);border-radius:28px;padding:20px;margin-bottom:14px;box-shadow:0 10px 30px -18px rgba(185,108,121,.45)}
+.card h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:25px;line-height:1.15;margin:0 0 4px}
+.card .sub{margin:0 0 16px;font-size:14px;color:var(--muted)}
+
+/* moodboard */
+.board{padding:10px}
+.pins{columns:2;column-gap:8px}
+.pin{display:block;width:100%;margin:0 0 8px;break-inside:avoid;border:none;padding:0;background:none;border-radius:20px;overflow:hidden}
+.pin img{display:block;width:100%;height:auto}
+.pin.add{aspect-ratio:3/4;background:var(--milk);border:1.5px dashed var(--blush2);color:var(--rose-deep);font-size:14px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.pin.add svg{width:64px;height:64px}
+.pin.add.plus{aspect-ratio:3/4;font-size:34px;font-weight:400;color:var(--rose)}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--blush);border-radius:999px;padding:4px;margin:0 0 16px}
+.tabs button{border:none;background:none;border-radius:999px;padding:9px 0;font-size:15px;color:var(--rose-deep);font-weight:600}
+.tabs button.on{background:var(--card);color:var(--cocoa);box-shadow:0 2px 8px -4px rgba(185,108,121,.5)}
+.bella .hand{font-size:21px;margin:8px 0 2px}
+.board-empty{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.board-empty .pin.add:first-child{grid-row:span 2;aspect-ratio:auto}
+.board-body{padding:8px 10px 8px}
+.why{margin:4px 0 6px;font-size:25px}
+.linkbtn{border:none;background:none;padding:0;color:var(--rose-deep);font-size:14px;text-decoration:underline;text-underline-offset:3px}
+
+/* sprint */
+.sprint{background:linear-gradient(160deg,var(--blush) 0%,var(--milk) 75%);position:relative;overflow:hidden}
+.sprint .deco{position:absolute;right:-22px;top:-26px;width:104px;opacity:.85}
+.sprint > *:not(.deco){position:relative;z-index:1}
+.sprint .n{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:400;font-size:24px;line-height:1.2;color:var(--cocoa);margin:6px 0 2px}
+.dots{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin:16px 0 6px}
+.dots i{aspect-ratio:1;border-radius:50%;background:#fff;border:1.5px solid var(--blush2)}
+.dots i.past{background:var(--rose);border-color:var(--rose)}
+.dots i.now{background:#fff;border:2px solid var(--rose-deep)}
+.dots i.wk{margin-left:6px}
+.sprint .hand{margin:10px 0 0}
+
+/* forms */
+.daynav{display:flex;gap:6px}
+.daynav button{border:none;background:var(--blush);width:34px;height:34px;border-radius:50%;color:var(--rose-deep);font-size:17px}
+.daynav button:disabled{opacity:.35;cursor:default}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.field{margin-top:16px}
+.field label,.lbl{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.inrow{display:flex;align-items:center;gap:10px}
+.inp{width:100%;border:1.5px solid var(--line);background:var(--milk);border-radius:16px;padding:12px 14px;font-size:17px}
+.inp:focus{outline:none;border-color:var(--rose)}
+.inrow .inp{max-width:150px}
+.unit{color:var(--muted);font-size:15px}
+.soft{height:10px;border-radius:99px;background:var(--blush);overflow:hidden;margin-top:10px}
+.soft i{display:block;height:100%;border-radius:99px;background:var(--rose);transition:width .3s}
+.note{font-size:14px;color:var(--muted);margin:8px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--blush2);background:transparent;border-radius:999px;padding:9px 16px;font-size:15px;color:var(--cocoa)}
+.chip.on{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* mood */
+.moods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mood{border:none;background:var(--milk);border-radius:18px;padding:10px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.mood i{width:26px;height:26px;border-radius:50%;display:block}
+.mood.on{background:var(--blush);color:var(--cocoa);font-weight:600}
+.mood.on i{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--rose-deep)}
+
+/* week */
+.goal{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.goal:last-child{border-bottom:none;padding-bottom:0}
+.goal .t{font-size:16px}
+.goal .v{font-size:14px;color:var(--muted);text-align:right}
+.pips{display:flex;gap:6px}
+.pips i{width:14px;height:14px;border-radius:50%;background:var(--blush);border:1.5px solid var(--blush2)}
+.pips i.on{background:var(--rose);border-color:var(--rose)}
+.goal .soft{grid-column:1/-1;margin-top:4px}
+.heart{color:var(--rose-deep)}
+
+.btn{border:none;border-radius:18px;padding:13px 20px;font-weight:600;font-size:15px;background:var(--rose-deep);color:#fff}
+.btn.ghost{background:var(--blush);color:var(--rose-deep)}
+.btn.full{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+textarea.inp{min-height:84px;resize:vertical;font-size:16px}
+.hist{margin:0;padding:0;list-style:none}
+.hist li{padding:12px 0;border-bottom:1px solid var(--line)}
+.hist li:last-child{border-bottom:none}
+.hist .top{display:flex;justify-content:space-between;gap:10px}
+.hist .top b{font-weight:600}
+.hist .hand{font-size:20px;margin-top:4px}
+.foot{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
+
+/* dolce */
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;border:none;border-radius:999px;padding:13px 22px 13px 16px;background:var(--cocoa);color:var(--cream);font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 30px -10px rgba(91,63,64,.6)}
+.fab svg{width:26px;height:26px}
+.reasons{display:grid;gap:8px}
+.reason{border:1.5px solid var(--line);background:var(--card);border-radius:20px;padding:14px 16px;text-align:left;font-size:16px}
+.reason small{display:block;color:var(--muted);font-size:13px}
+.it{background:var(--milk);border-radius:24px;padding:18px;text-align:center;margin:14px 0;position:relative;overflow:hidden}
+.it .tile{position:absolute;inset:0;width:100%;height:100%;opacity:.28;pointer-events:none}
+.it > *:not(.tile){position:relative}
+.it .ph{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:30px;line-height:1.15;margin:0}
+.it .tr{margin:8px 0 2px;font-size:16px}
+.it .pr{font-size:14px;color:var(--muted);margin:0}
+.ring{display:block;width:150px;height:150px;margin:6px auto 4px}
+.ring .bg{stroke:var(--blush)}
+.ring .fg{stroke:var(--rose-deep);transition:stroke-dashoffset 1s linear}
+.ring text{fill:var(--cocoa);font:600 28px 'Manrope',sans-serif}
+.tip{background:var(--blush);border-radius:20px;padding:14px 16px;margin:0 0 12px;font-size:15px}
+
+.modal{position:fixed;inset:0;background:rgba(91,63,64,.28);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:var(--cream);width:100%;max-width:500px;border-radius:30px 30px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto;animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
+.sheet h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:28px;margin:0 0 6px}
+.sheet .lead{margin:0 0 16px;color:var(--muted)}
+.sheet .lead + .field,.sheet .lead + .two > .field{margin-top:0}
+.viewer img{display:block;width:100%;border-radius:22px;margin-bottom:14px}
+.plate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.plate .ph{position:relative;aspect-ratio:1;border:none;padding:0;border-radius:18px;overflow:hidden;background:var(--blush)}
+.plate .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.plate .ph span{position:absolute;left:6px;bottom:6px;background:rgba(255,252,250,.9);border-radius:10px;padding:1px 7px;font-size:12px;color:var(--cocoa)}
+.plate .ph.add{background:var(--milk);border:1.5px dashed var(--blush2);color:var(--rose-deep);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.plate .ph.add svg{width:34px;height:34px}
+.morning{text-align:center;padding-top:6px}
+.morning svg{width:84px;height:84px}
+.itq{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:24px;line-height:1.2;margin:12px 0 0;max-width:85%}
+.morning .q{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;line-height:1.2;margin:10px 0 18px}
+.bella{display:grid;grid-template-columns:132px 1fr;gap:14px;align-items:center;padding:14px 18px 14px 10px}
+.bella svg{width:132px;height:auto;display:block}
+.bella h2{margin-bottom:2px}
+.bella .new{margin:8px 0 10px;font-size:14px}
+.bella .new b{font-weight:600;color:var(--rose-deep)}
+.bl{list-style:none;margin:0 0 6px;padding:0}
+.bl li{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.bl li:last-child{border-bottom:none}
+.bl li i{font-style:normal;color:var(--rose-deep);width:14px;flex:none}
+.bl li.no{color:var(--muted)}
+.bl small{display:block;color:var(--muted);font-size:13px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale .chip{padding:12px 0;font-size:17px;font-weight:600}
+.wave{position:relative;height:110px;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,var(--milk),var(--blush));margin:6px 0 10px}
+.wave svg{position:absolute;left:0;bottom:0;width:200%;height:90px;animation:swell 7s ease-in-out infinite}
+.wave .w1{fill:var(--rose);opacity:.55}
+.wave .w2{fill:var(--rose-deep);opacity:.25}
+@keyframes swell{0%{transform:translateX(0) translateY(6px)}50%{transform:translateX(-25%) translateY(-6px)}100%{transform:translateX(-50%) translateY(6px)}}
+.wave-t{position:absolute;top:14px;left:0;right:0;text-align:center;font:600 30px 'Manrope',sans-serif;color:var(--cocoa)}
+.wave-p{min-height:48px;margin:0 0 4px;font-size:16px;text-align:center}
+.myl{list-style:none;margin:0 0 12px;padding:0}
+.myl li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.myl .x{border:none;background:none;color:var(--muted);font-size:20px}
+.plans{border:1.5px dashed var(--rose);border-radius:20px;padding:10px 14px;margin:0 0 12px}
+.plans p{margin:4px 0;font-size:15px}
+.plans span{font-family:'Playfair Display',Georgia,serif;font-style:italic;color:var(--rose-deep)}
+.pat{margin:0;padding:0;list-style:none}
+.pat li{padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.pat li:last-child{border-bottom:none}
+.plan-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.plan-row span.k{font-family:'Playfair Display',Georgia,serif;font-style:italic;color:var(--rose-deep)}
+.help details{background:var(--card);border-radius:18px;padding:12px 16px;margin-bottom:8px}
+.help summary{cursor:pointer;font-weight:600;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.help summary::-webkit-details-marker{display:none}
+.help summary::after{content:"+";color:var(--rose-deep);font-size:20px;font-weight:400}
+.help details[open] summary::after{content:"−"}
+.help p,.help li{font-size:15px;line-height:1.5}
+.help ul,.help ol{padding-left:20px;margin:8px 0}
+.help p{margin:8px 0}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--cocoa);color:var(--cream);padding:10px 18px;border-radius:18px;font-size:15px;z-index:30;max-width:90%;text-align:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"><p class="muted">Секунду…</p></div>
+<button class="fab" data-act="dolce" id="fab" hidden><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 17h20v5a10 10 0 0 1-20 0z" fill="#F7E1DF"/><path d="M28 19h2.5a3.5 3.5 0 0 1 0 7H27" fill="none" stroke="#F7E1DF" stroke-width="2.4"/><path d="M18 21.5c-1.6-1.6-4-.3-3 1.6.6 1.1 3 2.7 3 2.7s2.4-1.6 3-2.7c1-1.9-1.4-3.2-3-1.6z" fill="#B96C79"/><path d="M14 13c0-2 2-2 2-4M20 13c0-2 2-2 2-4" fill="none" stroke="#F7E1DF" stroke-width="1.8" stroke-linecap="round"/></svg>Тянет заесть</button>
+<div id="layer"></div>
+<input type="file" id="file" accept="image/*" hidden>
+<input type="file" id="ffile" accept="image/*" hidden>
+<script>
+/* ---------- иллюстрации (свои, нарисованы кодом) ---------- */
+const ART = {
+  flower: `<svg viewBox="0 0 60 60" aria-hidden="true"><g transform="translate(30 27)">${[0,72,144,216,288].map(a=>`<ellipse rx="7.5" ry="12" transform="rotate(${a}) translate(0 -11)" fill="#F1CFCF"/>`).join('')}<circle r="6" fill="#F3DD8C"/></g><path d="M30 38c0 8-2 14-6 18" stroke="#B7C4A8" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="25" cy="49" rx="6" ry="3" transform="rotate(-35 25 49)" fill="#B7C4A8"/></svg>`,
+  lemons: `<svg viewBox="0 0 140 120" class="deco" aria-hidden="true"><path d="M20 40c30-10 60-5 100 20" stroke="#B7C4A8" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="60" cy="62" rx="20" ry="15" transform="rotate(20 60 62)" fill="#F3DD8C"/><ellipse cx="98" cy="78" rx="17" ry="13" transform="rotate(-15 98 78)" fill="#F3DD8C"/><ellipse cx="40" cy="36" rx="14" ry="6" transform="rotate(-25 40 36)" fill="#B7C4A8"/><ellipse cx="82" cy="45" rx="13" ry="5.5" transform="rotate(30 82 45)" fill="#B7C4A8"/><circle cx="54" cy="58" r="2.5" fill="#fff" opacity=".7"/></svg>`,
+  tile: `<svg class="tile" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><pattern id="t" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="scale(.7)"><rect width="40" height="40" fill="none"/><circle cx="20" cy="20" r="7" fill="none" stroke="#E2A2AA" stroke-width="1.5"/><path d="M20 0v8M20 32v8M0 20h8M32 20h8" stroke="#B7C4A8" stroke-width="1.5"/><circle cx="0" cy="0" r="4" fill="#F3DD8C"/><circle cx="40" cy="0" r="4" fill="#F3DD8C"/><circle cx="0" cy="40" r="4" fill="#F3DD8C"/><circle cx="40" cy="40" r="4" fill="#F3DD8C"/></pattern></defs><rect width="320" height="200" fill="url(#t)"/></svg>`,
+  cam: `<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="12" width="30" height="21" rx="6" fill="#F7E1DF"/><path d="M14 12l2.5-4h7L26 12" fill="#F7E1DF"/><circle cx="20" cy="22.5" r="6" fill="#fff"/><circle cx="20" cy="22.5" r="3.5" fill="#E2A2AA"/></svg>`,
+  frame: `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="8" width="44" height="50" rx="10" fill="#F7E1DF"/><path d="M22 44l8-10 6 7 4-4 6 7z" fill="#E2A2AA"/><circle cx="40" cy="24" r="4" fill="#F3DD8C"/></svg>`
+};
+
+/* ---------- Telegram и хранилище ---------- */
+const tg = window.Telegram && window.Telegram.WebApp;
+const inTg = !!(tg && tg.initData);
+const cloudOk = inTg && typeof tg.isVersionAtLeast === 'function' && tg.isVersionAtLeast('6.9');
+if (tg) { try { tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#FBF4EF'); tg.setBackgroundColor && tg.setBackgroundColor('#FBF4EF'); } catch (e) {} }
+const haptic = () => { try { inTg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('soft'); } catch (e) {} };
+
+const PFX = 'dn_';
+const Store = {
+  async keys(){
+    if (cloudOk) return new Promise(r => tg.CloudStorage.getKeys((e,k) => r(e ? [] : (k || []))));
+    const out = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(PFX)) out.push(k.slice(PFX.length)); } } catch (e) {}
+    return out;
+  },
+  async getMany(keys){
+    const out = {};
+    if (cloudOk) { for (let i = 0; i < keys.length; i += 20) {
+        const got = await new Promise(r => tg.CloudStorage.getItems(keys.slice(i, i+20), (e,v) => r(e ? {} : (v || {}))));
+        Object.assign(out, got); } return out; }
+    try { keys.forEach(k => { const v = localStorage.getItem(PFX + k); if (v != null) out[k] = v; }); } catch (e) {}
+    return out;
+  },
+  async getAll(){
+    if (cloudOk) {
+      const keys = (await Store.keys()).filter(k => !k.startsWith('f_'));
+      const out = {};
+      for (let i = 0; i < keys.length; i += 20) {
+        const got = await new Promise(r => tg.CloudStorage.getItems(keys.slice(i, i+20), (e,v) => r(e ? {} : (v || {}))));
+        Object.assign(out, got);
+      }
+      return out;
+    }
+    const out = {};
+    try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(PFX) && !k.startsWith(PFX + 'f_')) out[k.slice(PFX.length)] = localStorage.getItem(k); } } catch (e) {}
+    return out;
+  },
+  set(key, val){
+    const s = JSON.stringify(val);
+    if (cloudOk) return new Promise(r => tg.CloudStorage.setItem(key, s, e => { if (e) toast('Не получилось сохранить, попробуй ещё раз'); r(); }));
+    try { localStorage.setItem(PFX + key, s); } catch (e) { toast('Не хватило места в браузере'); }
+    return Promise.resolve();
+  },
+  remove(keys){
+    if (!keys.length) return Promise.resolve();
+    if (cloudOk) return new Promise(r => tg.CloudStorage.removeItems(keys, () => r()));
+    try { keys.forEach(k => localStorage.removeItem(PFX + k)); } catch (e) {}
+    return Promise.resolve();
+  }
+};
+
+/* ---------- даты ---------- */
+const pad = n => String(n).padStart(2,'0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const diff = (a,b) => Math.round((parse(b) - parse(a)) / 864e5);
+const today = () => iso(new Date());
+const MG = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const WD = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const fmtD = s => { const d = parse(s); return `${d.getDate()} ${MG[d.getMonth()]}`; };
+const num = (v, f=1) => (v == null || isNaN(v)) ? '—' : Number(v).toLocaleString('ru-RU', {maximumFractionDigits:f});
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function plural(n,a,b,c){ n = Math.abs(n) % 100; const m = n % 10; if (n > 10 && n < 20) return c; if (m > 1 && m < 5) return b; if (m === 1) return a; return c; }
+
+/* ---------- состояние ---------- */
+const S = {
+  cfg: {onb:false, name:'Яна', start:null, kcal:1800, steps:50000, s:2, p:1, c:2, item:'Юбка', why:'', we:[1700,2100,2600], clen:28, cyc:[], goal:65, girl:'Bella'},
+  days: {}, good: {}, meas: [], notes: {}, photos: [], food: {}, foodSrc: {}, foodTried: new Set(), legacy: new Set(), view: today()
+};
+async function load(){
+  const all = await Store.getAll();
+  const j = k => { try { return all[k] ? JSON.parse(all[k]) : null; } catch (e) { return null; } };
+  if (j('cfg')) Object.assign(S.cfg, j('cfg'));
+  S.meas = j('meas') || []; S.notes = j('notes') || {};
+  Object.keys(all).forEach(k => {
+    let m = k.match(/^d_(\d{4})_(\d{2})(?:_([abc]))?$/);
+    if (m) { const mo = j(k) || {}; Object.keys(mo).forEach(dd => S.days[`${m[1]}-${m[2]}-${dd}`] = mo[dd]); if (!m[3]) S.legacy.add(`${m[1]}-${m[2]}`); }
+    m = k.match(/^g_(\d{4})_(\d{2})$/);
+    if (m) { const mo = j(k) || {}; Object.keys(mo).forEach(dd => S.good[`${m[1]}-${m[2]}-${dd}`] = mo[dd]); }
+  });
+  const cutoff = addDays(today(), -13).replace(/-/g,''); const stale = [];
+  Object.keys(all).forEach(k => { const m = k.match(/^fi_(\d{8})$/); if (!m) return;
+    const list = j(k) || [];
+    if (m[1] < cutoff) { stale.push(k); list.forEach(p => { for (let i = 0; i < p.n; i++) stale.push(`f_${m[1]}_${p.id}_${i}`); }); }
+    else S.food[`${m[1].slice(0,4)}-${m[1].slice(4,6)}-${m[1].slice(6)}`] = list; });
+  if (stale.length) Store.remove(stale);
+  const mb = j('mb') || [];
+  S.photos = mb.map(p => { let t = ''; for (let i = 0; i < p.n; i++) t += j(`p_${p.id}_${i}`) || ''; return {id:p.id, n:p.n, src:t}; }).filter(p => p.src.startsWith('data:image'));
+  const oldN = j('imgn'); // фото из прошлой версии
+  if (oldN && !mb.length) { let t = ''; for (let i = 0; i < oldN; i++) t += j('img_' + i) || '';
+    if (t.startsWith('data:image')) { await savePhoto(t); await Store.set('imgn', 0); } }
+}
+const saveCfg = () => Store.set('cfg', S.cfg);
+function saveMonth(ds, key='d', src=S.days){ const [y,m] = ds.split('-'); const out = {};
+  Object.keys(src).forEach(k => { if (k.startsWith(`${y}-${m}-`) && src[k] != null && src[k] !== '') out[k.slice(8)] = src[k]; });
+  return Store.set(`${key}_${y}_${m}`, out); }
+// дни храним по третям месяца, чтобы запись не упиралась в лимит 4096 символов на ключ
+const part = dd => +dd <= 10 ? 'a' : +dd <= 20 ? 'b' : 'c';
+async function saveDays(ds){
+  const [y, m, dd] = ds.split('-'), ym = `${y}-${m}`;
+  const parts = S.legacy.has(ym) ? ['a','b','c'] : [part(dd)];
+  await Promise.all(parts.map(p => { const out = {};
+    Object.keys(S.days).forEach(k => { if (k.startsWith(ym + '-') && part(k.slice(8)) === p && S.days[k]) out[k.slice(8)] = S.days[k]; });
+    return Store.set(`d_${y}_${m}_${p}`, out); }));
+  if (S.legacy.has(ym)) { S.legacy.delete(ym); await Store.remove([`d_${y}_${m}`]); }
+}
+async function savePhoto(src){
+  const id = Date.now().toString(36).slice(-6); const parts = [];
+  for (let i = 0; i < src.length; i += 4000) parts.push(src.slice(i, i + 4000));
+  await Promise.all(parts.map((p, i) => Store.set(`p_${id}_${i}`, p)));
+  S.photos.push({id, n: parts.length, src});
+  await Store.set('mb', S.photos.map(p => ({id:p.id, n:p.n})));
+}
+async function deletePhoto(id){
+  const p = S.photos.find(x => x.id === id); if (!p) return;
+  S.photos = S.photos.filter(x => x.id !== id);
+  await Store.set('mb', S.photos.map(x => ({id:x.id, n:x.n})));
+  await Store.remove(Array.from({length:p.n}, (_, i) => `p_${id}_${i}`));
+}
+
+/* ---------- тарелка ---------- */
+const ymd = ds => ds.replace(/-/g,'');
+async function ensureFood(ds){
+  const list = S.food[ds] || []; const need = list.filter(p => !S.foodSrc[p.id] && !S.foodTried.has(p.id));
+  if (!need.length) return; need.forEach(p => S.foodTried.add(p.id));
+  const keys = []; need.forEach(p => { for (let i = 0; i < p.n; i++) keys.push(`f_${ymd(ds)}_${p.id}_${i}`); });
+  const got = await Store.getMany(keys);
+  need.forEach(p => { let t = ''; for (let i = 0; i < p.n; i++) { try { t += JSON.parse(got[`f_${ymd(ds)}_${p.id}_${i}`] || '""'); } catch (e) {} } if (t) S.foodSrc[p.id] = t; });
+  if (ds === S.view) render();
+}
+async function addFood(ds, src){
+  const id = Date.now().toString(36).slice(-5); const parts = [];
+  for (let i = 0; i < src.length; i += 4000) parts.push(src.slice(i, i + 4000));
+  await Promise.all(parts.map((p, i) => Store.set(`f_${ymd(ds)}_${id}_${i}`, p)));
+  const now = new Date(); const t = ds === today() ? `${pad(now.getHours())}:${pad(now.getMinutes())}` : '';
+  S.food[ds] = [...(S.food[ds] || []), {id, n: parts.length, t}]; S.foodSrc[id] = src;
+  await Store.set(`fi_${ymd(ds)}`, S.food[ds]);
+}
+async function delFood(ds, id){
+  const p = (S.food[ds] || []).find(x => x.id === id); if (!p) return;
+  S.food[ds] = S.food[ds].filter(x => x.id !== id); delete S.foodSrc[id];
+  await Store.set(`fi_${ymd(ds)}`, S.food[ds]);
+  await Store.remove(Array.from({length:p.n}, (_, i) => `f_${ymd(ds)}_${id}_${i}`));
+}
+
+/* ---------- цикл ---------- */
+function cycleDay(ds){ const st = (S.cfg.cyc || []).filter(x => x <= ds).sort(); if (!st.length) return null;
+  const L = S.cfg.clen || 28, n = diff(st[st.length-1], ds) + 1;
+  if (n > L * 4) return null; return ((n - 1) % L) + 1; }
+function cyclePredicted(ds){ const st = (S.cfg.cyc || []).filter(x => x <= ds).sort(); if (!st.length) return false;
+  return diff(st[st.length-1], ds) + 1 > (S.cfg.clen || 28); }
+function tender(ds){ const n = cycleDay(ds), L = S.cfg.clen || 28; if (!n) return null;
+  if (n <= 3) return 'period'; if (n >= L - 6) return 'pre'; return null; }
+
+/* ---------- девочка ---------- */
+const BLOOM = [
+  ['blush','Румянец','с первым записанным днём'],
+  ['lips','Красная помада и стрелки','за неделю, где выполнены все тренировки'],
+  ['street','Итальянская улочка','за неделю, где набраны все шаги'],
+  ['bouquet','Красные розы','когда волна «Dolce» пройдёт сама'],
+  ['shades','Очки на макушке','за 7 вечеров с ответом «Как ты?»'],
+  ['hearts','Сердечки','за 5 записей о приятном'],
+  ['reddress','Красное платье','с первыми итогами спринта'],
+  ['hoops','Золотые серьги-кольца','после двух спринтов вместе'],
+  ['heels','Туфли на каблуке','за спринт, где обе недели со всеми тренировками'],
+  ['bag','Сумочка','после трёх спринтов вместе'],
+  ['skirt','Твоя юбка','когда юбка застегнётся']
+];
+function blooms(){
+  const u = {}, days = Object.values(S.days), cfg = S.cfg;
+  const allTr = x => x.s >= cfg.s && x.p >= cfg.p && x.c >= cfg.c && (cfg.s + cfg.p + cfg.c) > 0;
+  if (days.some(d => d && (d.k || d.st || (d.w || []).length || d.m))) u.blush = 1;
+  for (let w = cfg.start; w <= today(); w = addDays(w, 7)) { const x = weekStats(w);
+    if (allTr(x)) u.lips = 1; if (x.steps >= cfg.steps) u.street = 1; }
+  for (let n = 0; sprintStart(n) <= addDays(today(), -13); n++) { const a = sprintStart(n);
+    if (allTr(weekStats(a)) && allTr(weekStats(addDays(a, 7)))) u.heels = 1; }
+  if (days.some(d => (d.u || []).some(x => x[2] === 'p'))) u.bouquet = 1;
+  if (days.filter(d => d.m).length >= 7) u.shades = 1;
+  if (Object.values(S.good).filter(Boolean).length >= 5) u.hearts = 1;
+  if (S.meas.some(m => m.n >= 1)) u.reddress = 1;
+  if (sprintOf(today()) >= 2) u.hoops = 1;
+  if (sprintOf(today()) >= 3) u.bag = 1;
+  if (S.meas.some(m => m.fit === 'yes')) u.skirt = 1;
+  return u;
+}
+function shapeF(){ // меняется только по итогам спринтов и никогда не идёт назад
+  const st = measFor(0); if (!st || !st.w) return 0;
+  const res = S.meas.filter(m => m.n >= 1 && m.w).map(m => m.w); if (!res.length) return 0;
+  const range = st.w - (S.cfg.goal || 65); if (range <= 0) return 0;
+  return Math.max(0, Math.min(1, (st.w - Math.min(...res)) / range));
+}
+function girlSVG(f, u){
+  const L = (a,b) => a + (b - a) * f, cx = 100;
+  const sh = L(22,19.5), wa = L(20.5,14), hi = L(29,21), th = L(12.5,9), ar = L(8,5.6);
+  const lg = (id, stops, x2='1', y2='0') => `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}">${stops.map(([o,c,a]) => `<stop offset="${o}" stop-color="${c}"${a != null ? ` stop-opacity="${a}"` : ''}/>`).join('')}</linearGradient>`;
+  let d = `<defs>
+    ${lg('gSkin', [[0,'#E8B9A2'],[.35,'#F8DCCB'],[.65,'#F6D4C1'],[1,'#DFAB93']])}
+    ${lg('gSkinV', [[0,'#F8DCCB'],[1,'#E9BCA5']], '0', '1')}
+    <radialGradient id="gFace" cx=".45" cy=".38" r=".7"><stop offset="0" stop-color="#FCE7DA"/><stop offset=".7" stop-color="#F4D0BC"/><stop offset="1" stop-color="#E6B59D"/></radialGradient>
+    ${lg('gHair', [[0,'#BE9670'],[1,'#8E6B4C']], '0', '1')}
+    <radialGradient id="gBun" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#C9A27C"/><stop offset="1" stop-color="#8A6849"/></radialGradient>
+    ${lg('gDress', [[0,'#D98E99'],[.3,'#EFB6BD'],[.55,'#EAAAB3'],[1,'#CF8591']])}
+    ${lg('gRed', [[0,'#8E1624'],[.3,'#D0303F'],[.55,'#C42636'],[1,'#86131F']])}
+    ${lg('gHeel', [[0,'#D0303F'],[1,'#8E1624']], '0', '1')}
+    ${lg('gSkirt', [[0,'#9E5663'],[.35,'#C27884'],[.6,'#B86C79'],[1,'#95505D']])}
+    ${lg('gTop', [[0,'#EADDD5'],[.35,'#FFFFFF'],[.7,'#FBF4F0'],[1,'#E6D6CD']])}
+    ${lg('gShoe', [[0,'#C98390'],[1,'#9E5563']], '0', '1')}
+    ${lg('gSneak', [[0,'#FFFFFF'],[1,'#E7DEDA']], '0', '1')}
+    ${lg('gBag', [[0,'#F7E39E'],[1,'#DDBE58']], '0', '1')}
+    <radialGradient id="gBg" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#FCEDEB"/><stop offset="1" stop-color="#F3D6D6"/></radialGradient>
+    <radialGradient id="gBlush" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E88F9C" stop-opacity=".55"/><stop offset="1" stop-color="#E88F9C" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gShadow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7A4E50" stop-opacity=".28"/><stop offset="1" stop-color="#7A4E50" stop-opacity="0"/></radialGradient>
+    <clipPath id="gc"><circle cx="100" cy="128" r="94"/></clipPath></defs>`;
+  let g = `<circle cx="100" cy="128" r="94" fill="url(#gBg)"/>`;
+  if (u.street) g += `<g clip-path="url(#gc)"><rect x="0" y="20" width="200" height="200" fill="#FFF3E6"/>
+    ${[22,78,134].map(x => `<rect x="${x}" y="46" width="44" height="120" fill="#F7E1DF"/><path d="M${x+6} 100v-22a16 16 0 0 1 32 0v22z" fill="#F1CFCF"/><rect x="${x+2}" y="72" width="5" height="28" fill="#B7C4A8"/><rect x="${x+37}" y="72" width="5" height="28" fill="#B7C4A8"/><path d="M${x} 116h44l-4 10h-36z" fill="#E2A2AA"/>`).join('')}
+    <rect x="0" y="206" width="200" height="30" fill="#F1E3DC"/></g>`;
+  if (u.hearts) g += [[38,70,1],[160,62,.8],[168,150,.9],[30,160,.7]].map(([x,y,k]) => `<path transform="translate(${x} ${y}) scale(${k})" d="M0 3c-2-4-8-3-8 1 0 4 8 8 8 8s8-4 8-8c0-4-6-5-8-1z" fill="#E2A2AA"/>`).join('');
+  g += `<ellipse cx="${cx}" cy="237" rx="${24 + hi * .3}" ry="5" fill="url(#gShadow)"/>`;
+  const leg = sgn => `<path d="M${cx + sgn*2.5} 174L${cx + sgn*(2.5+th)} 174Q${cx + sgn*(3+th*.95)} 200 ${cx + sgn*(3+th*.7)} 231L${cx + sgn*4} 231Q${cx + sgn*2.8} 200 ${cx + sgn*2.5} 174Z" fill="url(#gSkin)"/>`;
+  g += leg(-1) + leg(1);
+  const shoe = sgn => { const x = cx + sgn * (3.5 + th * .36);
+    return u.heels ? `<path d="M${x-3.5} 229.5q-5 1-6.5 6.5h13l-1.5-3q-2-3.5-5-3.5z" fill="url(#gHeel)"/><path d="M${x+5} 233v4.5" stroke="#8E1624" stroke-width="1.6" stroke-linecap="round"/><path d="M${x-8} 235.6q5-1.6 10-1" stroke="#fff" stroke-width=".6" opacity=".5"/>`
+                      : `<path d="M${x-7.5} 235.5q0-5 5-5.5h5q5 .5 5 5.5z" fill="url(#gShoe)"/><path d="M${x-4} 231.5q4-1 8 0" stroke="#fff" stroke-width=".8" opacity=".6"/>`; };
+  g += shoe(-1) + shoe(1);
+  const hx = sgn => cx + sgn * (sh + 7);
+  const arm = sgn => `<path d="M${cx + sgn*(sh-2)} 82Q${cx + sgn*(sh+6)} 115 ${hx(sgn)} 148" stroke="url(#gSkin)" stroke-width="${(ar*1.8).toFixed(1)}" stroke-linecap="round" fill="none"/>
+    <ellipse cx="${hx(sgn)}" cy="150" rx="${(ar*.85).toFixed(1)}" ry="${(ar*1.05).toFixed(1)}" fill="url(#gSkinV)"/>`;
+  g += arm(-1) + arm(1);
+  g += `<rect x="${cx-5}" y="60" width="10" height="18" rx="3" fill="url(#gSkin)"/><ellipse cx="${cx}" cy="66" rx="6" ry="3" fill="#D9A48C" opacity=".55"/>`;
+  if (u.skirt) {
+    g += `<path d="M${cx-sh} 78Q${cx} 72 ${cx+sh} 78L${cx+wa} 120L${cx-wa} 120Z" fill="url(#gTop)"/>`;
+    g += `<path d="M${cx-wa-1} 118L${cx+wa+1} 118L${cx+hi+10} 184Q${cx} 190 ${cx-hi-10} 184Z" fill="url(#gSkirt)"/>
+      <path d="M${cx-6} 122L${cx-11} 184M${cx+7} 122L${cx+13} 184" stroke="#8E4A57" stroke-width="1" opacity=".35"/>
+      <path d="M${cx-wa-1} 119H${cx+wa+1}" stroke="#8E4A57" stroke-width="2" opacity=".5"/>`;
+  } else {
+    const dz = u.reddress ? 'url(#gRed)' : 'url(#gDress)', dl = u.reddress ? '#6E0F1A' : '#B96C79';
+    g += `<path d="M${cx-sh} 78Q${cx} 72 ${cx+sh} 78L${cx+wa} 118L${cx+hi+13} 186Q${cx} 192 ${cx-hi-13} 186L${cx-wa} 118Z" fill="${dz}"/>
+      <path d="M${cx-5} 121L${cx-12} 187M${cx+6} 121L${cx+14} 187M${cx-15} 125L${cx-26} 185" stroke="${dl}" stroke-width="1" opacity=".3"/>
+      ${u.reddress ? `<path d="M${cx+wa} 118L${cx-6} 124L${cx-2} 186" stroke="${dl}" stroke-width="1.2" opacity=".45" fill="none"/>` : `<path d="M${cx-wa} 118H${cx+wa}" stroke="${dl}" stroke-width="2.4"/><path d="M${cx-wa} 116.8H${cx+wa}" stroke="#fff" stroke-width=".6" opacity=".4"/>`}`;
+  }
+  g += u.reddress && !u.skirt ? `<path d="M${cx-8} 76Q${cx} 97 ${cx+8} 76Z" fill="#F4D0BC"/>` : `<path d="M${cx-6.5} 76Q${cx} 87 ${cx+6.5} 76Z" fill="#F4D0BC"/>`;
+  g += [-1,1].map(sgn => `<ellipse cx="${cx + sgn*(sh-1)}" cy="81" rx="${(ar+2.4).toFixed(1)}" ry="${(ar+1.6).toFixed(1)}" fill="${u.skirt ? 'url(#gTop)' : u.reddress ? 'url(#gRed)' : 'url(#gDress)'}"/>`).join('');
+  /* голова */
+  g += `<g transform="translate(${cx} 66) scale(1.16) translate(${-cx} -66)">`;
+  g += `<circle cx="${cx}" cy="28" r="9.5" fill="url(#gBun)"/><path d="M${cx-5} 23q4-4 9-1" stroke="#D9B48E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="${cx-15.5}" cy="52" rx="2.6" ry="3.6" fill="#EDC1AB"/><ellipse cx="${cx+15.5}" cy="52" rx="2.6" ry="3.6" fill="#EDC1AB"/>
+    <ellipse cx="${cx}" cy="50" rx="15" ry="17" fill="url(#gFace)"/>
+    <path d="M${cx-16} 50Q${cx-17.5} 32 ${cx} 32.5Q${cx+17.5} 32 ${cx+16} 50Q${cx+13} 40 ${cx+4} 38.5Q${cx-2} 41 ${cx-8} 40Q${cx-13} 42 ${cx-16} 50Z" fill="url(#gHair)"/>
+    <path d="M${cx-10} 36q6-3 13-1" stroke="#D9B48E" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".8"/>
+    <path d="M${cx-9.5} 46.2q3.2-1.6 6.2 0M${cx+3.3} 46.2q3.2-1.6 6.2 0" stroke="#8C6A4C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    ${[-1,1].map(sgn => { const ex = cx + sgn*6.3; return `<path d="M${ex-3.6} 51.5Q${ex} 48.4 ${ex+3.6} 51.5Q${ex} 53.8 ${ex-3.6} 51.5Z" fill="#fff"/>
+      <circle cx="${ex}" cy="51.2" r="1.9" fill="#7A6453"/><circle cx="${ex}" cy="51.2" r=".9" fill="#2E2320"/><circle cx="${ex+.7}" cy="50.5" r=".55" fill="#fff"/>
+      <path d="M${ex-3.8} 51.4Q${ex} 48 ${ex+3.9} 51.1" stroke="#3E2E2A" stroke-width="1" fill="none" stroke-linecap="round"/>`; }).join('')}
+    <path d="M${cx-.6} 53.5Q${cx-1.8} 57.5 ${cx-.5} 58.3Q${cx+1} 58.8 ${cx+1.6} 58" stroke="#D39E86" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <path d="M${cx-4} 61.6Q${cx-2} 60.3 ${cx} 61Q${cx+2} 60.3 ${cx+4} 61.6Q${cx} 62.4 ${cx-4} 61.6Z" fill="#D07F8B"/>
+    <path d="M${cx-4} 61.6Q${cx} 65.2 ${cx+4} 61.6Q${cx} 62.6 ${cx-4} 61.6Z" fill="#E0939E"/><path d="M${cx-1.4} 63.4h2.2" stroke="#fff" stroke-width=".6" opacity=".6" stroke-linecap="round"/>`;
+  if (u.blush) g += `<ellipse cx="${cx-9}" cy="57.5" rx="4.5" ry="3" fill="url(#gBlush)"/><ellipse cx="${cx+9}" cy="57.5" rx="4.5" ry="3" fill="url(#gBlush)"/>`;
+  if (u.lips) g += `<path d="M${cx-4} 61.6Q${cx-2} 60.1 ${cx} 60.9Q${cx+2} 60.1 ${cx+4} 61.6Q${cx} 62.4 ${cx-4} 61.6Z" fill="#B3202F"/><path d="M${cx-4} 61.6Q${cx} 65.4 ${cx+4} 61.6Q${cx} 62.6 ${cx-4} 61.6Z" fill="#D0303F"/><path d="M${cx-1.2} 63.5h2" stroke="#fff" stroke-width=".6" opacity=".6" stroke-linecap="round"/>
+    <path d="M${cx-10.2} 51.3L${cx-12} 50.2M${cx+10.3} 51L${cx+12.1} 49.9" stroke="#2E2320" stroke-width="1.1" stroke-linecap="round"/>`;
+  if (u.hoops) g += `<circle cx="${cx-15.5}" cy="58.5" r="3.4" fill="none" stroke="#D9B84E" stroke-width="1.1"/><circle cx="${cx+15.5}" cy="58.5" r="3.4" fill="none" stroke="#D9B84E" stroke-width="1.1"/>`;
+  if (u.shades) g += `<path d="M${cx-13} 37.5Q${cx} 34 ${cx+13} 37.5" stroke="#2E2320" stroke-width="1" fill="none"/><ellipse cx="${cx-6.5}" cy="36.5" rx="5.2" ry="3.4" fill="#3A2A28"/><ellipse cx="${cx+6.5}" cy="36.5" rx="5.2" ry="3.4" fill="#3A2A28"/><path d="M${cx-9} 35.3q2-1 4 0M${cx+4} 35.3q2-1 4 0" stroke="#fff" stroke-width=".7" opacity=".5"/>`;
+  g += '</g>';
+  if (u.bag) { const x = hx(-1); g += `<path d="M${x-6} 154q6-9 12 0" stroke="#C9A640" stroke-width="1.5" fill="none"/><rect x="${x-9}" y="153" width="18" height="14" rx="3.5" fill="url(#gBag)"/><path d="M${x-9} 157h18" stroke="#C9A640" stroke-width=".8" opacity=".6"/>`; }
+  if (u.bouquet) { const x = hx(1); g += `<path d="M${x} 150L${x+4} 128M${x} 150L${x+11} 133M${x} 150L${x-2} 130" stroke="#8FA67E" stroke-width="1.5"/><ellipse cx="${x+9}" cy="138" rx="4" ry="2" fill="#B7C4A8" transform="rotate(-30 ${x+9} 138)"/>
+    <circle cx="${x+4}" cy="126" r="5" fill="#C42636"/><circle cx="${x+12}" cy="131" r="4.5" fill="#D0303F"/><circle cx="${x-3}" cy="128" r="4" fill="#A81E2D"/><path d="M${x+2} 125q2-2 4 0M${x+10} 130q2-2 4 0M${x-5} 127q2-2 4 0" stroke="#fff" stroke-width=".6" opacity=".45" fill="none"/>`; }
+  return `<svg viewBox="0 0 200 240" role="img" aria-label="Иллюстрация девушки">${d}${g}</svg>`;
+}
+
+/* ---------- спринты ---------- */
+const sprintOf = ds => Math.max(0, Math.floor(diff(S.cfg.start, ds) / 14));
+const sprintStart = n => addDays(S.cfg.start, n * 14);
+const REASON = {h:'голод', t:'усталость', s:'грусть', a:'злость или тревога', l:'одиночество', b:'скука', w:'просто хотелось сладкого', p:'компания или праздник', y:'просто было вкусно'};
+function weekStats(from){
+  let s = 0, p = 0, c = 0, steps = 0, kSum = 0, kDays = 0, est = false, urges = 0, passed = 0, tu = 0, bs = 0, as = 0, ns = 0; const why = {};
+  for (let i = 0; i < 7; i++) { const dsx = addDays(from, i), d = S.days[dsx]; if (!d) continue;
+    const w = d.w || []; if (w.includes('s')) s++; if (w.includes('p')) p++; if (w.includes('c')) c++;
+    steps += d.st || 0; if (d.e) est = true; if (d.k) { kSum += d.k; kDays++; }
+    (d.u || []).forEach(u => { if (u[1] === 'h') return; urges++; if (tender(dsx)) tu++; if (u[3] && u[4]) { bs += u[3]; as += u[4]; ns++; } why[u[1]] = (why[u[1]] || 0) + 1; if (u[2] === 'p') passed++; }); }
+  const top = Object.keys(why).sort((a,b) => why[b] - why[a])[0];
+  return {s, p, c, steps, kDays, est, urges, passed, top, tu, bAvg: ns ? Math.round(bs / ns) : 0, aAvg: ns ? Math.round(as / ns) : 0, kAvg: kDays ? Math.round(kSum / kDays) : null};
+}
+const FIT = {no:'пока не сходится', almost:'почти застёгивается', yes:'застегнулась!'};
+const MOODS = [['light','легко','#F3DD8C'],['good','хорошо','#B7C4A8'],['meh','так себе','#F1CFCF'],['tired','устала','#D9C3BE'],['sad','грустно','#C9B6D3']];
+const measFor = n => S.meas.find(m => m.n === n);
+
+const KIND = [
+[
+"Sii dolce con te stessa",
+"Будь нежна к себе",
+"сИи дОльче кон тэ стЭсса",
+"Говори с собой так, как говорила бы с лучшей подругой."
+],
+[
+"Mi voglio bene",
+"Я себя люблю",
+"ми вОльо бЭне",
+"Скажи это вслух хотя бы раз сегодня. Даже если звучит непривычно."
+],
+[
+"Ama te stessa",
+"Люби себя",
+"Ама тэ стЭсса",
+"Не за что-то и не когда-нибудь потом. Просто сейчас."
+],
+[
+"Prenditi cura di te",
+"Позаботься о себе",
+"прЭндити кУра ди тэ",
+"Что бы сегодня сделало тебе хорошо? Сделай это для себя."
+],
+[
+"Me lo merito",
+"Я это заслуживаю",
+"ме ло мЭрито",
+"Отдых, красивые вещи, внимание, любовь — ты их заслуживаешь."
+],
+[
+"Oggi scelgo me",
+"Сегодня я выбираю себя",
+"Оджи шЭльго ме",
+"Одно маленькое решение в свою пользу — и день уже хороший."
+],
+[
+"Credi in te stessa",
+"Верь в себя",
+"крЭди ин тэ стЭсса",
+"Ты уже сделала много того, во что когда-то не верила."
+],
+[
+"Sei più forte di quanto pensi",
+"Ты сильнее, чем думаешь",
+"сэй пьЮ фОрте ди куАнто пЭнси",
+"Вспомни, с чем ты уже справилась."
+],
+[
+"Segui il tuo cuore",
+"Следуй за своим сердцем",
+"сЭгуи иль тУо куОре",
+"Прислушайся сегодня к тому, чего хочется по-настоящему."
+],
+[
+"Al cuor non si comanda",
+"Сердцу не прикажешь",
+"аль куОр нон си комАнда",
+"Твои чувства имеют право быть. Любые."
+],
+[
+"L'amore vince tutto",
+"Любовь побеждает всё",
+"ламОре вИнче тУтто",
+"И любовь к себе тоже."
+],
+[
+"Chi trova un amico trova un tesoro",
+"Кто нашёл друга, нашёл сокровище",
+"ки трОва ун амИко трОва ун тезОро",
+"Напиши сегодня кому-то, кого любишь. Просто так."
+],
+[
+"Sognare non costa nulla",
+"Мечтать ничего не стоит",
+"соньЯре нон кОста нУлла",
+"Позволь себе сегодня помечтать смело, без «а вдруг не выйдет»."
+],
+[
+"Volere è potere",
+"Хотеть — значит мочь",
+"волЕре э потЕре",
+"Большие мечты начинаются с простого «я хочу»."
+],
+[
+"Il mondo è di chi se lo prende",
+"Мир принадлежит тем, кто его берёт",
+"иль мОндо э ди ки се ло прЭнде",
+"Что сегодня можно взять себе — возможность, идею, радость?"
+],
+[
+"Chi non risica non rosica",
+"Кто не рискует, тот не выигрывает",
+"ки нон рИзика нон рОзика",
+"Маленькая смелость сегодня — большой шаг к мечте."
+],
+[
+"Ogni lasciata è persa",
+"Каждый упущенный шанс потерян",
+"Оньи лашАта э пЭрса",
+"Если давно хотела что-то попробовать — может, сегодня?"
+],
+[
+"Il meglio deve ancora venire",
+"Лучшее ещё впереди",
+"иль мЭльо дЭве анкОра венИре",
+"Правда впереди."
+],
+[
+"Chi va piano va sano e va lontano",
+"Кто идёт медленно, идёт здоровым и далеко",
+"ки ва пьЯно ва сАно э ва лонтАно",
+"Мечты не любят спешки. Твой темп — правильный."
+],
+[
+"Roma non fu fatta in un giorno",
+"Рим построили не за один день",
+"рОма нон фу фАтта ин ун джОрно",
+"Всё красивое строится постепенно. Твоя жизнь тоже."
+],
+[
+"Chi ben comincia è a metà dell'opera",
+"Кто хорошо начал, сделал половину дела",
+"ки бэн комИнча э а метА делл'Опера",
+"Начни день с чего-то приятного для себя."
+],
+[
+"Il tempo è galantuomo",
+"Время — благородный человек",
+"иль тЭмпо э галантуОмо",
+"Время всё расставит по местам. Можно не торопить."
+],
+[
+"Dopo la pioggia viene il sereno",
+"После дождя приходит ясная погода",
+"дОпо ла пьОджа вьЕне иль серЕно",
+"Если сейчас грустно — это пройдёт. Солнце вернётся."
+],
+[
+"Non c'è rosa senza spine",
+"Нет розы без шипов",
+"нон чэ рОза сЭнца спИне",
+"Трудные дни — тоже часть красивой жизни."
+],
+[
+"La felicità è fatta di piccole cose",
+"Счастье состоит из мелочей",
+"ла феличитА э фАтта ди пИкколе кОзе",
+"Заметь сегодня три маленьких радости."
+],
+[
+"Goditi il momento",
+"Наслаждайся моментом",
+"гОдити иль момЭнто",
+"Солнце в окне, любимая музыка, тёплый плед — это и есть жизнь."
+],
+[
+"Dolce far niente",
+"Сладкое ничегонеделание",
+"дОльче фар ньЕнте",
+"Отдых без чувства вины — очень по-итальянски."
+],
+[
+"La bellezza salverà il mondo",
+"Красота спасёт мир",
+"ла беллЕцца сальверА иль мОндо",
+"Фраза Достоевского, которую очень любят итальянцы. Окружи себя сегодня чем-то красивым."
+],
+[
+"Ogni giorno è un nuovo inizio",
+"Каждый день — новое начало",
+"Оньи джОрно э ун нуОво инИцио",
+"Не нужно ждать понедельника, чтобы начать что-то хорошее."
+],
+[
+"Andrà tutto bene",
+"Всё будет хорошо",
+"андрА тУтто бЭне",
+"Правда будет."
+],
+[
+"La vita è bella",
+"Жизнь прекрасна",
+"ла вИта э бЭлла",
+"И ты в ней тоже."
+],
+[
+"Coraggio!",
+"Смелее!",
+"корАджо",
+"Ты справляешься лучше, чем тебе кажется."
+]
+];
+const IT = [
+  ['Sii dolce con te stessa','Будь нежна к себе','сИи дОльче кон тэ стЭсса'],
+  ['Dolce far niente','Сладкое ничегонеделание','дОльче фар ньЕнте'],
+  ['Piano piano si va lontano','Потихоньку уйдёшь далеко','пьЯно пьЯно си ва лонтАно'],
+  ['Ogni giorno è un nuovo inizio','Каждый день — новое начало','Оньи джОрно э ун нуОво инИцио'],
+  ['Sono fiera di me','Я горжусь собой','сОно фьЕра ди ме'],
+  ['Mi voglio bene','Я себя люблю','ми вОльо бЭне'],
+  ['Una cosa alla volta','По одному делу за раз','Уна кОза Алла вОльта'],
+  ['Che bella giornata!','Какой прекрасный день!','ке бЭлла джорнАта'],
+  ['Ho bisogno di riposare','Мне нужно отдохнуть','о бизОньо ди рипозАре'],
+  ['Un passo alla volta','Шаг за шагом','ун пАссо Алла вОльта'],
+  ['Andrà tutto bene','Всё будет хорошо','андрА тУтто бЭне'],
+  ['Sono stanca, e va bene così','Я устала, и это нормально','сОно стАнка, э ва бЭне козИ'],
+  ['Mi sento leggera','Я чувствую лёгкость','ми сЭнто леджЕра'],
+  ['Con calma','Спокойно, не торопясь','кон кАльма'],
+  ['Me lo merito','Я это заслуживаю','ме ло мЭрито'],
+  ['Oggi scelgo me','Сегодня я выбираю себя','Оджи шЭльго ме'],
+  ['Coraggio!','Смелее!','корАджо'],
+  ['Respira piano','Дыши медленно','респИра пьЯно'],
+  ['La vita è bella','Жизнь прекрасна','ла вИта э бЭлла'],
+  ['Il vestito mi sta benissimo','Платье мне очень идёт','иль вестИто ми ста бенИссимо'],
+  ['Che bello!','Как здорово!','ке бЭлло'],
+  ['Bellissima','Прекраснейшая','беллИссима']
+];
+
+/* ---------- экран ---------- */
+function greet(){ const h = new Date().getHours(); return h < 5 ? 'Buonanotte' : h < 12 ? 'Buongiorno' : h < 18 ? 'Buon pomeriggio' : 'Buonasera'; }
+const $app = document.getElementById('app');
+function render(){
+  const t = today(), n = sprintOf(t), st = sprintStart(n), dayN = diff(st, t) + 1;
+  const end = addDays(st, 13);
+  const wStart = dayN <= 7 ? st : addDays(st, 7), wNo = dayN <= 7 ? 1 : 2;
+  const kind = KIND[(diff('2026-01-01', t) + 7) % KIND.length];
+  let dots = ''; for (let i = 0; i < 14; i++) { const ds = addDays(st, i);
+    dots += `<i class="${ds < t ? 'past' : ds === t ? 'now' : ''} ${i === 7 ? 'wk' : ''}"></i>`; }
+
+  /* мудборд */
+  const pins = S.photos.map(p => `<button class="pin" data-act="viewpin" data-v="${p.id}" aria-label="Открыть картинку"><img src="${p.src}" alt=""></button>`).join('');
+  const addPin = S.photos.length < 12 ? `<button class="pin add plus" data-act="photo" aria-label="Добавить картинку">+</button>` : '';
+  const board = `<section class="card board"><div class="pins">${pins}${addPin}</div></section>`;
+
+  /* итоги спринта */
+  const prevN = n - 1;
+  const needResult = prevN >= 0 && !measFor(prevN + 1) && !(S.cfg.skip || []).includes(prevN + 1);
+  const resultCard = needResult ? `<section class="card"><h2>Спринт ${prevN + 1} позади</h2>
+      <p class="sub">Встань на весы утром, до завтрака, примерь ${esc(S.cfg.item.toLowerCase())} и запиши пару слов о том, что получилось.</p>
+      <button class="btn full" data-act="result" data-v="${prevN + 1}">Подвести итоги</button></section>` : '';
+
+  /* день */
+  const v = S.view, d = S.days[v] || {}, w = d.w || [];
+  const minView = addDays(t, -13);
+  const isWe = [0,6].includes(parse(v).getDay());
+  const kPct = d.k ? Math.min(100, d.k / S.cfg.kcal * 100) : 0;
+  const weChips = isWe ? `<div class="chips" style="margin-bottom:10px">${[['light','Как в будни'],['more','Чуть больше'],['fest','Праздник']].map(([k,l],i) => `<button class="chip ${d.e===k?'on':''}" data-act="we" data-v="${k}" data-i="${i}" aria-pressed="${d.e===k}">${l}</button>`).join('')}</div>` : '';
+  const kNote = d.e ? `Примерно ${num(d.k,0)} ккал. Примерно — тоже честно, главное записать` :
+    !d.k ? (isWe ? 'Выбери, каким был день, или впиши точную цифру, если знаешь' : `План — до ${num(S.cfg.kcal,0)} ккал`) :
+    d.k <= S.cfg.kcal ? `Осталось ${num(S.cfg.kcal - d.k,0)} ккал` : 'Чуть больше плана. Считается неделя целиком, а не один день';
+  const chip = (k, label) => `<button class="chip ${w.includes(k)?'on':''}" data-act="w" data-v="${k}" aria-pressed="${w.includes(k)}">${label}</button>`;
+  const bu = blooms(), got = BLOOM.filter(b => bu[b.id || b[0]]), next = BLOOM.find(b => !bu[b[0]]);
+  const lastFit = [...S.meas].sort((a,b) => b.n - a.n).find(m => m.fit);
+  const bellaCard = `<section class="card bella" data-act="bella" role="button" tabindex="0" style="cursor:pointer">${girlSVG(shapeF(), bu)}
+    <div><h2>${esc(S.cfg.girl)}</h2><p class="small muted" style="margin:0">расцветает от твоей заботы</p>
+      ${S.cfg.why ? `<p class="hand">${esc(S.cfg.why)}</p>` : `<button class="linkbtn" data-act="moti" style="margin-top:8px">Написать слова для себя</button>`}
+      ${lastFit ? `<p class="small muted" style="margin:4px 0 0">${esc(S.cfg.item)}: ${FIT[lastFit.fit]}</p>` : ''}
+      <p class="new">${got.length ? `Уже расцвело: <b>${got.length} из ${BLOOM.length}</b>` : 'Пока только начинает — всё впереди'}</p>
+      ${next ? `<p class="small muted" style="margin:0">Дальше: ${next[1].toLowerCase()} — ${next[2]}</p>` : '<p class="small" style="margin:0">Всё расцвело ♡</p>'}</div></section>`;
+  const cd = cycleDay(v), tn = tender(v), isStart = (S.cfg.cyc || []).includes(v);
+  const moods = MOODS.map(([k,l,c]) => `<button class="mood ${d.m===k?'on':''}" data-act="mood" data-v="${k}" aria-pressed="${d.m===k}"><i style="background:${c}"></i>${l}</button>`).join('');
+
+  /* неделя */
+  const ws = weekStats(wStart);
+  const pips = (have, need) => { let h = ''; for (let i = 0; i < Math.max(need, have); i++) h += `<i class="${i < have ? 'on' : ''}"></i>`; return h; };
+  const goal = (label, have, need) => `<div class="goal"><span class="t">${label}${have >= need ? ' <span class="heart">♡</span>' : ''}</span><span class="pips">${pips(have, need)}</span></div>`;
+  const stepPct = Math.min(100, ws.steps / S.cfg.steps * 100);
+  const kLine = ws.kDays ? `В среднем ${ws.est ? 'около ' : ''}${num(ws.kAvg,0)} ккал в день, ориентир — до ${num(S.cfg.kcal,0)}` : 'Калории пока не заполнены';
+  const uLine = ws.urges ? `Тянуло заесть ${ws.urges} ${plural(ws.urges,'раз','раза','раз')}, чаще всего — ${REASON[ws.top]}. ${ws.passed ? `${ws.passed} ${plural(ws.passed,'раз','раза','раз')} волна прошла сама.` : ''}${ws.tu ? ` Из них ${ws.tu} — в дни перед месячными или в первые дни цикла.` : ''}${ws.bAvg && ws.aAvg < ws.bAvg ? ` В среднем волна спадала с ${ws.bAvg} до ${ws.aAvg}.` : ''}` : '';
+
+  /* история */
+  const sorted = [...S.meas].sort((a,b) => a.n - b.n);
+  const hist = sorted.filter(m => m.n > 0).map(m => {
+    const prev = sorted.find(x => x.n === m.n - 1);
+    const dW = prev && prev.w != null && m.w != null ? Math.round((m.w - prev.w) * 10) / 10 : null;
+    const ch = dW == null ? '' : dW < 0 ? `−${num(-dW)} кг` : dW > 0 ? `+${num(dW)} кг` : 'без изменений';
+    return `<li><div class="top"><b>Спринт ${m.n}</b><span>${num(m.w)} кг${m.wa ? `, ${num(m.wa)} см` : ''}</span></div>
+      <div class="small muted">${ch}${m.fit ? `${ch ? ', ' : ''}${esc(S.cfg.item.toLowerCase())} ${FIT[m.fit]}` : ''}</div>${S.notes[m.n] ? `<div class="hand">${esc(S.notes[m.n])}</div>` : ''}</li>`; }).join('');
+  const startM = measFor(0);
+
+  if ((S.food[v] || []).some(p => !S.foodSrc[p.id])) ensureFood(v);
+  const sprintsCard = `<section class="card">
+    <h2>Мои спринты</h2>
+    <p class="sub">${startM ? `Старт ${fmtD(startM.d)}: ${num(startM.w)} кг${startM.wa ? `, талия ${num(startM.wa)} см` : ''}` : 'Стартовый вес ещё не записан'}</p>
+    ${hist ? `<ul class="hist">${hist}</ul>` : `<p class="note" style="margin:0">Здесь появятся итоги после первого спринта, ${fmtD(addDays(sprintStart(0), 14))}.</p>`}
+  </section>`;
+  /* закономерности */
+  const ev = []; Object.keys(S.days).forEach(ds => { const d = S.days[ds]; const wd = parse(ds).getDay();
+    (d.u || []).forEach(u => { if (u[1] !== 'h') ev.push({h:u[0], r:u[1], we: wd === 0 || wd === 6, k:'u'}); });
+    (d.x || []).forEach(x => ev.push({h:x[0], r:x[1], we: wd === 0 || wd === 6, k:'x'})); });
+  const slot = h => h < 12 ? 'утром' : h < 15 ? 'в обед' : h < 18 ? 'после обеда' : h < 22 ? 'вечером' : 'поздно вечером';
+  const topOf = arr => { const c = {}; arr.forEach(x => c[x] = (c[x] || 0) + 1); const k = Object.keys(c).sort((a,b) => c[b]-c[a])[0]; return k ? [k, c[k]] : null; };
+  const tSlot = topOf(ev.map(e => slot(e.h))), tWhy = topOf(ev.map(e => e.r)), weN = ev.filter(e => e.we).length;
+  const xs = ev.filter(e => e.k === 'x'), tX = topOf(xs.map(e => e.r));
+  const patCard = `<section class="card"><h2>Когда тянет</h2>
+    ${ev.length >= 3 ? `<ul class="pat">
+      <li>Чаще всего — <b>${tSlot[0]}</b> (${tSlot[1]} из ${ev.length})</li>
+      <li>Главная причина — <b>${REASON[tWhy[0]]}</b></li>
+      <li>${weN > ev.length * 2 / 7 * 1.3 ? 'На выходных тянет заметно чаще, чем в будни' : weN < ev.length * 2 / 7 * .7 ? 'В будни тянет чаще, чем на выходных' : 'В будни и на выходных примерно одинаково'}</li>
+      ${tX ? `<li>Перед эпизодами переедания чаще всего — ${REASON[tX[0]]}</li>` : ''}</ul>
+      <p class="note">Это не оценка, а карта: теперь понятно, где подстелить соломку.</p>`
+    : '<p class="note" style="margin:0">Когда наберётся хотя бы несколько записей в «Тянет заесть», здесь появится карта: когда и почему тянет чаще всего.</p>'}
+  </section>`;
+  const plans = S.cfg.plans || [];
+  const FEEL = {t:'устала', s:'грустно', a:'злюсь или тревожно', l:'одиноко', b:'скучно', w:'хочется сладкого', p:'вокруг компания', y:'вкусно'};
+  const planHint = ev.length >= 3 ? `${tSlot[0]} тянет заесть, потому что ${FEEL[tWhy[0]] || 'устала'}` : 'после обеда тянет на сладкое';
+  const planCard = `<section class="card"><h2>Мои «если — то»</h2>
+    <p class="sub">Решение, принятое заранее, в спокойном состоянии. Оно всплывёт в «Тянет заесть» в нужный момент.</p>
+    ${plans.map(p => `<div class="plan-row"><span><span class="k">Если</span> ${esc(p.i)}, <span class="k">то</span> ${esc(p.t)}</span><button class="x" data-act="plan-del" data-v="${p.id}" aria-label="Удалить">×</button></div>`).join('')}
+    ${plans.length < 3 ? `<div class="field"><label for="pl_i">Если…</label><input class="inp" id="pl_i" maxlength="70" placeholder="${esc(planHint)}"></div>
+      <div class="field"><label for="pl_t">…то я</label><input class="inp" id="pl_t" maxlength="70" placeholder="завариваю чай с мятой и выхожу на 10 минут"></div>
+      <button class="btn full" style="margin-top:14px" data-act="plan-add">Добавить план</button>` : '<p class="note">Три плана — самое то. Чтобы добавить новый, удали один из старых.</p>'}
+  </section>`;
+  const head = `<header><div class="hello">${ART.flower}<div><div class="brand">Dolce Cura</div><h1>${greet()}, ${esc(S.cfg.name)}</h1><div class="date">${WD[parse(t).getDay()]}, ${fmtD(t)}</div></div></div>
+    <button class="gear" data-act="settings" aria-label="Настройки">⚙︎</button></header>
+  <div class="tabs" role="tablist">${[['day','Мой день'],['sprints','Спринты'],['board','Мудборд']].map(([k,l]) => `<button role="tab" data-act="tab" data-v="${k}" class="${(S.tab || 'day') === k ? 'on' : ''}" aria-selected="${(S.tab || 'day') === k}">${l}</button>`).join('')}</div>`;
+  if (S.tab === 'board') { $app.innerHTML = head + board; return; }
+  if (S.tab === 'sprints') { $app.innerHTML = head + sprintsCard + patCard + planCard; return; }
+  $app.innerHTML = `
+  ${head}
+  ${resultCard}
+  ${bellaCard}
+  <section class="card sprint">${ART.lemons}
+    <div class="small muted">Спринт ${n + 1}, ${fmtD(st)} — ${fmtD(end)}</div>
+    <div class="n">день ${dayN} из 14</div>
+    <div class="dots" aria-hidden="true">${dots}</div>
+    ${dayN === 14 ? '<p class="hand">Последний день спринта. Завтра утром — весы, примерка и пара слов о себе.</p>' : `<p class="itq">${kind[0]}</p><p class="hand" style="margin-top:2px">${kind[1]}</p>`}
+  </section>
+  <section class="card">
+    <div class="head"><h2>${v === t ? 'Сегодня' : fmtD(v)}</h2>
+      <div class="daynav"><button data-act="day" data-v="-1" ${v <= minView ? 'disabled' : ''} aria-label="Предыдущий день">‹</button>
+      <button data-act="day" data-v="1" ${v >= t ? 'disabled' : ''} aria-label="Следующий день">›</button></div></div>
+    <div class="field"><label for="k">${isWe ? 'Калории, можно примерно' : 'Калории'}</label>
+      ${weChips}<div class="inrow"><input class="inp" id="k" data-f="k" inputmode="numeric" placeholder="1600" value="${d.k ?? ''}"><span class="unit">ккал</span></div>
+      <div class="soft"><i style="width:${kPct}%"></i></div><p class="note">${kNote}</p></div>
+    <div class="field"><label for="st">Шаги</label>
+      <div class="inrow"><input class="inp" id="st" data-f="st" inputmode="numeric" placeholder="8000" value="${d.st ?? ''}"><span class="unit">шагов</span></div></div>
+    <div class="field"><label>Тренировка</label>
+      <div class="chips">${chip('s','Силовая')}${chip('p','Пилатес')}${chip('c','Кардио')}</div></div>
+    <div class="field cyc"><label>Цикл</label>
+      <div class="inrow" style="justify-content:space-between;flex-wrap:wrap">
+        ${cd ? `<span class="small">День ${cd}${cyclePredicted(v) ? ' (по прогнозу)' : ''}${tn === 'pre' ? '. Дни перед месячными — будь к себе мягче' : tn === 'period' ? '. Первые дни — больше отдыха и тепла' : ''}</span>
+          <button class="linkbtn" data-act="cycfix">поправить</button>` : `<span class="small muted">Какой сегодня день цикла?</span>
+          <div class="inrow"><input class="inp" id="cycn" inputmode="numeric" placeholder="7" style="max-width:80px"><button class="btn ghost" data-act="cycset">Запомнить</button></div>`}
+      </div>
+      <button class="chip ${isStart ? 'on' : ''}" style="margin-top:10px" data-act="cyc" aria-pressed="${isStart}">${isStart ? 'Начались сегодня ✓' : 'Месячные начались'}</button></div>
+  </section>
+  <section class="card">
+    <h2>Моя тарелка</h2>
+    <p class="sub">Сначала фото, потом в рот. Даже если это один кусочек. Фото хранятся две недели</p>
+    <div class="plate">${(S.food[v] || []).map(p => `<button class="ph" data-act="viewfood" data-v="${p.id}">${S.foodSrc[p.id] ? `<img src="${S.foodSrc[p.id]}" alt="Еда">` : ''}${p.t ? `<span>${p.t}</span>` : ''}</button>`).join('')}
+      ${(S.food[v] || []).length < 12 ? `<button class="ph add" data-act="addfood">${ART.cam}Еда</button>` : ''}</div>
+    ${(S.food[v] || []).length ? `<p class="note">${v === t ? 'Сегодня' : 'В этот день'} ${S.food[v].length} ${plural(S.food[v].length,'фото','фото','фото')}. Вечером полистай — так проще увидеть, что было на самом деле</p>` : ''}
+  </section>
+  <section class="card">
+    <h2>Как ты?</h2>
+    <p class="sub">Лучше всего отвечать вечером</p>
+    <div class="moods">${moods}</div>
+    <div class="field"><label for="g">Что сегодня было приятного?</label>
+      <input class="inp" id="g" data-g="1" maxlength="80" placeholder="например, вкусный капучино и солнце" value="${esc(S.good[v] || '')}"></div>
+  </section>
+  <section class="card">
+    <h2>Неделя ${wNo}</h2>
+    <p class="sub">${fmtD(wStart)} — ${fmtD(addDays(wStart, 6))}</p>
+    ${goal('Силовые', ws.s, S.cfg.s)}${goal('Пилатес', ws.p, S.cfg.p)}${goal('Кардио', ws.c, S.cfg.c)}
+    <div class="goal"><span class="t">Шаги${ws.steps >= S.cfg.steps ? ' <span class="heart">♡</span>' : ''}</span><span class="v">${num(ws.steps,0)} из ${num(S.cfg.steps,0)}</span>
+      <div class="soft"><i style="width:${stepPct}%"></i></div></div>
+    <div class="goal"><span class="t small muted" style="grid-column:1/-1">${kLine}${uLine ? `<br>${uLine}` : ''}</span></div>
+  </section>
+  ${cloudOk ? '' : `<p class="foot">Сейчас это превью: данные хранятся в браузере. В Телеграме они будут в облаке бота.</p>`}`;
+}
+
+/* ---------- окна ---------- */
+const $layer = document.getElementById('layer');
+let timer = null;
+function modal(html){ stopTimer(); $layer.innerHTML = `<div class="modal" data-act="bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`; }
+const close = () => { stopTimer(); $layer.innerHTML = ''; };
+function toast(t){ const e = document.createElement('div'); e.className = 'toast'; e.textContent = t; document.body.appendChild(e); setTimeout(() => e.remove(), 2400); }
+const val = id => { const x = document.getElementById(id); if (!x) return null; const v = parseFloat(String(x.value).replace(/\s/g,'').replace(',', '.')); return isNaN(v) ? null : v; };
+
+const dayPhrase = () => KIND[(diff('2026-01-01', today()) % KIND.length + KIND.length) % KIND.length];
+function morningModal(){
+  modal(`<div class="morning">${ART.flower}<p class="muted small" style="margin:6px 0 0">${greet()}, ${esc(S.cfg.name)}</p>
+    <p class="q" style="font-style:italic;margin-bottom:6px">${dayPhrase()[0]}</p><p style="margin:0">${dayPhrase()[1]}</p>
+    <p class="small muted" style="margin:4px 0 12px">[${dayPhrase()[2]}]</p><p class="hand" style="margin:0 0 18px">${dayPhrase()[3]}</p>${tender(today()) === 'pre' ? '<p class="small muted" style="margin:-8px 0 16px">Сейчас дни перед месячными. Сегодня можно особенно бережно.</p>' : ''}
+    <button class="btn full" data-act="morning-ok">Grazie ♡</button></div>`);
+}
+function onboarding(){
+  modal(`<h2>Benvenuta в Dolce Cura</h2><p class="lead">Это трекер нежной заботы о себе. Две недели — один спринт. В конце каждого встаёшь на весы, а между ними просто отмечаешь день.</p>
+    <div class="field"><label for="o_d">Первый день спринта</label><input class="inp" id="o_d" type="date" value="${today()}"></div>
+    <div class="two field"><div><label for="o_w">Вес на старте, кг</label><input class="inp" id="o_w" inputmode="decimal" value="75"></div>
+      <div><label for="o_wa">Талия, см</label><input class="inp" id="o_wa" inputmode="decimal" placeholder="по желанию"></div></div>
+    <button class="btn full" style="margin-top:20px" data-act="onb">Поехали</button>`);
+}
+function resultModal(n){
+  const tn = tender(today());
+  modal(`<h2>Итоги спринта ${n}</h2><p class="lead">Утром, до завтрака. Любая цифра — просто информация, не оценка.</p>
+    ${tn ? `<div class="tip">${tn === 'pre' ? 'Сейчас дни перед месячными' : 'Сейчас первые дни цикла'}: вес в это время часто выше из-за воды. Можно взвеситься через несколько дней — итоги подождут. А можно записать сейчас и помнить об этом.</div>` : ''}
+    <div class="two"><div class="field"><label for="r_w">Вес, кг</label><input class="inp" id="r_w" inputmode="decimal"></div>
+      <div class="field"><label for="r_wa">Талия, см</label><input class="inp" id="r_wa" inputmode="decimal" placeholder="по желанию"></div></div>
+    <div class="field"><label>Примерка: ${esc(S.cfg.item.toLowerCase())}</label>
+      <div class="chips">${[['no','Пока не сходится'],['almost','Почти'],['yes','Застегнулась!']].map(([k,l]) => `<button class="chip" data-act="fitpick" data-v="${k}">${l}</button>`).join('')}</div></div>
+    <div class="field"><label for="r_n">Что получилось хорошо?</label><textarea class="inp" id="r_n" placeholder="например, ни разу не пропустила пилатес"></textarea></div>
+    <button class="btn full" style="margin-top:18px" data-act="res-save" data-v="${n}">Сохранить</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="res-skip" data-v="${n}">Пропустить в этот раз</button>`);
+}
+function settings(){
+  const c = S.cfg;
+  modal(`<h2>Настройки</h2><button class="btn ghost full" style="margin:0 0 14px" data-act="help">Как пользоваться Dolce Cura</button><p class="lead">Цели можно менять в любой момент. Если неделя тяжёлая, это нормально — снизь планку.</p>
+    <div class="field"><label for="c_n">Как к тебе обращаться</label><input class="inp" id="c_n" value="${esc(c.name)}"></div>
+    <div class="two"><div class="field"><label for="c_k">Калории в день, до</label><input class="inp" id="c_k" inputmode="numeric" value="${c.kcal}"></div>
+      <div class="field"><label for="c_st">Шаги в неделю</label><input class="inp" id="c_st" inputmode="numeric" value="${c.steps}"></div>
+      <div class="field"><label for="c_s">Силовых в неделю</label><input class="inp" id="c_s" inputmode="numeric" value="${c.s}"></div>
+      <div class="field"><label for="c_p">Пилатеса в неделю</label><input class="inp" id="c_p" inputmode="numeric" value="${c.p}"></div>
+      <div class="field"><label for="c_c">Кардио в неделю</label><input class="inp" id="c_c" inputmode="numeric" value="${c.c}"></div>
+      <div class="field"><label for="c_d">Старт первого спринта</label><input class="inp" id="c_d" type="date" value="${c.start}"></div></div>
+    <div class="field"><label>Выходные примерно, ккал: как в будни, чуть больше, праздник</label>
+      <div class="three"><input class="inp" id="c_e0" inputmode="numeric" value="${c.we[0]}"><input class="inp" id="c_e1" inputmode="numeric" value="${c.we[1]}"><input class="inp" id="c_e2" inputmode="numeric" value="${c.we[2]}"></div></div>
+    <div class="field"><label for="c_g">Цель по весу, кг (нужна только для силуэта девочки)</label><input class="inp" id="c_g" inputmode="decimal" value="${c.goal || 65}"></div>
+    <div class="field"><label for="c_cl">Средняя длина цикла, дней (посмотри в Здоровье)</label><input class="inp" id="c_cl" inputmode="numeric" value="${c.clen || 28}"></div>
+    <button class="btn full" style="margin-top:18px" data-act="set-save">Сохранить</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="moti">Мои слова и вещь для примерки</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="mysw">Мои переключалки</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="export">Резервная копия</button>`);
+}
+
+/* ---------- Dolce: переключалка ---------- */
+let itIdx = Math.floor(Math.random() * IT.length);
+const itCard = () => { const [ph, tr, pr] = IT[itIdx % IT.length];
+  return `<div class="it">${ART.tile}<p class="ph">${ph}</p><p class="tr">${tr}</p><p class="pr">[${pr}]</p></div>`; };
+const TIPS = {
+  t: 'Усталость часто маскируется под голод. Телу сейчас нужен отдых, а не сахар.',
+  s: 'Грусти можно дать место. Еда утешит на минуту, а забота о себе — надольше.',
+  b: 'Скуке нужно что-то новое, а не еда.',
+  a: 'Злость и тревога дают много энергии. Её лучше выпустить через тело, чем заесть.',
+  l: 'Одиночество — это голод по людям, а не по еде.',
+  w: 'Это просто волна: она поднимется, дойдёт до пика и спадёт.'
+};
+const SW = {
+  t: [['t1','Полежать 10 минут, ноги на стену'],['t2','Умыться прохладной водой'],['t3','Маска для лица или крем для рук'],['t4','Чай в самой красивой чашке'],['t5','Выйти на балкон или к окну и подышать']],
+  s: [['s1','Отправить голосовое близкому человеку'],['s2','Любимый плейлист погромче'],['s3','Плед и одна серия любимого сериала'],['s4','Записать, что сейчас чувствую'],['s5','Обнять себя и сказать: мне грустно, и это нормально']],
+  b: [['b1','Выучить 5 итальянских слов'],['b2','Собрать образ из своего шкафа'],['b3','Добавить картинку на мудборд'],['b4','Накрасить ногти'],['b5','Разобрать одну полку или ящик']],
+  a: [['a1','Пять медленных выдохов: вдох на 4, выдох на 6'],['a2','Выписать на бумагу всё, что злит'],['a3','Быстрая прогулка на 10 минут'],['a4','Минуту потрясти руками и плечами'],['a5','Умыться холодной водой']],
+  l: [['l1','Написать подруге «привет, как ты?»'],['l2','Позвонить кому-то родному'],['l3','Выйти туда, где есть люди: кафе, парк'],['l4','Записать голосовое близкому'],['l5','Завернуться в плед с любимым фильмом']],
+  w: [['w1','Чай с корицей или мятой'],['w2','Почистить зубы'],['w3','Мятная жвачка'],['w4','Пройтись 10 минут вокруг дома'],['w5','Стакан воды и вернуться к делу']]
+};
+const WAVE = [
+  'Заметь, где в теле живёт желание: во рту, в животе, в руках?',
+  'Дыши медленно: вдох на четыре счёта, выдох на шесть.',
+  'Назови его: «Я замечаю, что хочу сладкого». Это просто ощущение, не приказ.',
+  'Волна поднимается. Ты не обязана ничего с ней делать — только наблюдать.',
+  'Возможно, сейчас пик. Дальше будет спад.',
+  'Проверь: волна стала хоть чуть-чуть ниже?',
+  'Ещё немного. Ты справляешься.',
+  'Почти всё. Как ты сейчас?'
+];
+let U = {};
+const swText = id => { for (const k in SW) { const x = SW[k].find(o => o[0] === id); if (x) return x[1]; } const m = (S.cfg.mysw || []).find(o => o[0] === id); return m ? m[1] : ''; };
+function pickSwitches(r){
+  const st = S.cfg.swst || {};
+  const pool = [...SW[r], ...(S.cfg.mysw || [])];
+  return pool.map(o => { const [t, p] = st[o[0]] || [0, 0]; return [o, (p + 1) / (t + 2) + Math.random() * .35 + (o[0].startsWith('m') ? .15 : 0)]; })
+    .sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0]);
+}
+function dolceStart(){
+  U = {};
+  const tn = tender(today());
+  modal(`<h2>Хочется dolce?</h2>${tn ? `<div class="tip">${tn === 'pre' ? 'Сейчас дни перед месячными. В это время тяга к сладкому у многих сильнее — это гормоны, а не слабость.' : 'Сейчас первые дни цикла. Телу нужно больше тепла и отдыха — и тяга может быть сильнее обычного.'} Будь к себе особенно мягкой.</div>` : ''}<p class="lead">По-итальянски dolce — не только «сладкий», но и «нежный». Сначала честно: что сейчас на самом деле?</p>
+    <div class="reasons">
+      <button class="reason" data-act="why" data-v="h">Голод<small>давно не ела, живот урчит</small></button>
+      <button class="reason" data-act="why" data-v="t">Устала<small>нет сил, хочется «топлива»</small></button>
+      <button class="reason" data-act="why" data-v="s">Грустно<small>хочется утешиться</small></button>
+      <button class="reason" data-act="why" data-v="b">Скучно<small>руки ищут занятие</small></button>
+      <button class="reason" data-act="why" data-v="a">Злюсь или тревожно<small>внутри всё кипит или сжимается</small></button>
+      <button class="reason" data-act="why" data-v="l">Одиноко<small>хочется, чтобы кто-то был рядом</small></button>
+      <button class="reason" data-act="why" data-v="w">Просто хочу сладкого<small>например, после обеда</small></button>
+    </div>
+    <button class="btn ghost full" style="margin-top:12px" data-act="over">Я уже переела</button>
+    <button class="linkbtn" style="margin-top:14px" data-act="mysw">Мои переключалки</button>`);
+}
+const scale = act => `<div class="scale">${Array.from({length:10}, (_, i) => `<button class="chip" data-act="${act}" data-v="${i+1}">${i+1}</button>`).join('')}</div>`;
+function intensityBefore(){
+  modal(`<h2>Насколько сильно?</h2><p class="lead">Оцени тягу прямо сейчас: 1 — еле заметно, 10 — очень сильно. Потом сравним.</p>${scale('ib')}`);
+}
+function chooseSwitch(){
+  const opts = pickSwitches(U.r);
+  const plans = S.cfg.plans || [];
+  modal(`<h2>Пока идёт волна</h2><div class="tip">${TIPS[U.r]}</div>${plans.length ? `<div class="plans">${plans.map(p => `<p><span>Если</span> ${esc(p.i)}, <span>то</span> ${esc(p.t)}</p>`).join('')}</div>` : ''}<p class="lead" style="margin-bottom:10px">Что попробуешь?</p>
+    <div class="reasons">${opts.map(o => `<button class="reason" data-act="opt" data-v="${o[0]}">${esc(o[1])}${o[0].startsWith('m') ? '<small>моя переключалка</small>' : ''}</button>`).join('')}
+    <button class="reason" data-act="opt" data-v="">Просто посёрфить волну<small>дышать и наблюдать</small></button></div>`);
+}
+function logUrge(r, o, b, a, opt){
+  const t = today(), d = S.days[t] || {}; const u = (d.u || []).slice(-9);
+  u.push([new Date().getHours(), r, o, b || 0, a || 0, opt || '']); S.days[t] = Object.assign({}, d, {u}); return saveDays(t);
+}
+function stopTimer(){ if (timer) { clearInterval(timer); timer = null; } }
+function surf(){
+  const total = 600; let left = total;
+  const opt = U.opt ? swText(U.opt) : '';
+  modal(`<h2>Сёрфинг</h2>${opt ? `<p class="lead" style="margin-bottom:8px">Пока идёт волна: <b style="color:var(--cocoa)">${esc(opt)}</b></p>` : '<p class="lead" style="margin-bottom:8px">Просто дыши и наблюдай. Волна пройдёт сама.</p>'}
+    <div class="wave" aria-hidden="true"><svg viewBox="0 0 600 90" preserveAspectRatio="none"><path class="w2" d="M0 55 Q 75 25 150 55 T 300 55 T 450 55 T 600 55 T 750 55 T 900 55 T 1050 55 T 1200 55 V90 H0Z"/><path class="w1" d="M0 60 Q 75 35 150 60 T 300 60 T 450 60 T 600 60 T 750 60 T 900 60 T 1050 60 T 1200 60 V90 H0Z"/></svg>
+      <div class="wave-t" id="wt">10:00</div></div>
+    <p class="wave-p" id="wp">${WAVE[0]}</p>
+    <div id="itbox">${itCard()}</div>
+    <button class="btn ghost full" data-act="nextit">Ещё фраза</button>
+    <div class="two" style="margin-top:10px"><button class="btn" data-act="urge-end" data-v="p">Отпустило</button>
+      <button class="btn ghost" data-act="urge-end" data-v="a">Всё ещё хочется</button></div>`);
+  timer = setInterval(() => {
+    left--; const tx = document.getElementById('wt'), wp = document.getElementById('wp');
+    if (!tx) { stopTimer(); return; }
+    tx.textContent = left > 0 ? `${Math.floor(left / 60)}:${pad(left % 60)}` : 'готово';
+    const k = Math.min(WAVE.length - 1, Math.floor((total - left) / 75)); if (wp.textContent !== WAVE[k]) wp.textContent = WAVE[k];
+    if (left <= 0) { stopTimer(); haptic(); }
+  }, 1000);
+}
+
+/* ---------- действия ---------- */
+async function patchDay(p){ const v = S.view; S.days[v] = Object.assign({}, S.days[v] || {}, p); render(); await saveDays(v); }
+async function compress(file, steps=[[640,.7],[540,.62],[440,.55],[360,.5]], limit=56000){
+  const url = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+  const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+  let out = '';
+  for (const [side, q] of steps) {
+    const k = Math.min(1, side / Math.max(img.width, img.height)), cv = document.createElement('canvas');
+    cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    out = cv.toDataURL('image/jpeg', q); if (out.length < limit) break;
+  }
+  return out;
+}
+const A = {
+  bg: (b, e) => { if (e.target === b) close(); },
+  day: b => { const n = addDays(S.view, +b.dataset.v); if (n <= today() && n >= addDays(today(), -13)) { S.view = n; render(); } },
+  w: b => { const k = b.dataset.v, cur = (S.days[S.view] || {}).w || []; haptic();
+    patchDay({w: cur.includes(k) ? cur.filter(x => x !== k) : [...cur, k]}); },
+  we: b => { const d = S.days[S.view] || {}, k = b.dataset.v; haptic();
+    patchDay(d.e === k ? {e:null, k:null} : {e:k, k:S.cfg.we[+b.dataset.i]}); },
+  mood: b => { const d = S.days[S.view] || {}, k = b.dataset.v; haptic(); patchDay({m: d.m === k ? null : k}); },
+  settings, result: b => resultModal(+b.dataset.v),
+  fitpick: b => { b.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b && !b.classList.contains('on'))); },
+  tab: b => { S.tab = b.dataset.v; render(); scrollTo(0, 0); },
+  photo: () => { if (S.photos.length >= 12) { toast('На доске уже 12 картинок — убери одну, чтобы добавить новую'); return; } document.getElementById('file').click(); },
+  viewpin: b => modal(`<div class="viewer"><img src="${S.photos.find(p => p.id === b.dataset.v).src}" alt="Моя картинка">
+    <div class="two"><button class="btn ghost" data-act="bg-close">Закрыть</button><button class="btn ghost" data-act="delpin" data-v="${b.dataset.v}">Убрать с доски</button></div></div>`),
+  'bg-close': () => close(),
+  delpin: async b => { await deletePhoto(b.dataset.v); close(); render(); },
+  moti: () => modal(`<h2>Мои слова</h2><p class="lead">Они будут под твоей доской каждый раз, когда откроешь трекер.</p>
+    <div class="field"><label for="m_i">Какую вещь примеряем в конце спринта</label><input class="inp" id="m_i" value="${esc(S.cfg.item)}"></div>
+    <div class="field"><label for="m_w">Слова для себя</label><textarea class="inp" id="m_w" placeholder="например, хочу летом надеть эту юбку и чувствовать себя лёгкой">${esc(S.cfg.why)}</textarea></div>
+    <button class="btn full" style="margin-top:16px" data-act="moti-save">Сохранить</button>`),
+  'moti-save': async () => { S.cfg.item = document.getElementById('m_i').value.trim().slice(0,30) || 'Юбка';
+    S.cfg.why = document.getElementById('m_w').value.trim().slice(0,160); await saveCfg(); close(); render(); },
+  dolce: () => dolceStart(),
+  bella: () => { const bu = blooms();
+    modal(`<h2>${esc(S.cfg.girl)}</h2><p class="lead">Её образ расцветает от того, что ты делаешь для себя, а не от весов. Силуэт меняется только в день итогов спринта, чуть-чуть, и никогда не идёт назад.</p>
+      <ul class="bl">${BLOOM.map(b => `<li class="${bu[b[0]] ? '' : 'no'}"><i>${bu[b[0]] ? '♡' : '·'}</i><span>${b[1]}<small>${bu[b[0]] ? 'уже есть' : b[2]}</small></span></li>`).join('')}</ul>
+      <div class="field"><label for="gname">Как её зовут</label><input class="inp" id="gname" value="${esc(S.cfg.girl)}"></div>
+      <button class="btn full" style="margin-top:14px" data-act="gname-save">Готово</button>`); },
+  'gname-save': async () => { S.cfg.girl = document.getElementById('gname').value.trim().slice(0,20) || 'Bella'; await saveCfg(); close(); render(); },
+  cyc: async () => { const v = S.view; let c = S.cfg.cyc || [];
+    c = c.includes(v) ? c.filter(x => x !== v) : [...c.filter(x => Math.abs(diff(x, v)) > 10), v].sort().slice(-12);
+    S.cfg.cyc = c; haptic(); await saveCfg(); render(); },
+  cycset: async () => { const n = val('cycn'); const L = S.cfg.clen || 28;
+    if (!n || n < 1 || n > 60) { toast('Впиши день цикла числом'); return; }
+    const start = addDays(S.view, -(Math.round(n) - 1));
+    S.cfg.cyc = [...(S.cfg.cyc || []).filter(x => Math.abs(diff(x, start)) > 10), start].sort().slice(-12);
+    await saveCfg(); render(); toast(`Запомнила: день ${Math.round(n)}. Дальше считаю сама ♡`); },
+  cycfix: () => modal(`<h2>День цикла</h2><p class="lead">Какой сегодня день? Я пересчитаю дату начала и дальше буду вести отсчёт сама.</p>
+    <div class="inrow"><input class="inp" id="cycn" inputmode="numeric" placeholder="7" style="max-width:100px"><button class="btn" data-act="cycset2">Сохранить</button></div>`),
+  cycset2: async () => { await A.cycset(); close(); },
+  addfood: () => document.getElementById('ffile').click(),
+  viewfood: b => { const src = S.foodSrc[b.dataset.v]; if (!src) return;
+    modal(`<div class="viewer"><img src="${src}" alt="Еда"><div class="two"><button class="btn ghost" data-act="bg-close">Закрыть</button><button class="btn ghost" data-act="delfood" data-v="${b.dataset.v}">Удалить</button></div></div>`); },
+  delfood: async b => { await delFood(S.view, b.dataset.v); close(); render(); },
+  'morning-ok': async () => { S.cfg.seen = today(); await saveCfg(); close(); },
+  why: async b => { const r = b.dataset.v;
+    if (r === 'h') { await logUrge('h', 'e');
+      modal(`<h2>Это голод, и это нормально</h2><div class="tip">Голод не нужно пережидать. Поешь по-человечески, лучше что-то с белком: творог, яйцо, кусочек курицы из рациона. Это не срыв, это забота.</div>${itCard()}<button class="btn full" data-act="bg-close">Пойду поем</button>`); return; }
+    U = {r}; intensityBefore(); },
+  ib: b => { U.b = +b.dataset.v; chooseSwitch(); },
+  opt: b => { U.opt = b.dataset.v; surf(); },
+  nextit: () => { itIdx++; document.getElementById('itbox').innerHTML = itCard(); },
+  'urge-end': b => { U.o = b.dataset.v;
+    modal(`<h2>${U.o === 'p' ? 'А теперь?' : 'Как сейчас?'}</h2><p class="lead">Оцени тягу ещё раз. В начале было ${U.b} из 10.</p>${scale('ia')}`); },
+  ia: async b => { U.a = +b.dataset.v;
+    const st = S.cfg.swst || {}; if (U.opt) { const [t, p] = st[U.opt] || [0, 0]; st[U.opt] = [t + 1, p + (U.o === 'p' ? 1 : 0)]; S.cfg.swst = st; saveCfg(); }
+    await logUrge(U.r, U.o, U.b, U.a, U.opt);
+    const drop = U.b - U.a;
+    const waveLine = drop > 0 ? `Волна: <b>${U.b} → ${U.a}</b>. Она правда спала.` : `Волна: ${U.b} → ${U.a}. Иногда она держится дольше — это нормально.`;
+    modal(U.o === 'p' ? `<h2>Brava!</h2><p class="lead">${waveLine} Запомни это ощущение: ты сильнее, чем кажется в моменте.</p>${itCard()}<button class="btn full" data-act="bg-close">Grazie</button>`
+      : `<h2>Тогда съешь спокойно</h2><p class="lead">${waveLine} Выбери то, что правда хочется, положи на красивую тарелку и ешь медленно, без телефона и без вины. Одна порция dolce ничего не ломает.</p><button class="btn full" data-act="bg-close">Хорошо</button>`);
+    render(); },
+  over: () => { U = {};
+    modal(`<h2>Это эпизод, а не провал</h2>
+      <div class="tip">Один раз съесть больше — это не «всё испорчено». Не нужно ничего компенсировать: следующий приём пищи — как обычно, без наказаний и пропусков. Ты по-прежнему на своём пути.</div>
+      <p class="lead" style="margin-bottom:10px">Что было перед этим? Это просто подсказка на будущее.</p>
+      <div class="chips">${['t','s','a','l','b','h','p','y'].map(k => `<button class="chip" data-act="over-why" data-v="${k}">${REASON[k][0].toUpperCase() + REASON[k].slice(1)}</button>`).join('')}</div>`); },
+  'over-why': async b => { const t = today(), d = S.days[t] || {}; const x = (d.x || []).slice(-4);
+    x.push([new Date().getHours(), b.dataset.v]); S.days[t] = Object.assign({}, d, {x}); await saveDays(t);
+    modal(`<h2>Записала</h2><p class="lead">${b.dataset.v === 'y' ? 'Вкусная еда — это нормально, и удовольствие от неё тоже.' : `Перед этим была ${REASON[b.dataset.v]}. Это ценная подсказка, а не повод себя ругать.`} Будь к себе сейчас так же добра, как была бы к подруге.</p>
+      <div class="it">${ART.tile}<p class="ph">Sii dolce con te stessa</p><p class="tr">Будь нежна к себе</p></div>
+      <button class="btn full" data-act="bg-close">Grazie</button>`); render(); },
+  'plan-add': async () => { const i = document.getElementById('pl_i').value.trim(), t = document.getElementById('pl_t').value.trim();
+    if (!i || !t) { toast('Заполни обе части: «если» и «то»'); return; }
+    S.cfg.plans = [...(S.cfg.plans || []), {id: Date.now().toString(36).slice(-5), i: i.slice(0,70), t: t.slice(0,70)}].slice(-3); await saveCfg(); render(); toast('План записан ♡'); },
+  'plan-del': async b => { S.cfg.plans = (S.cfg.plans || []).filter(p => p.id !== b.dataset.v); await saveCfg(); render(); },
+  help: () => modal(`<h2>Как пользоваться</h2><p class="lead">Всё сохраняется само — кнопки «Сохранить» нет. Когда цифра записалась, появляется «Сохранено ✓».</p>
+    <div class="help">
+    <details><summary>Бот</summary>
+      <p>Бот — будильник: сам пишет тебе, но на сообщения не отвечает и не видит, что ты внесла в приложение.</p>
+      <ul><li><b>9:00</b> — итальянская фраза дня с переводом и произношением.</li>
+      <li><b>21:00</b> — мягкое напоминание записать день. В пятницу — совет про выходные, в воскресенье — отметить выходные хотя бы примерно.</li>
+      <li><b>Утро 15-го дня</b> — зов подвести итоги спринта.</li>
+      <li><b>Кнопка Dolce Cura</b> слева от поля ввода открывает приложение.</li></ul>
+      <p>В Apps Script: <b>pause</b> выключает напоминания (отпуск, болезнь), <b>resume</b> включает обратно.</p></details>
+    <details><summary>Мой день</summary>
+      <ul><li><b>Bella</b> — её образ собирается из твоих заботливых дел, силуэт меняется только по итогам спринтов. Нажми на неё, чтобы увидеть, что уже есть и что будет дальше.</li>
+      <li><b>Спринт</b> — день из 14 и фраза дня.</li>
+      <li><b>Сегодня</b> — калории, шаги, тренировки, цикл. На выходных можно просто выбрать «как в будни», «чуть больше» или «праздник». Стрелки ‹ › — вернуться до двух недель назад.</li>
+      <li><b>Моя тарелка</b> — фото всего, что ешь. Хранятся две недели.</li>
+      <li><b>Как ты?</b> — настроение и одна приятная вещь за день. Лучше вечером.</li>
+      <li><b>Неделя</b> — тренировки, шаги, среднее по калориям и итоги «Тянет заесть».</li></ul></details>
+    <details><summary>Спринты</summary>
+      <ul><li><b>Мои спринты</b> — вес, талия, примерка и твои слова по итогам каждого спринта.</li>
+      <li><b>Когда тянет</b> — карта: в какое время, почему, будни или выходные.</li>
+      <li><b>Мои «если — то»</b> — до трёх заранее принятых решений на опасные моменты. Они всплывают в «Тянет заесть».</li></ul></details>
+    <details><summary>Мудборд</summary>
+      <p>До 12 картинок, которые вдохновляют. Нажми на картинку, чтобы открыть крупно или убрать.</p></details>
+    <details><summary>Тянет заесть</summary>
+      <ol><li><b>Что на самом деле?</b> Голод — тогда просто нормально поесть. Или усталость, грусть, злость и тревога, одиночество, скука, «просто хочу сладкого».</li>
+      <li><b>Насколько сильно?</b> От 1 до 10.</li>
+      <li><b>Что попробуешь?</b> Три переключалки и твои планы «если — то».</li>
+      <li><b>Сёрфинг</b> — волна, таймер на 10 минут и подсказки.</li>
+      <li><b>А теперь?</b> Снова оценка — видно, как спала волна.</li></ol>
+      <p><b>«Я уже переела»</b> — не отчёт, а поддержка: следующий приём пищи как обычно, без наказаний.</p>
+      <p>Свои переключалки добавляются в ⚙︎ → «Мои переключалки».</p></details>
+    <details><summary>Раз в две недели</summary>
+      <p>Утром 15-го дня, до завтрака: весы, талия, примерка юбки, потом «Подвести итоги». Если это дни перед месячными, можно взвеситься через пару дней — карточка подождёт.</p></details>
+    <details><summary>Цикл</summary>
+      <p>Один раз впиши, какой сегодня день цикла, — дальше приложение считает само по средней длине из ⚙︎. Когда начнутся месячные, нажми «Месячные начались», чтобы поправить отсчёт.</p></details>
+    <details><summary>Если что-то не так</summary>
+      <ul><li>Не видно обновлений — в приложении «…» → Reload Page.</li>
+      <li>Внизу надпись «Сейчас это превью» — данные не попадают в облако Телеграма, открой приложение через кнопку в боте.</li>
+      <li>Раз в месяц полезно сохранить ⚙︎ → «Резервная копия» себе в «Избранное».</li></ul></details>
+    </div>
+    <button class="btn full" style="margin-top:14px" data-act="bg-close">Понятно</button>`),
+  mysw: () => { const my = S.cfg.mysw || [];
+    modal(`<h2>Мои переключалки</h2><p class="lead">То, что помогает именно тебе. Они будут появляться среди вариантов, а те, после которых чаще «отпускает», — чаще.</p>
+      ${my.length ? `<ul class="myl">${my.map(o => `<li><span>${esc(o[1])}</span><button class="x" data-act="mysw-del" data-v="${o[0]}" aria-label="Удалить">×</button></li>`).join('')}</ul>` : ''}
+      <div class="inrow"><input class="inp" id="mysw_in" maxlength="60" placeholder="например, полить цветы" style="max-width:none"><button class="btn" data-act="mysw-add">Добавить</button></div>
+      <button class="btn ghost full" style="margin-top:14px" data-act="bg-close">Готово</button>`); },
+  'mysw-add': async () => { const v = document.getElementById('mysw_in').value.trim(); if (!v) return;
+    S.cfg.mysw = [...(S.cfg.mysw || []), ['m' + Date.now().toString(36).slice(-5), v.slice(0,60)]].slice(-12); await saveCfg(); A.mysw(); },
+  'mysw-del': async b => { S.cfg.mysw = (S.cfg.mysw || []).filter(o => o[0] !== b.dataset.v); await saveCfg(); A.mysw(); },
+  onb: async () => {
+    const d = document.getElementById('o_d').value || today(), w = val('o_w'), wa = val('o_wa');
+    Object.assign(S.cfg, {onb:true, start:d});
+    if (w) { S.meas = S.meas.filter(m => m.n !== 0); S.meas.push({n:0, d, w, wa}); }
+    S.cfg.seen = today(); await Promise.all([saveCfg(), Store.set('meas', S.meas)]); render();
+    modal(`<div class="morning">${ART.flower}<p class="muted small" style="margin:6px 0 0">Первый день</p>
+      <p class="q">Не нужно всё сразу. Просто начни — и будь к себе нежной по дороге.</p><button class="btn full" data-act="bg-close">Начинаем ♡</button></div>`);
+  },
+  'res-save': async b => {
+    const n = +b.dataset.v, w = val('r_w'), wa = val('r_wa'), note = document.getElementById('r_n').value.trim().slice(0,200);
+    if (w == null) { toast('Впиши вес или нажми «Пропустить»'); return; }
+    const fitEl = document.querySelector('[data-act="fitpick"].on');
+    S.meas = S.meas.filter(m => m.n !== n); S.meas.push({n, d: today(), w, wa, fit: fitEl ? fitEl.dataset.v : null});
+    if (note) S.notes[n] = note;
+    await Promise.all([Store.set('meas', S.meas), Store.set('notes', S.notes)]); close(); render();
+    toast(fitEl && fitEl.dataset.v === 'yes' ? 'Застегнулась! Вот это да ♡' : 'Записала. Ты молодец, что продолжаешь');
+  },
+  'res-skip': async b => { S.cfg.skip = [...(S.cfg.skip || []), +b.dataset.v]; await saveCfg(); close(); render(); },
+  'set-save': async () => {
+    const c = S.cfg;
+    Object.assign(c, {name: document.getElementById('c_n').value.trim() || c.name, kcal: val('c_k') || c.kcal, steps: val('c_st') || c.steps,
+      s: val('c_s') ?? c.s, p: val('c_p') ?? c.p, c: val('c_c') ?? c.c, start: document.getElementById('c_d').value || c.start,
+      we: [val('c_e0') || c.we[0], val('c_e1') || c.we[1], val('c_e2') || c.we[2]], goal: val('c_g') || c.goal || 65, clen: Math.min(45, Math.max(20, val('c_cl') || c.clen || 28))});
+    await saveCfg(); close(); render(); toast('Сохранено');
+  },
+  export: () => { const data = JSON.stringify({cfg:S.cfg, days:S.days, good:S.good, meas:S.meas, notes:S.notes});
+    modal(`<h2>Резервная копия</h2><p class="lead">Скопируй и сохрани себе в «Избранное». Картинки в копию не входят.</p><textarea class="inp" readonly style="min-height:140px;font-size:12px">${esc(data)}</textarea>`); }
+};
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches && e.target.matches('input.inp')) e.target.blur(); });
+document.addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (b && A[b.dataset.act]) A[b.dataset.act](b, e); });
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.id === 'ffile') { const f = el.files && el.files[0]; el.value = ''; if (!f) return;
+    try { const src = await compress(f, [[380,.6],[320,.52],[260,.45]], 12000); const v = S.view; await addFood(v, src); render(); toast('На тарелке ♡'); }
+    catch (err) { toast('Не получилось загрузить фото'); } return; }
+  if (el.id === 'file') { const f = el.files && el.files[0]; el.value = ''; if (!f) return;
+    try { const src = await compress(f); await savePhoto(src); render(); toast('Картинка на доске'); }
+    catch (err) { toast('Не получилось загрузить, попробуй другую картинку'); } return; }
+  if (el.dataset.g) { const v = S.view; S.good[v] = el.value.trim().slice(0,80); await saveMonth(v, 'g', S.good); toast('Записала ♡'); return; }
+  const f = el.dataset.f; if (!f) return;
+  const v = parseFloat(String(el.value).replace(/\s/g,'').replace(',', '.'));
+  const p = {[f]: isNaN(v) ? null : Math.round(v)}; if (f === 'k') p.e = null; await patchDay(p); toast('Сохранено ✓');
+});
+
+(async () => {
+  try { await load(); } catch (e) { console.error(e); }
+  if (!S.cfg.start) S.cfg.start = today();
+  document.getElementById('fab').hidden = false;
+  render();
+  if (!S.cfg.onb) onboarding();
+  else if (new Date().getHours() < 13 && S.cfg.seen !== today()) morningModal();
+})();
+</script>
+</body>
+</html>
