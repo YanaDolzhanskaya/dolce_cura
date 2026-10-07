@@ -1,0 +1,3375 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dolce Cura</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Playfair+Display:ital@1&family=Manrope:wght@400;500;600;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF4EF; --card:#FFFCFA; --blush:#F7E1DF; --blush2:#F1CFCF; --rose:#E2A2AA; --rose-deep:#B96C79;
+  --cocoa:#5B3F40; --muted:#7F6764; --line:#F0E1DC; --milk:#FFF8F2; --sage:#B7C4A8; --lemon:#F3DD8C;
+  color-scheme:light;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--cream);color:var(--cocoa);font:16px/1.5 'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--rose-deep);outline-offset:2px}
+img{max-width:100%}
+.app{max-width:500px;margin:0 auto;padding:18px 18px 130px}
+.hand{font-family:'Caveat','Segoe Print',cursive;font-size:22px;line-height:1.2;color:var(--rose-deep)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+
+header{display:flex;justify-content:space-between;align-items:flex-start;margin:4px 0 18px}
+.hello{display:flex;gap:10px;align-items:center}
+.hello svg{width:44px;height:44px;flex:none}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:30px;line-height:1.05;margin:0}
+.brand{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;color:var(--rose-deep);line-height:1;margin-bottom:2px}
+.date{font-size:14px;color:var(--muted);margin-top:4px}
+.gear{border:none;background:var(--blush);width:40px;height:40px;border-radius:50%;font-size:17px;color:var(--rose-deep)}
+
+.card{background:var(--card);border-radius:26px;padding:18px;margin-bottom:12px;box-shadow:0 10px 30px -18px rgba(185,108,121,.45)}
+.card h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:25px;line-height:1.15;margin:0 0 4px}
+.card .sub{margin:0 0 16px;font-size:14px;color:var(--muted)}
+
+/* moodboard */
+.board{padding:10px}
+.pins{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+.pcol{display:flex;flex-direction:column;gap:8px}
+.pin{display:block;width:100%;margin:0;border:none;padding:0;background:var(--blush);border-radius:18px;overflow:hidden}
+.pin img{display:block;width:100%;height:100%;object-fit:cover}
+.pin.add{aspect-ratio:3/4;background:var(--milk);border:1.5px dashed var(--blush2);color:var(--rose-deep);font-size:14px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.pin.add svg{width:64px;height:64px}
+.pin.add.plus{aspect-ratio:3/4;font-size:34px;font-weight:400;color:var(--rose)}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--blush);border-radius:999px;padding:4px;margin:0 0 16px}
+.tabs button{border:none;background:none;border-radius:999px;padding:9px 0;font-size:15px;color:var(--rose-deep);font-weight:600}
+.tabs button.on{background:var(--card);color:var(--cocoa);box-shadow:0 2px 8px -4px rgba(185,108,121,.5)}
+.bella .hand{font-size:22px;line-height:1.2;margin:6px 0 10px}
+.board-empty{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.board-empty .pin.add:first-child{grid-row:span 2;aspect-ratio:auto}
+.board-body{padding:8px 10px 8px}
+.why{margin:4px 0 6px;font-size:25px}
+.linkbtn{border:none;background:none;padding:0;color:var(--rose-deep);font-size:14px;text-decoration:underline;text-underline-offset:3px}
+
+/* sprint */
+.sprint{background:linear-gradient(160deg,var(--blush) 0%,var(--milk) 75%);position:relative;overflow:hidden}
+.sprint .deco{position:absolute;right:-22px;top:-26px;width:104px;opacity:.85}
+.sprint > *:not(.deco){position:relative;z-index:1}
+.sprint .n{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:400;font-size:24px;line-height:1.2;color:var(--cocoa);margin:6px 0 2px}
+.dots{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;margin:16px 0 6px}
+.dots i{aspect-ratio:1;border-radius:50%;background:#fff;border:1.5px solid var(--blush2)}
+.dots i.past{background:var(--rose);border-color:var(--rose)}
+.dots i.now{background:#fff;border:2px solid var(--rose-deep)}
+.dots i.wk{margin-left:6px}
+.sprint .hand{margin:10px 0 0}
+
+/* forms */
+.daynav{display:flex;gap:6px}
+.daynav button{border:none;background:var(--blush);width:34px;height:34px;border-radius:50%;color:var(--rose-deep);font-size:17px}
+.daynav button:disabled{opacity:.35;cursor:default}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.field{margin-top:16px}
+.field label,.lbl{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+.inrow{display:flex;align-items:center;gap:10px}
+.inp{width:100%;border:1.5px solid var(--line);background:var(--milk);border-radius:14px;padding:10px 12px;font-size:16px}
+.inp:focus{outline:none;border-color:var(--rose)}
+.inrow .inp{max-width:130px}
+.unit{color:var(--muted);font-size:15px}
+.soft{height:10px;border-radius:99px;background:var(--blush);overflow:hidden;margin-top:10px}
+.soft i{display:block;height:100%;border-radius:99px;background:var(--rose);transition:width .3s}
+.note{font-size:14px;color:var(--muted);margin:8px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--blush2);background:transparent;border-radius:999px;padding:9px 16px;font-size:15px;color:var(--cocoa)}
+.chip.on{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* mood */
+.moods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mood{border:none;background:var(--milk);border-radius:18px;padding:10px 2px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.mood i{width:26px;height:26px;border-radius:50%;display:block}
+.mood.on{background:var(--blush);color:var(--cocoa);font-weight:600}
+.mood.on i{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--rose-deep)}
+
+/* week */
+.goal{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.goal:last-child{border-bottom:none;padding-bottom:0}
+.goal .t{font-size:16px}
+.goal .v{font-size:14px;color:var(--muted);text-align:right}
+.pips{display:flex;gap:6px}
+.pips i{width:14px;height:14px;border-radius:50%;background:var(--blush);border:1.5px solid var(--blush2)}
+.pips i.on{background:var(--rose);border-color:var(--rose)}
+.goal .soft{grid-column:1/-1;margin-top:4px}
+.heart{color:var(--rose-deep)}
+
+.btn{border:none;border-radius:18px;padding:13px 20px;font-weight:600;font-size:15px;background:var(--rose-deep);color:#fff}
+.btn.ghost{background:var(--blush);color:var(--rose-deep)}
+.btn.full{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+textarea.inp{min-height:84px;resize:vertical;font-size:16px}
+.hist{margin:0;padding:0;list-style:none}
+.hist li{padding:12px 0;border-bottom:1px solid var(--line)}
+.hist li:last-child{border-bottom:none}
+.hist .top{display:flex;justify-content:space-between;gap:10px}
+.hist .top b{font-weight:600}
+.hist .hand{font-size:20px;margin-top:4px}
+.foot{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
+
+/* dolce */
+.fab.hide{opacity:0;pointer-events:none;transform:translate(-50%,20px)}
+.fab{transition:opacity .2s,transform .2s}
+.fab.mini{padding:13px;gap:0}
+.fab.mini .fl{display:none}
+.fab{transition:padding .2s;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;border:none;border-radius:999px;padding:13px 22px 13px 16px;background:var(--cocoa);color:var(--cream);font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;box-shadow:0 12px 30px -10px rgba(91,63,64,.6)}
+.fab svg{width:26px;height:26px}
+.reasons{display:grid;gap:8px}
+.reason{border:1.5px solid var(--line);background:var(--card);border-radius:20px;padding:14px 16px;text-align:left;font-size:16px}
+.reason small{display:block;color:var(--muted);font-size:13px}
+.it{background:var(--milk);border-radius:24px;padding:18px;text-align:center;margin:14px 0;position:relative;overflow:hidden}
+.it .tile{position:absolute;inset:0;width:100%;height:100%;opacity:.28;pointer-events:none}
+.it > *:not(.tile){position:relative}
+.it .ph{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:30px;line-height:1.15;margin:0}
+.it .tr{margin:8px 0 2px;font-size:16px}
+.it .pr{font-size:14px;color:var(--muted);margin:0}
+.ring{display:block;width:150px;height:150px;margin:6px auto 4px}
+.ring .bg{stroke:var(--blush)}
+.ring .fg{stroke:var(--rose-deep);transition:stroke-dashoffset 1s linear}
+.ring text{fill:var(--cocoa);font:600 28px 'Manrope',sans-serif}
+.tip{background:var(--blush);border-radius:20px;padding:14px 16px;margin:0 0 12px;font-size:15px}
+
+.modal{position:fixed;inset:0;background:rgba(91,63,64,.28);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:var(--cream);width:100%;max-width:500px;border-radius:30px 30px 0 0;padding:24px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto;animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
+.sheet h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:28px;margin:0 0 6px}
+.sheet .lead{margin:0 0 16px;color:var(--muted)}
+.sheet .lead + .field,.sheet .lead + .two > .field{margin-top:0}
+.viewer img{display:block;width:100%;border-radius:22px;margin-bottom:14px}
+.plate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.plate .ph{position:relative;aspect-ratio:1;border:none;padding:0;border-radius:18px;overflow:hidden;background:var(--blush)}
+.plate .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.plate .ph span{position:absolute;left:6px;bottom:6px;background:rgba(255,252,250,.9);border-radius:10px;padding:1px 7px;font-size:12px;color:var(--cocoa)}
+.plate .ph.add{background:var(--milk);border:1.5px dashed var(--blush2);color:var(--rose-deep);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.plate .ph.add svg{width:34px;height:34px}
+.morning{text-align:center;padding-top:6px}
+.morning svg{width:84px;height:84px}
+.itq{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:24px;line-height:1.2;margin:12px 0 0;max-width:85%}
+.morning .q{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;line-height:1.2;margin:10px 0 18px}
+.bella{display:grid;grid-template-columns:128px 1fr;gap:16px;align-items:center;padding:16px 20px 16px 12px}
+.bella svg{width:128px;height:auto;display:block}
+.bella h2{margin-bottom:2px}
+.bella .new{margin:8px 0 10px;font-size:14px}
+.bella .new b{font-weight:600;color:var(--rose-deep)}
+.bl{list-style:none;margin:0 0 6px;padding:0}
+.bl li{display:flex;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.bl li:last-child{border-bottom:none}
+.bl li i{font-style:normal;color:var(--rose-deep);width:14px;flex:none}
+.bl li.no{color:var(--muted)}
+.bl small{display:block;color:var(--muted);font-size:13px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale .chip{padding:12px 0;font-size:17px;font-weight:600}
+.wave{position:relative;height:110px;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,var(--milk),var(--blush));margin:6px 0 10px}
+.wave svg{position:absolute;left:0;bottom:0;width:200%;height:90px;animation:swell 7s ease-in-out infinite}
+.wave .w1{fill:var(--rose);opacity:.55}
+.wave .w2{fill:var(--rose-deep);opacity:.25}
+@keyframes swell{0%{transform:translateX(0) translateY(6px)}50%{transform:translateX(-25%) translateY(-6px)}100%{transform:translateX(-50%) translateY(6px)}}
+.wave-t{position:absolute;top:14px;left:0;right:0;text-align:center;font:600 30px 'Manrope',sans-serif;color:var(--cocoa)}
+.wave-p{min-height:48px;margin:0 0 4px;font-size:16px;text-align:center}
+.myl{list-style:none;margin:0 0 12px;padding:0}
+.myl li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.myl .x{border:none;background:none;color:var(--muted);font-size:20px}
+.plans{border:1.5px dashed var(--rose);border-radius:20px;padding:10px 14px;margin:0 0 12px}
+.plans p{margin:4px 0;font-size:15px}
+.plans span{font-family:'Playfair Display',Georgia,serif;font-style:italic;color:var(--rose-deep)}
+.pat{margin:0;padding:0;list-style:none}
+.pat li{padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.pat li:last-child{border-bottom:none}
+.plan-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.plan-row span.k{font-family:'Playfair Display',Georgia,serif;font-style:italic;color:var(--rose-deep)}
+.help details{background:var(--card);border-radius:18px;padding:12px 16px;margin-bottom:8px}
+.help summary{cursor:pointer;font-weight:600;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.help summary::-webkit-details-marker{display:none}
+.help summary::after{content:"+";color:var(--rose-deep);font-size:20px;font-weight:400}
+.help details[open] summary::after{content:"−"}
+.help p,.help li{font-size:15px;line-height:1.5}
+.help ul,.help ol{padding-left:20px;margin:8px 0}
+.help p{margin:8px 0}
+.closeday{margin:0 0 14px;padding:16px 20px;font-size:16px;box-shadow:0 12px 26px -14px rgba(185,108,121,.8)}
+.donecard .okmark{font-family:'Manrope',sans-serif;font-size:14px;font-weight:600;color:var(--rose-deep);margin-left:6px;vertical-align:middle}
+.drow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.drow span{color:var(--muted)}
+.drow b{font-weight:600}
+.plate.mini{grid-template-columns:repeat(5,1fr);margin-top:12px;gap:6px}
+.plate.mini .ph{border-radius:12px}
+.celebr{text-align:center;padding-top:6px;position:relative}
+.celebr > svg{width:84px;height:84px}
+.celebr .big{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:34px;margin:8px 0 4px}
+.petal{position:fixed;top:-20px;width:12px;height:16px;border-radius:60% 40% 60% 40%;z-index:40;pointer-events:none;animation:petal 2.6s ease-in forwards}
+@keyframes petal{to{transform:translateY(105vh) rotate(260deg) translateX(40px);opacity:.3}}
+.ach{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 6px}
+.ach span{background:var(--blush);color:var(--rose-deep);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:600}
+.rh{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:21px;margin:16px 0 4px}
+.lib small{color:var(--rose-deep)}
+.eat{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.eat .muted{font-size:13px}
+.words{display:flex;flex-direction:column;gap:2px}
+.wrow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
+.wrow:last-child{border-bottom:none}
+.wit{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:18px;color:var(--cocoa)}
+.wex{font-size:14px;margin-top:2px;font-style:italic}
+.rchips{display:flex;flex-wrap:wrap;gap:6px}
+.rchip{border:1.5px solid var(--blush2);background:transparent;border-radius:999px;padding:5px 11px;font-size:13px;color:var(--cocoa)}
+.rchip.on{background:var(--rose);border-color:var(--rose);color:#fff}
+.linkbtn.small{font-size:13px}
+.sprint.top{padding:16px 18px}
+.toprow{display:flex;gap:12px;align-items:center}
+.mini-bella{border:none;background:var(--milk);border-radius:50%;width:64px;height:64px;flex:none;overflow:hidden;padding:0}
+.mini-bella svg{width:100%;height:auto;margin-top:2px}
+.why1{font-size:18px;margin:4px 0 0}
+.wordsrow{display:flex;gap:6px;align-items:baseline;width:100%;border:none;background:rgba(255,255,255,.6);border-radius:14px;padding:10px 12px;margin-top:10px;text-align:left;font-size:14px}
+.wordsrow .wl{flex:1;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:16px;color:var(--cocoa);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.daycard h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:20px;margin:22px 0 2px;padding-top:16px;border-top:1px solid var(--line)}
+.prog{font-size:13px;font-weight:600;color:var(--rose-deep);background:var(--blush);border-radius:999px;padding:3px 10px;margin-left:8px;vertical-align:middle;font-family:'Manrope',sans-serif}
+.left{font-size:13px;color:var(--muted);text-align:center;margin:8px 0 0}
+.wk .goal{padding:9px 0}
+.wk .mini{font-size:14px;color:var(--muted);margin:8px 0 0}
+details.grp{border-top:1px solid var(--line);padding:12px 0}
+details.grp > summary{font-weight:600;font-size:16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+details.grp > summary::after{content:'+';color:var(--rose-deep)}
+details.grp[open] > summary::after{content:'–'}
+.hero{display:block;width:100%;text-align:left;border:none;border-radius:28px;padding:20px 22px;margin:0 0 14px;background:var(--cocoa);color:var(--cream);box-shadow:0 14px 30px -16px rgba(91,63,64,.8)}
+.hero-t{display:block;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:28px;line-height:1.1}
+.hero-s{display:block;font-size:14px;opacity:.8;margin-top:6px}
+.bloom{font-size:13px;color:var(--muted)}
+.bloom i{display:block;height:6px;border-radius:9px;background:var(--blush);margin-top:5px;overflow:hidden}
+.bloom b{display:block;height:100%;background:var(--rose);border-radius:9px}
+.x{border:none;background:none;color:var(--muted);font-size:20px;line-height:1;padding:4px 6px}
+.cpill{display:inline-flex;align-items:center;gap:6px;padding:5px 8px 5px 16px;cursor:text}
+.cpill input{width:52px;border:none;border-radius:999px;background:var(--milk);padding:5px 8px;font-size:15px;text-align:center;color:var(--cocoa)}
+.cpill.on input{background:rgba(255,255,255,.9)}
+.rchecks{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+.rcheck{display:flex;align-items:center;gap:10px;border:none;background:none;padding:7px 0;text-align:left;font-size:15px;color:var(--cocoa)}
+.rcheck i{flex:none;width:22px;height:22px;border-radius:7px;border:1.8px solid var(--rose);display:grid;place-items:center;font-style:normal;font-size:14px;color:#fff}
+.rcheck.on i{background:var(--rose)}
+.rcheck.on{color:var(--muted)}
+.pmlist{display:flex;flex-direction:column}
+.ghostchip{border-style:dashed;color:var(--muted);font-size:14px;padding:7px 12px}
+.pmrow{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.pmrow:last-child{border-bottom:none}
+.pmdo{flex:1;border:none;background:none;text-align:left;padding:10px 0;font-size:15px;color:var(--cocoa)}
+.pmdo small{display:block;font-size:12px;color:var(--muted)}
+.notes{min-height:96px;resize:none;line-height:1.45;margin-top:10px}
+.chip{white-space:normal;text-align:left;max-width:100%}
+.sheet{overflow-x:hidden}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--cocoa);color:var(--cream);padding:10px 18px;border-radius:18px;font-size:15px;z-index:30;max-width:90%;text-align:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"><p class="muted">Секунду…</p></div>
+<button class="fab" data-act="dolce" id="fab" hidden><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 17h20v5a10 10 0 0 1-20 0z" fill="#F7E1DF"/><path d="M28 19h2.5a3.5 3.5 0 0 1 0 7H27" fill="none" stroke="#F7E1DF" stroke-width="2.4"/><path d="M18 21.5c-1.6-1.6-4-.3-3 1.6.6 1.1 3 2.7 3 2.7s2.4-1.6 3-2.7c1-1.9-1.4-3.2-3-1.6z" fill="#B96C79"/><path d="M14 13c0-2 2-2 2-4M20 13c0-2 2-2 2-4" fill="none" stroke="#F7E1DF" stroke-width="1.8" stroke-linecap="round"/></svg><span class="fl">Тянет заесть</span></button>
+<div id="layer"></div>
+<input type="file" id="file" accept="image/*" hidden>
+<script>
+/* ---------- иллюстрации (свои, нарисованы кодом) ---------- */
+const ART = {
+  flower: `<svg viewBox="0 0 60 60" aria-hidden="true"><g transform="translate(30 27)">${[0,72,144,216,288].map(a=>`<ellipse rx="7.5" ry="12" transform="rotate(${a}) translate(0 -11)" fill="#F1CFCF"/>`).join('')}<circle r="6" fill="#F3DD8C"/></g><path d="M30 38c0 8-2 14-6 18" stroke="#B7C4A8" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="25" cy="49" rx="6" ry="3" transform="rotate(-35 25 49)" fill="#B7C4A8"/></svg>`,
+  lemons: `<svg viewBox="0 0 140 120" class="deco" aria-hidden="true"><path d="M20 40c30-10 60-5 100 20" stroke="#B7C4A8" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="60" cy="62" rx="20" ry="15" transform="rotate(20 60 62)" fill="#F3DD8C"/><ellipse cx="98" cy="78" rx="17" ry="13" transform="rotate(-15 98 78)" fill="#F3DD8C"/><ellipse cx="40" cy="36" rx="14" ry="6" transform="rotate(-25 40 36)" fill="#B7C4A8"/><ellipse cx="82" cy="45" rx="13" ry="5.5" transform="rotate(30 82 45)" fill="#B7C4A8"/><circle cx="54" cy="58" r="2.5" fill="#fff" opacity=".7"/></svg>`,
+  tile: `<svg class="tile" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><pattern id="t" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="scale(.7)"><rect width="40" height="40" fill="none"/><circle cx="20" cy="20" r="7" fill="none" stroke="#E2A2AA" stroke-width="1.5"/><path d="M20 0v8M20 32v8M0 20h8M32 20h8" stroke="#B7C4A8" stroke-width="1.5"/><circle cx="0" cy="0" r="4" fill="#F3DD8C"/><circle cx="40" cy="0" r="4" fill="#F3DD8C"/><circle cx="0" cy="40" r="4" fill="#F3DD8C"/><circle cx="40" cy="40" r="4" fill="#F3DD8C"/></pattern></defs><rect width="320" height="200" fill="url(#t)"/></svg>`,
+  cam: `<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="12" width="30" height="21" rx="6" fill="#F7E1DF"/><path d="M14 12l2.5-4h7L26 12" fill="#F7E1DF"/><circle cx="20" cy="22.5" r="6" fill="#fff"/><circle cx="20" cy="22.5" r="3.5" fill="#E2A2AA"/></svg>`,
+  frame: `<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="8" width="44" height="50" rx="10" fill="#F7E1DF"/><path d="M22 44l8-10 6 7 4-4 6 7z" fill="#E2A2AA"/><circle cx="40" cy="24" r="4" fill="#F3DD8C"/></svg>`
+};
+
+/* ---------- Telegram и хранилище ---------- */
+const tg = window.Telegram && window.Telegram.WebApp;
+const inTg = !!(tg && tg.initData);
+const cloudOk = inTg && typeof tg.isVersionAtLeast === 'function' && tg.isVersionAtLeast('6.9');
+if (tg) { try { tg.ready(); tg.expand(); tg.setHeaderColor && tg.setHeaderColor('#FBF4EF'); tg.setBackgroundColor && tg.setBackgroundColor('#FBF4EF'); } catch (e) {} }
+const haptic = () => { try { inTg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('soft'); } catch (e) {} };
+
+const PFX = 'dn_';
+const Store = {
+  async keys(){
+    if (cloudOk) return new Promise(r => tg.CloudStorage.getKeys((e,k) => r(e ? [] : (k || []))));
+    const out = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(PFX)) out.push(k.slice(PFX.length)); } } catch (e) {}
+    return out;
+  },
+  async getMany(keys){
+    const out = {};
+    if (cloudOk) { for (let i = 0; i < keys.length; i += 20) {
+        const got = await new Promise(r => tg.CloudStorage.getItems(keys.slice(i, i+20), (e,v) => r(e ? {} : (v || {}))));
+        Object.assign(out, got); } return out; }
+    try { keys.forEach(k => { const v = localStorage.getItem(PFX + k); if (v != null) out[k] = v; }); } catch (e) {}
+    return out;
+  },
+  async getAll(){
+    if (cloudOk) {
+      const keys = (await Store.keys()).filter(k => !k.startsWith('f_'));
+      const out = {};
+      for (let i = 0; i < keys.length; i += 20) {
+        const got = await new Promise(r => tg.CloudStorage.getItems(keys.slice(i, i+20), (e,v) => r(e ? {} : (v || {}))));
+        Object.assign(out, got);
+      }
+      return out;
+    }
+    const out = {};
+    try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(PFX) && !k.startsWith(PFX + 'f_')) out[k.slice(PFX.length)] = localStorage.getItem(k); } } catch (e) {}
+    return out;
+  },
+  set(key, val){
+    const s = JSON.stringify(val);
+    if (cloudOk) return new Promise(r => tg.CloudStorage.setItem(key, s, e => { if (e) toast('Не получилось сохранить, попробуй ещё раз'); r(); }));
+    try { localStorage.setItem(PFX + key, s); } catch (e) { toast('Не хватило места в браузере'); }
+    return Promise.resolve();
+  },
+  remove(keys){
+    if (!keys.length) return Promise.resolve();
+    if (cloudOk) return new Promise(r => tg.CloudStorage.removeItems(keys, () => r()));
+    try { keys.forEach(k => localStorage.removeItem(PFX + k)); } catch (e) {}
+    return Promise.resolve();
+  }
+};
+
+/* ---------- даты ---------- */
+const pad = n => String(n).padStart(2,'0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const diff = (a,b) => Math.round((parse(b) - parse(a)) / 864e5);
+const today = () => iso(new Date());
+const MG = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const WD = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const fmtD = s => { const d = parse(s); return `${d.getDate()} ${MG[d.getMonth()]}`; };
+const num = (v, f=1) => (v == null || isNaN(v)) ? '—' : Number(v).toLocaleString('ru-RU', {maximumFractionDigits:f});
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function plural(n,a,b,c){ n = Math.abs(n) % 100; const m = n % 10; if (n > 10 && n < 20) return c; if (m > 1 && m < 5) return b; if (m === 1) return a; return c; }
+
+/* ---------- состояние ---------- */
+const S = {
+  cfg: {onb:false, name:'', start:null, kcal:1800, steps:50000, s:2, p:1, c:2, item:'Юбка', why:'', we:[1700,2100,2600], clen:28, cyc:[], goal:null, girl:'Bella'},
+  days: {}, good: {}, meas: [], notes: {}, photos: [], lib: [], pm: [], vocab: [], vocabRaw: '', eat: {}, legacy: new Set(), view: today()
+};
+async function load(){
+  const all = await Store.getAll();
+  const j = k => { try { return all[k] ? JSON.parse(all[k]) : null; } catch (e) { return null; } };
+  if (j('cfg')) Object.assign(S.cfg, j('cfg'));
+  S.meas = j('meas') || []; S.notes = j('notes') || {};
+  Object.keys(all).forEach(k => {
+    let m = k.match(/^d_(\d{4})_(\d{2})(?:_([abc]))?$/);
+    if (m) { const mo = j(k) || {}; Object.keys(mo).forEach(dd => S.days[`${m[1]}-${m[2]}-${dd}`] = mo[dd]); if (!m[3]) S.legacy.add(`${m[1]}-${m[2]}`); }
+    m = k.match(/^g_(\d{4})_(\d{2})$/);
+    if (m) { const mo = j(k) || {}; Object.keys(mo).forEach(dd => S.good[`${m[1]}-${m[2]}-${dd}`] = mo[dd]); }
+  });
+  S.lib = j('lib') || []; S.known = j('known') || []; S.pm = j('pm') || [];
+  const vn = j('vocn'); if (vn) { let t = ''; for (let i = 0; i < vn; i++) t += j('voc_' + i) || ''; S.vocab = parseVocab(t); S.vocabRaw = t; }
+  const cutE = ymd(addDays(today(), -60)); const oldE = [];
+  const parts = {};
+  Object.keys(all).forEach(k => { const m = k.match(/^e_(\d{8})(?:_(\d+))?$/); if (!m) return;
+    if (m[1] < cutE) { oldE.push(k); return; }
+    (parts[m[1]] = parts[m[1]] || [])[+(m[2] || 0)] = j(k); });
+  Object.keys(parts).forEach(y => { const p = parts[y], ds = `${y.slice(0,4)}-${y.slice(4,6)}-${y.slice(6)}`;
+    S.eat[ds] = Array.isArray(p[0]) ? p[0].map(e => (e[0] ? e[0] + ' ' : '') + e[1]).join('\n') : p.map(x => x || '').join(''); });
+  if (oldE.length) Store.remove(oldE);
+  // «Тарелка» убрана — чистим её старые фото из облака
+  try { const old = (await Store.keys()).filter(k => /^fi?_/.test(k)); if (old.length) Store.remove(old); } catch (e) {}
+  const mb = j('mb') || [];
+  S.photos = mb.map(p => { let t = ''; for (let i = 0; i < p.n; i++) t += j(`p_${p.id}_${i}`) || ''; return {id:p.id, n:p.n, src:t}; }).filter(p => p.src.startsWith('data:image'));
+  const oldN = j('imgn'); // фото из прошлой версии
+  if (oldN && !mb.length) { let t = ''; for (let i = 0; i < oldN; i++) t += j('img_' + i) || '';
+    if (t.startsWith('data:image')) { await savePhoto(t); await Store.set('imgn', 0); } }
+}
+const saveCfg = () => Store.set('cfg', S.cfg);
+function saveMonth(ds, key='d', src=S.days){ const [y,m] = ds.split('-'); const out = {};
+  Object.keys(src).forEach(k => { if (k.startsWith(`${y}-${m}-`) && src[k] != null && src[k] !== '') out[k.slice(8)] = src[k]; });
+  return Store.set(`${key}_${y}_${m}`, out); }
+// дни храним по третям месяца, чтобы запись не упиралась в лимит 4096 символов на ключ
+const part = dd => +dd <= 10 ? 'a' : +dd <= 20 ? 'b' : 'c';
+async function saveDays(ds){
+  const [y, m, dd] = ds.split('-'), ym = `${y}-${m}`;
+  const parts = S.legacy.has(ym) ? ['a','b','c'] : [part(dd)];
+  await Promise.all(parts.map(p => { const out = {};
+    Object.keys(S.days).forEach(k => { if (k.startsWith(ym + '-') && part(k.slice(8)) === p && S.days[k]) out[k.slice(8)] = S.days[k]; });
+    return Store.set(`d_${y}_${m}_${p}`, out); }));
+  if (S.legacy.has(ym)) { S.legacy.delete(ym); await Store.remove([`d_${y}_${m}`]); }
+}
+async function savePhoto(src){
+  const id = Date.now().toString(36).slice(-6); const parts = [];
+  for (let i = 0; i < src.length; i += 4000) parts.push(src.slice(i, i + 4000));
+  await Promise.all(parts.map((p, i) => Store.set(`p_${id}_${i}`, p)));
+  S.photos.push({id, n: parts.length, src});
+  await Store.set('mb', S.photos.map(p => ({id:p.id, n:p.n})));
+}
+async function deletePhoto(id){
+  const p = S.photos.find(x => x.id === id); if (!p) return;
+  S.photos = S.photos.filter(x => x.id !== id);
+  await Store.set('mb', S.photos.map(x => ({id:x.id, n:x.n})));
+  await Store.remove(Array.from({length:p.n}, (_, i) => `p_${id}_${i}`));
+}
+
+/* ---------- словарь и еда ---------- */
+const WORDS = [
+[
+"ciao",
+"привет / пока",
+"чАо",
+"Ciao, come stai?",
+"Привет, как дела?"
+],
+[
+"grazie",
+"спасибо",
+"грАцие",
+"Grazie mille!",
+"Большое спасибо!"
+],
+[
+"per favore",
+"пожалуйста (просьба)",
+"пер фавОре",
+"Un caffè, per favore.",
+"Кофе, пожалуйста."
+],
+[
+"buongiorno",
+"доброе утро, добрый день",
+"буонджОрно",
+"Buongiorno, signora!",
+"Доброе утро, синьора!"
+],
+[
+"acqua",
+"вода",
+"Аква",
+"Bevo molta acqua.",
+"Я пью много воды."
+],
+[
+"casa",
+"дом",
+"кАза",
+"Lavoro da casa.",
+"Я работаю из дома."
+],
+[
+"lavoro",
+"работа",
+"лавОро",
+"Il lavoro è interessante.",
+"Работа интересная."
+],
+[
+"amica",
+"подруга",
+"амИка",
+"Lei è la mia amica.",
+"Она моя подруга."
+],
+[
+"famiglia",
+"семья",
+"фамИлья",
+"La mia famiglia è grande.",
+"У меня большая семья."
+],
+[
+"marito",
+"муж",
+"марИто",
+"Mio marito cucina bene.",
+"Мой муж хорошо готовит."
+],
+[
+"bello / bella",
+"красивый / красивая",
+"бЭлло / бЭлла",
+"Che bella giornata!",
+"Какой прекрасный день!"
+],
+[
+"giorno",
+"день",
+"джОрно",
+"Ogni giorno cammino.",
+"Каждый день я гуляю."
+],
+[
+"sera",
+"вечер",
+"сЭра",
+"Stasera leggo un libro.",
+"Сегодня вечером я читаю книгу."
+],
+[
+"mattina",
+"утро",
+"маттИна",
+"La mattina bevo un cappuccino.",
+"По утрам я пью капучино."
+],
+[
+"libro",
+"книга",
+"лИбро",
+"Questo libro è bellissimo.",
+"Эта книга прекрасна."
+],
+[
+"mangiare",
+"есть, кушать",
+"манджАре",
+"Mangio piano piano.",
+"Я ем медленно."
+],
+[
+"bere",
+"пить",
+"бЭре",
+"Voglio bere un tè.",
+"Я хочу выпить чаю."
+],
+[
+"dormire",
+"спать",
+"дормИре",
+"Stanotte voglio dormire bene.",
+"Сегодня ночью хочу хорошо выспаться."
+],
+[
+"camminare",
+"ходить пешком, гулять",
+"камминАре",
+"Mi piace camminare.",
+"Мне нравится гулять."
+],
+[
+"parlare",
+"говорить",
+"парлАре",
+"Parlo un po' di italiano.",
+"Я немного говорю по-итальянски."
+],
+[
+"capire",
+"понимать",
+"капИре",
+"Non capisco, puoi ripetere?",
+"Не понимаю, можешь повторить?"
+],
+[
+"volere",
+"хотеть",
+"волЕре",
+"Voglio un gelato.",
+"Я хочу мороженое."
+],
+[
+"potere",
+"мочь",
+"потЕре",
+"Posso entrare?",
+"Можно войти?"
+],
+[
+"andare",
+"идти, ехать",
+"андАре",
+"Vado in palestra.",
+"Я иду в спортзал."
+],
+[
+"essere",
+"быть",
+"Эссере",
+"Sono felice.",
+"Я счастлива."
+],
+[
+"avere",
+"иметь",
+"авЕре",
+"Ho fame.",
+"Я голодна."
+],
+[
+"fare",
+"делать",
+"фАре",
+"Faccio pilates.",
+"Я занимаюсь пилатесом."
+],
+[
+"felice",
+"счастливый",
+"фелИче",
+"Oggi sono felice.",
+"Сегодня я счастлива."
+],
+[
+"stanca",
+"уставшая",
+"стАнка",
+"Sono stanca, mi riposo.",
+"Я устала, отдыхаю."
+],
+[
+"tempo",
+"время; погода",
+"тЭмпо",
+"Che tempo fa?",
+"Какая погода?"
+],
+[
+"sole",
+"солнце",
+"сОле",
+"C'è il sole!",
+"Светит солнце!"
+],
+[
+"pioggia",
+"дождь",
+"пьОджа",
+"Non ho paura della pioggia.",
+"Я не боюсь дождя."
+],
+[
+"città",
+"город",
+"читтА",
+"Roma è una città bellissima.",
+"Рим — прекрасный город."
+],
+[
+"strada",
+"улица, дорога",
+"стрАда",
+"La strada è lunga.",
+"Дорога длинная."
+],
+[
+"negozio",
+"магазин",
+"негОцио",
+"Il negozio è chiuso.",
+"Магазин закрыт."
+],
+[
+"vestito",
+"платье",
+"вестИто",
+"Ho un vestito rosso.",
+"У меня есть красное платье."
+],
+[
+"gonna",
+"юбка",
+"гОнна",
+"Questa gonna mi sta bene.",
+"Эта юбка мне идёт."
+],
+[
+"scarpe",
+"обувь, туфли",
+"скАрпе",
+"Le scarpe sono nuove.",
+"Туфли новые."
+],
+[
+"rosso",
+"красный",
+"рОссо",
+"Il rossetto rosso è bello.",
+"Красная помада красивая."
+],
+[
+"bianco",
+"белый",
+"бьЯнко",
+"Una camicia bianca.",
+"Белая рубашка."
+],
+[
+"nero",
+"чёрный",
+"нЕро",
+"Un caffè nero, per favore.",
+"Чёрный кофе, пожалуйста."
+],
+[
+"rosa",
+"розовый; роза",
+"рОза",
+"Amo il colore rosa.",
+"Я люблю розовый цвет."
+],
+[
+"fiore",
+"цветок",
+"фьОре",
+"Un fiore per te.",
+"Цветок для тебя."
+],
+[
+"cuore",
+"сердце",
+"куОре",
+"Con tutto il cuore.",
+"От всего сердца."
+],
+[
+"amore",
+"любовь",
+"амОре",
+"L'amore è tutto.",
+"Любовь — это всё."
+],
+[
+"sogno",
+"мечта; сон",
+"сОньо",
+"Il mio sogno è l'Italia.",
+"Моя мечта — Италия."
+],
+[
+"viaggio",
+"путешествие",
+"вьЯджо",
+"Buon viaggio!",
+"Счастливого пути!"
+],
+[
+"mare",
+"море",
+"мАре",
+"Andiamo al mare.",
+"Поедем на море."
+],
+[
+"pane",
+"хлеб",
+"пАне",
+"Il pane è caldo.",
+"Хлеб тёплый."
+],
+[
+"frutta",
+"фрукты",
+"фрУтта",
+"Mangio la frutta.",
+"Я ем фрукты."
+],
+[
+"dolce",
+"сладкий; десерт; нежный",
+"дОльче",
+"Il dolce è buonissimo.",
+"Десерт очень вкусный."
+],
+[
+"buono",
+"хороший, вкусный",
+"буОно",
+"Questo è molto buono.",
+"Это очень вкусно."
+],
+[
+"oggi",
+"сегодня",
+"Оджи",
+"Oggi è venerdì.",
+"Сегодня пятница."
+],
+[
+"domani",
+"завтра",
+"домАни",
+"A domani!",
+"До завтра!"
+],
+[
+"sempre",
+"всегда",
+"сЭмпре",
+"Sei sempre gentile.",
+"Ты всегда такая милая."
+],
+[
+"adesso",
+"сейчас",
+"адЭссо",
+"Adesso respiro.",
+"Сейчас я дышу."
+],
+[
+"piano",
+"медленно, тихо",
+"пьЯно",
+"Parla piano, per favore.",
+"Говори медленно, пожалуйста."
+],
+[
+"insieme",
+"вместе",
+"инсьЕме",
+"Andiamo insieme!",
+"Пойдём вместе!"
+],
+[
+"forza",
+"сила",
+"фОрца",
+"Forza, puoi farcela!",
+"Давай, ты справишься!"
+],
+[
+"bene",
+"хорошо",
+"бЭне",
+"Sto bene, grazie.",
+"У меня всё хорошо, спасибо."
+],
+[
+"formaggio",
+"сыр",
+"формАджо",
+"Mi piace il formaggio.",
+"Я люблю сыр."
+],
+[
+"arrivederci",
+"до свидания",
+"арриведЭрчи",
+"Arrivederci e grazie!",
+"До свидания и спасибо!"
+],
+[
+"zucchero",
+"сахар",
+"дзУккеро",
+"Il caffè senza zucchero.",
+"Кофе без сахара."
+],
+[
+"festa",
+"праздник, вечеринка",
+"фЭста",
+"Stasera c'è una festa.",
+"Сегодня вечером вечеринка."
+],
+[
+"comprare",
+"покупать",
+"компрАре",
+"Voglio comprare un vestito.",
+"Я хочу купить платье."
+],
+[
+"piacere",
+"нравиться",
+"пьячЕре",
+"Mi piace questa canzone.",
+"Мне нравится эта песня."
+],
+[
+"simpatico",
+"симпатичный, приятный",
+"симпАтико",
+"Il cameriere è simpatico.",
+"Официант очень приятный."
+],
+[
+"prezzo",
+"цена",
+"прЭццо",
+"Qual è il prezzo?",
+"Какая цена?"
+],
+[
+"donna",
+"женщина",
+"дОнна",
+"Una donna elegante.",
+"Элегантная женщина."
+],
+[
+"tardi",
+"поздно",
+"тАрди",
+"È tardi, vado a dormire.",
+"Поздно, иду спать."
+],
+[
+"contenta",
+"довольная",
+"контЭнта",
+"Sono contenta di te.",
+"Я тобой довольна."
+],
+[
+"uscire",
+"выходить",
+"ушИре",
+"Stasera esco con le amiche.",
+"Сегодня вечером я иду гулять с подругами."
+],
+[
+"buonanotte",
+"спокойной ночи",
+"буонанОтте",
+"Buonanotte, sogni d'oro!",
+"Спокойной ночи, сладких снов!"
+],
+[
+"mai",
+"никогда",
+"май",
+"Non mollare mai!",
+"Никогда не сдавайся!"
+],
+[
+"lavorare",
+"работать",
+"лаворАре",
+"Oggi lavoro da casa.",
+"Сегодня я работаю из дома."
+],
+[
+"prego",
+"пожалуйста (в ответ)",
+"прЭго",
+"«Grazie!» «Prego!»",
+"«Спасибо!» «Пожалуйста!»"
+],
+[
+"ballare",
+"танцевать",
+"баллАре",
+"Balliamo insieme!",
+"Давай потанцуем!"
+],
+[
+"finire",
+"заканчивать",
+"финИре",
+"Ho finito il lavoro.",
+"Я закончила работу."
+],
+[
+"pasta",
+"паста; пирожное",
+"пАста",
+"Stasera cucino la pasta.",
+"Сегодня вечером я готовлю пасту."
+],
+[
+"primavera",
+"весна",
+"примавЭра",
+"In primavera tutto fiorisce.",
+"Весной всё цветёт."
+],
+[
+"facile",
+"лёгкий, простой",
+"фАчиле",
+"È facile!",
+"Это легко!"
+],
+[
+"caffè",
+"кофе",
+"каффЭ",
+"Prendo un caffè.",
+"Я возьму кофе."
+],
+[
+"comodo",
+"удобный",
+"кОмодо",
+"Le scarpe sono comode.",
+"Туфли удобные."
+],
+[
+"no",
+"нет",
+"но",
+"No, grazie.",
+"Нет, спасибо."
+],
+[
+"pesce",
+"рыба",
+"пЭше",
+"Il pesce è fresco.",
+"Рыба свежая."
+],
+[
+"spesso",
+"часто",
+"спЭссо",
+"Vado spesso al parco.",
+"Я часто хожу в парк."
+],
+[
+"uovo",
+"яйцо",
+"уОво",
+"Mangio un uovo a colazione.",
+"На завтрак я ем яйцо."
+],
+[
+"difficile",
+"трудный",
+"диффИчиле",
+"Non è difficile.",
+"Это не трудно."
+],
+[
+"sorriso",
+"улыбка",
+"соррИзо",
+"Hai un bel sorriso.",
+"У тебя красивая улыбка."
+],
+[
+"colore",
+"цвет",
+"колОре",
+"Il mio colore preferito è il rosa.",
+"Мой любимый цвет — розовый."
+],
+[
+"freddo",
+"холодный; холодно",
+"фрЭддо",
+"Fa freddo fuori.",
+"На улице холодно."
+],
+[
+"qui",
+"здесь",
+"куи",
+"Siamo qui!",
+"Мы здесь!"
+],
+[
+"vicino",
+"близко, рядом",
+"вичИно",
+"Il bar è vicino.",
+"Бар рядом."
+],
+[
+"niente",
+"ничего",
+"ньЕнте",
+"Non fa niente.",
+"Ничего страшного."
+],
+[
+"chi",
+"кто",
+"ки",
+"Chi è?",
+"Кто это?"
+],
+[
+"piazza",
+"площадь",
+"пьЯцца",
+"Ci vediamo in piazza.",
+"Встретимся на площади."
+],
+[
+"tutto",
+"всё",
+"тУтто",
+"Va tutto bene.",
+"Всё хорошо."
+],
+[
+"davvero",
+"правда, действительно",
+"даввЭро",
+"Davvero? Che bello!",
+"Правда? Как здорово!"
+],
+[
+"leggere",
+"читать",
+"лЭджере",
+"Leggo ogni sera.",
+"Я читаю каждый вечер."
+],
+[
+"corpo",
+"тело",
+"кОрпо",
+"Ascolto il mio corpo.",
+"Я прислушиваюсь к своему телу."
+],
+[
+"mela",
+"яблоко",
+"мЭла",
+"Una mela al giorno.",
+"Одно яблоко в день."
+],
+[
+"poco",
+"мало",
+"пОко",
+"La sera mangio poco.",
+"Вечером я ем мало."
+],
+[
+"sì",
+"да",
+"си",
+"Sì, certo!",
+"Да, конечно!"
+],
+[
+"stazione",
+"вокзал",
+"стацьОне",
+"Dov'è la stazione?",
+"Где вокзал?"
+],
+[
+"testa",
+"голова",
+"тЭста",
+"Mi fa male la testa.",
+"У меня болит голова."
+],
+[
+"amare",
+"любить",
+"амАре",
+"Amo l'Italia.",
+"Я люблю Италию."
+],
+[
+"aprire",
+"открывать",
+"апрИре",
+"Il museo apre alle nove.",
+"Музей открывается в девять."
+],
+[
+"verde",
+"зелёный",
+"вЭрде",
+"Un tè verde.",
+"Зелёный чай."
+],
+[
+"caldo",
+"горячий; жарко",
+"кАльдо",
+"Oggi fa caldo.",
+"Сегодня жарко."
+],
+[
+"nuovo",
+"новый",
+"нуОво",
+"Un nuovo inizio.",
+"Новое начало."
+],
+[
+"tranquilla",
+"спокойная",
+"транквИлла",
+"Stai tranquilla.",
+"Не волнуйся."
+],
+[
+"neve",
+"снег",
+"нЕве",
+"Fuori c'è la neve.",
+"На улице снег."
+],
+[
+"provare",
+"пробовать, примерять",
+"провАре",
+"Posso provare questa gonna?",
+"Можно примерить эту юбку?"
+],
+[
+"come",
+"как",
+"кОме",
+"Come ti senti?",
+"Как ты себя чувствуешь?"
+],
+[
+"musica",
+"музыка",
+"мУзика",
+"Ascolto la musica.",
+"Я слушаю музыку."
+],
+[
+"cercare",
+"искать",
+"черкАре",
+"Cerco le chiavi.",
+"Я ищу ключи."
+],
+[
+"dove",
+"где",
+"дОве",
+"Dove sei?",
+"Где ты?"
+],
+[
+"lunedì",
+"понедельник",
+"лунедИ",
+"Lunedì comincio!",
+"В понедельник начинаю!"
+],
+[
+"maglione",
+"свитер",
+"мальОне",
+"Un maglione morbido.",
+"Мягкий свитер."
+],
+[
+"correre",
+"бегать",
+"кОррере",
+"Corro nel parco.",
+"Я бегаю в парке."
+],
+[
+"cielo",
+"небо",
+"чЕло",
+"Il cielo è azzurro.",
+"Небо голубое."
+],
+[
+"sapere",
+"знать",
+"сапЕре",
+"Non lo so.",
+"Я не знаю."
+],
+[
+"inverno",
+"зима",
+"инвЭрно",
+"L'inverno a Mosca è lungo.",
+"Зима в Москве долгая."
+],
+[
+"vino",
+"вино",
+"вИно",
+"Un bicchiere di vino rosso.",
+"Бокал красного вина."
+],
+[
+"camicia",
+"рубашка, блузка",
+"камИча",
+"Una camicia di seta.",
+"Шёлковая блузка."
+],
+[
+"pensare",
+"думать",
+"пенсАре",
+"Penso a te.",
+"Я думаю о тебе."
+],
+[
+"biglietto",
+"билет",
+"бильЕтто",
+"Un biglietto per Firenze.",
+"Билет до Флоренции."
+],
+[
+"papà",
+"папа",
+"папА",
+"Mio papà lavora molto.",
+"Мой папа много работает."
+],
+[
+"viaggiare",
+"путешествовать",
+"вьяджАре",
+"Voglio viaggiare in Italia.",
+"Я хочу путешествовать по Италии."
+],
+[
+"guardare",
+"смотреть",
+"гуардАре",
+"Guardo un film.",
+"Я смотрю фильм."
+],
+[
+"pantaloni",
+"брюки",
+"панталОни",
+"Questi pantaloni sono comodi.",
+"Эти брюки удобные."
+],
+[
+"sei, sette",
+"шесть, семь",
+"сэй, сЭтте",
+"Alle sette ceno.",
+"В семь я ужинаю."
+],
+[
+"otto, nove, dieci",
+"восемь, девять, десять",
+"Отто, нОве, дьЕчи",
+"Dormo otto ore.",
+"Я сплю восемь часов."
+],
+[
+"chiudere",
+"закрывать",
+"кьУдере",
+"Chiudo gli occhi e respiro.",
+"Я закрываю глаза и дышу."
+],
+[
+"latte",
+"молоко",
+"лАтте",
+"Il latte è freddo.",
+"Молоко холодное."
+],
+[
+"museo",
+"музей",
+"музЭо",
+"Il museo è aperto.",
+"Музей открыт."
+],
+[
+"nuotare",
+"плавать",
+"нуотАре",
+"Mi piace nuotare nel mare.",
+"Я люблю плавать в море."
+],
+[
+"anche",
+"тоже",
+"Анке",
+"Anch'io!",
+"Я тоже!"
+],
+[
+"giovane",
+"молодой",
+"джОване",
+"Una giovane donna.",
+"Молодая женщина."
+],
+[
+"capelli",
+"волосы",
+"капЭлли",
+"Ho i capelli lunghi.",
+"У меня длинные волосы."
+],
+[
+"settimana",
+"неделя",
+"сеттимАна",
+"La settimana è stata lunga.",
+"Неделя была длинной."
+],
+[
+"scusa",
+"извини",
+"скУза",
+"Scusa, sono in ritardo.",
+"Извини, я опаздываю."
+],
+[
+"chiamare",
+"звонить; звать",
+"кьямАре",
+"Ti chiamo stasera.",
+"Я позвоню тебе вечером."
+],
+[
+"schiena",
+"спина",
+"скьЕна",
+"Tengo la schiena dritta.",
+"Я держу спину прямо."
+],
+[
+"libera",
+"свободная",
+"лИбера",
+"Domani sono libera.",
+"Завтра я свободна."
+],
+[
+"pronta",
+"готовая",
+"прОнта",
+"Sono pronta!",
+"Я готова!"
+],
+[
+"notte",
+"ночь",
+"нОтте",
+"La notte è stellata.",
+"Звёздная ночь."
+],
+[
+"bellezza",
+"красота",
+"беллЕцца",
+"La bellezza è ovunque.",
+"Красота повсюду."
+],
+[
+"pranzo",
+"обед",
+"прАнцо",
+"A pranzo mangio l'insalata.",
+"На обед я ем салат."
+],
+[
+"a presto",
+"до скорого",
+"а прЭсто",
+"Ci vediamo a presto!",
+"Скоро увидимся!"
+],
+[
+"corto",
+"короткий",
+"кОрто",
+"Una gonna corta.",
+"Короткая юбка."
+],
+[
+"perché",
+"почему; потому что",
+"перкЭ",
+"Perché no?",
+"Почему бы и нет?"
+],
+[
+"dire",
+"сказать",
+"дИре",
+"Cosa vuoi dire?",
+"Что ты хочешь сказать?"
+],
+[
+"mese",
+"месяц",
+"мЭзе",
+"Il mese prossimo vado a Roma.",
+"В следующем месяце я еду в Рим."
+],
+[
+"uno, due, tre",
+"один, два, три",
+"Уно, дУэ, трэ",
+"Uno, due, tre... via!",
+"Раз, два, три... вперёд!"
+],
+[
+"estate",
+"лето",
+"эстАте",
+"L'estate in Italia è calda.",
+"Лето в Италии жаркое."
+],
+[
+"va bene",
+"хорошо, ладно",
+"ва бЭне",
+"Va bene, andiamo.",
+"Хорошо, пойдём."
+],
+[
+"minuto",
+"минута",
+"минУто",
+"Aspetta un minuto.",
+"Подожди минутку."
+],
+[
+"limone",
+"лимон",
+"лимОне",
+"Acqua e limone.",
+"Вода с лимоном."
+],
+[
+"mercato",
+"рынок",
+"меркАто",
+"Compro la frutta al mercato.",
+"Я покупаю фрукты на рынке."
+],
+[
+"cosa",
+"что; вещь",
+"кОза",
+"Cosa fai stasera?",
+"Что делаешь сегодня вечером?"
+],
+[
+"occhi",
+"глаза",
+"Оккьи",
+"Hai gli occhi belli.",
+"У тебя красивые глаза."
+],
+[
+"prendere",
+"брать",
+"прЭндере",
+"Prendo il treno.",
+"Я еду на поезде."
+],
+[
+"lingua",
+"язык",
+"лИнгуа",
+"L'italiano è una lingua bellissima.",
+"Итальянский — прекрасный язык."
+],
+[
+"cena",
+"ужин",
+"чЭна",
+"La cena è alle otto.",
+"Ужин в восемь."
+],
+[
+"cominciare",
+"начинать",
+"коминчАре",
+"Cominciamo adesso!",
+"Начнём сейчас!"
+],
+[
+"bacio",
+"поцелуй",
+"бАчо",
+"Un bacio!",
+"Целую!"
+],
+[
+"scrivere",
+"писать",
+"скрИвере",
+"Scrivo un messaggio.",
+"Я пишу сообщение."
+],
+[
+"sentire",
+"чувствовать; слышать",
+"сентИре",
+"Mi sento bene.",
+"Я чувствую себя хорошо."
+],
+[
+"riposare",
+"отдыхать",
+"рипозАре",
+"Oggi mi riposo.",
+"Сегодня я отдыхаю."
+],
+[
+"triste",
+"грустный",
+"трИсте",
+"Oggi sono un po' triste.",
+"Сегодня мне немного грустно."
+],
+[
+"venire",
+"приходить",
+"венИре",
+"Vieni con me?",
+"Пойдёшь со мной?"
+],
+[
+"buonasera",
+"добрый вечер",
+"буонасЭра",
+"Buonasera a tutti!",
+"Добрый вечер всем!"
+],
+[
+"magari",
+"хорошо бы; вот бы",
+"магАри",
+"«Andiamo a Roma?» «Magari!»",
+"«Поедем в Рим?» «Вот бы!»"
+],
+[
+"lontano",
+"далеко",
+"лонтАно",
+"Roma è lontana.",
+"Рим далеко."
+],
+[
+"letto",
+"кровать",
+"лЭтто",
+"Vado a letto presto.",
+"Я рано ложусь спать."
+],
+[
+"mano",
+"рука (кисть)",
+"мАно",
+"Dammi la mano.",
+"Дай мне руку."
+],
+[
+"ridere",
+"смеяться",
+"рИдере",
+"Ridiamo tanto.",
+"Мы много смеёмся."
+],
+[
+"porta",
+"дверь",
+"пОрта",
+"Chiudi la porta, per favore.",
+"Закрой дверь, пожалуйста."
+],
+[
+"giacca",
+"пиджак, куртка",
+"джАкка",
+"Metto la giacca.",
+"Я надеваю пиджак."
+],
+[
+"subito",
+"сразу, сейчас же",
+"сУбито",
+"Arrivo subito!",
+"Сейчас приду!"
+],
+[
+"treno",
+"поезд",
+"трЭно",
+"Il treno parte alle dieci.",
+"Поезд отправляется в десять."
+],
+[
+"quanto",
+"сколько",
+"куАнто",
+"Quanto costa?",
+"Сколько стоит?"
+],
+[
+"imparare",
+"учить, выучивать",
+"импарАре",
+"Imparo cinque parole al giorno.",
+"Я учу пять слов в день."
+],
+[
+"luce",
+"свет",
+"лУче",
+"C'è una bella luce.",
+"Какой красивый свет."
+],
+[
+"quattro, cinque",
+"четыре, пять",
+"куАттро, чИнкуэ",
+"Cinque minuti di pausa.",
+"Пять минут перерыва."
+],
+[
+"già",
+"уже",
+"джа",
+"Ho già mangiato.",
+"Я уже поела."
+],
+[
+"tornare",
+"возвращаться",
+"торнАре",
+"Torno a casa alle sei.",
+"Я возвращаюсь домой в шесть."
+],
+[
+"forte",
+"сильный",
+"фОрте",
+"Sei più forte di quanto pensi.",
+"Ты сильнее, чем думаешь."
+],
+[
+"ristorante",
+"ресторан",
+"ристорАнте",
+"Prenotiamo un ristorante?",
+"Забронируем ресторан?"
+],
+[
+"finestra",
+"окно",
+"финЭстра",
+"Apro la finestra.",
+"Я открываю окно."
+],
+[
+"ieri",
+"вчера",
+"йЭри",
+"Ieri ho camminato molto.",
+"Вчера я много гуляла."
+],
+[
+"telefono",
+"телефон",
+"телЭфоно",
+"Il telefono è scarico.",
+"Телефон разрядился."
+],
+[
+"presto",
+"рано; скоро",
+"прЭсто",
+"Mi sveglio presto.",
+"Я рано просыпаюсь."
+],
+[
+"studiare",
+"учиться, изучать",
+"студьЯре",
+"Studio l'italiano.",
+"Я изучаю итальянский."
+],
+[
+"ricordare",
+"помнить",
+"рикордАре",
+"Ricordo quel giorno.",
+"Я помню тот день."
+],
+[
+"lungo",
+"длинный",
+"лУнго",
+"Un vestito lungo.",
+"Длинное платье."
+],
+[
+"gentile",
+"любезный, добрый",
+"джентИле",
+"Grazie, sei molto gentile.",
+"Спасибо, ты очень любезна."
+],
+[
+"trovare",
+"находить",
+"тровАре",
+"Ho trovato un bel bar.",
+"Я нашла хороший бар."
+],
+[
+"piccolo",
+"маленький",
+"пИкколо",
+"Un piccolo passo.",
+"Маленький шаг."
+],
+[
+"parco",
+"парк",
+"пАрко",
+"Cammino nel parco.",
+"Я гуляю в парке."
+],
+[
+"elegante",
+"элегантный",
+"элегАнте",
+"Che vestito elegante!",
+"Какое элегантное платье!"
+],
+[
+"borsa",
+"сумка",
+"бОрса",
+"La borsa è nuova.",
+"Сумка новая."
+],
+[
+"azzurro",
+"голубой",
+"аддзУрро",
+"Il mare è azzurro.",
+"Море голубое."
+],
+[
+"gente",
+"люди",
+"джЭнте",
+"C'è tanta gente in piazza.",
+"На площади много людей."
+],
+[
+"albergo",
+"гостиница",
+"альбЭрго",
+"L'albergo è vicino al mare.",
+"Гостиница рядом с морем."
+],
+[
+"allora",
+"итак, ну что",
+"аллОра",
+"Allora, andiamo?",
+"Ну что, пойдём?"
+],
+[
+"cantare",
+"петь",
+"кантАре",
+"Canto sotto la doccia.",
+"Я пою в душе."
+],
+[
+"gamba",
+"нога",
+"гАмба",
+"Mi fanno male le gambe.",
+"У меня болят ноги."
+],
+[
+"soldi",
+"деньги",
+"сОльди",
+"Risparmio i soldi per il viaggio.",
+"Я коплю деньги на поездку."
+],
+[
+"nome",
+"имя",
+"нОме",
+"Qual è il tuo nome?",
+"Как тебя зовут?"
+],
+[
+"tè",
+"чай",
+"тэ",
+"Un tè caldo, per favore.",
+"Горячий чай, пожалуйста."
+],
+[
+"pelle",
+"кожа",
+"пЭлле",
+"La pelle è morbida.",
+"Кожа мягкая."
+],
+[
+"farmacia",
+"аптека",
+"фармачИя",
+"La farmacia è aperta.",
+"Аптека открыта."
+],
+[
+"aspettare",
+"ждать",
+"аспеттАре",
+"Ti aspetto qui.",
+"Я жду тебя здесь."
+],
+[
+"domanda",
+"вопрос",
+"домАнда",
+"Posso fare una domanda?",
+"Можно задать вопрос?"
+],
+[
+"pomodoro",
+"помидор",
+"помодОро",
+"Pasta al pomodoro.",
+"Паста с томатным соусом."
+],
+[
+"montagna",
+"горы",
+"монтАнья",
+"Amo la montagna.",
+"Я люблю горы."
+],
+[
+"gelato",
+"мороженое",
+"джелАто",
+"Un gelato al pistacchio!",
+"Фисташковое мороженое!"
+],
+[
+"quando",
+"когда",
+"куАндо",
+"Quando parti?",
+"Когда ты уезжаешь?"
+],
+[
+"cucinare",
+"готовить",
+"кучинАре",
+"Mi piace cucinare.",
+"Мне нравится готовить."
+],
+[
+"carne",
+"мясо",
+"кАрне",
+"Non mangio molta carne.",
+"Я ем мало мяса."
+],
+[
+"palestra",
+"спортзал",
+"палЭстра",
+"Vado in palestra due volte a settimana.",
+"Я хожу в спортзал два раза в неделю."
+],
+[
+"sorella",
+"сестра",
+"сорЭлла",
+"Mia sorella è simpatica.",
+"Моя сестра очень милая."
+],
+[
+"occhiali",
+"очки",
+"оккьЯли",
+"Dove sono i miei occhiali?",
+"Где мои очки?"
+],
+[
+"salute",
+"здоровье",
+"салУте",
+"Alla salute!",
+"За здоровье!"
+],
+[
+"abbraccio",
+"объятие",
+"аббрАччо",
+"Un abbraccio forte.",
+"Крепко обнимаю."
+],
+[
+"giallo",
+"жёлтый",
+"джАлло",
+"Un limone giallo.",
+"Жёлтый лимон."
+],
+[
+"risposta",
+"ответ",
+"риспОста",
+"La risposta è sì.",
+"Ответ — да."
+],
+[
+"molto",
+"очень; много",
+"мОльто",
+"Ti voglio molto bene.",
+"Я тебя очень люблю."
+],
+[
+"ancora",
+"ещё",
+"анкОра",
+"Ancora un po'.",
+"Ещё немножко."
+],
+[
+"stella",
+"звезда",
+"стЭлла",
+"Guarda quella stella!",
+"Посмотри на ту звезду!"
+],
+[
+"luna",
+"луна",
+"лУна",
+"La luna è piena.",
+"Полная луна."
+],
+[
+"ora",
+"час; сейчас",
+"Ора",
+"Che ore sono?",
+"Который час?"
+],
+[
+"insalata",
+"салат",
+"инсалАта",
+"Un'insalata verde.",
+"Зелёный салат."
+],
+[
+"parola",
+"слово",
+"парОла",
+"Una parola nuova.",
+"Новое слово."
+],
+[
+"collega",
+"коллега",
+"коллЭга",
+"La mia collega è brava.",
+"Моя коллега молодец."
+],
+[
+"grande",
+"большой",
+"грАнде",
+"Una grande piazza.",
+"Большая площадь."
+],
+[
+"ufficio",
+"офис",
+"уффИчо",
+"Oggi non vado in ufficio.",
+"Сегодня я не иду в офис."
+],
+[
+"specchio",
+"зеркало",
+"спЭккьо",
+"Mi guardo allo specchio.",
+"Я смотрю в зеркало."
+],
+[
+"anno",
+"год",
+"Анно",
+"Buon anno!",
+"С Новым годом!"
+],
+[
+"cucina",
+"кухня",
+"кучИна",
+"Amo la cucina italiana.",
+"Я люблю итальянскую кухню."
+],
+[
+"rispondere",
+"отвечать",
+"риспОндере",
+"Rispondo subito.",
+"Отвечаю сразу."
+],
+[
+"vecchio",
+"старый",
+"вЭккьо",
+"Un vecchio palazzo.",
+"Старый дворец."
+],
+[
+"tavolo",
+"стол",
+"тАволо",
+"Il tavolo è apparecchiato.",
+"Стол накрыт."
+],
+[
+"mamma",
+"мама",
+"мАмма",
+"Chiamo la mamma.",
+"Я звоню маме."
+],
+[
+"cappotto",
+"пальто",
+"каппОтто",
+"Fa freddo, prendo il cappotto.",
+"Холодно, беру пальто."
+],
+[
+"caro",
+"дорогой",
+"кАро",
+"È troppo caro.",
+"Это слишком дорого."
+],
+[
+"uomo",
+"мужчина",
+"уОмо",
+"Quell'uomo è gentile.",
+"Тот мужчина любезный."
+],
+[
+"regalo",
+"подарок",
+"регАло",
+"Un regalo per te.",
+"Подарок для тебя."
+],
+[
+"vivere",
+"жить",
+"вИвере",
+"Voglio vivere bene.",
+"Я хочу жить хорошо."
+],
+[
+"divano",
+"диван",
+"дивАно",
+"Mi riposo sul divano.",
+"Я отдыхаю на диване."
+],
+[
+"spiaggia",
+"пляж",
+"спьЯджа",
+"Andiamo in spiaggia!",
+"Пойдём на пляж!"
+],
+[
+"camera",
+"комната",
+"кАмера",
+"La camera è luminosa.",
+"Комната светлая."
+],
+[
+"fratello",
+"брат",
+"фратЭлло",
+"Mio fratello vive lontano.",
+"Мой брат живёт далеко."
+],
+[
+"autunno",
+"осень",
+"аутУнно",
+"L'autunno è arrivato.",
+"Осень пришла."
+],
+[
+"conoscere",
+"знать, быть знакомым",
+"конОшере",
+"Piacere di conoscerti!",
+"Приятно познакомиться!"
+],
+[
+"colazione",
+"завтрак",
+"колацьОне",
+"La colazione è pronta.",
+"Завтрак готов."
+],
+[
+"pagare",
+"платить",
+"пагАре",
+"Posso pagare con la carta?",
+"Можно заплатить картой?"
+]
+];
+function dayWords(){
+  const base = S.vocab.length ? S.vocab.map(v => [v[0], v[1], '', '', '']) : WORDS;
+  const known = new Set(S.known || []);
+  const left = base.filter(w => !known.has(w[0])).length; if (!left) return [];
+  const n = Math.min(S.cfg.wpd || 4, left), L = base.length; let k = ((diff('2026-01-01', today()) * n) % L + L) % L;
+  const out = []; for (let i = 0; out.length < n && i < L; i++) { const w = base[(k + i) % L]; if (!known.has(w[0])) out.push(w); }
+  return out;
+}
+const wordsList = (big) => { const ws = dayWords(); if (!ws.length) return '<p class="note">Все слова отмечены как знакомые — браво! Добавь новые в ⚙︎ → «Мой итальянский».</p>';
+  return `<div class="words">${ws.map(w => `<div class="wrow"><div><span class="wit">${esc(w[0])}</span>${w[2] ? ` <span class="muted small">[${esc(w[2])}]</span>` : ''} — ${esc(w[1])}
+    ${big && w[3] ? `<div class="wex">${esc(w[3])} <span class="muted">${esc(w[4])}</span></div>` : ''}</div><button class="linkbtn" data-act="known" data-v="${esc(w[0])}">знаю</button></div>`).join('')}</div>`; };
+const baseWord = shift => WORDS[(((diff('2026-01-01', today()) + (shift || 0)) % WORDS.length) + WORDS.length) % WORDS.length];
+const ymd = ds => ds.replace(/-/g,'');
+function parseVocab(t){ return String(t || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => { const m = l.split(/\s+[—–-]\s+|\s*[—–]\s*|\t|\s*=\s*/); return [m[0].trim(), (m.slice(1).join(' — ') || '').trim()]; }).filter(x => x[0]); }
+async function saveVocab(t){ const parts = []; for (let i = 0; i < t.length; i += 3800) parts.push(t.slice(i, i + 3800));
+  await Promise.all(parts.map((p, i) => Store.set('voc_' + i, p))); await Store.set('vocn', parts.length); S.vocabRaw = t; S.vocab = parseVocab(t); }
+const wordOf = shift => { const v = S.vocab; if (!v.length) return null; const k = diff('2026-01-01', today()) + (shift || 0); return v[((k % v.length) + v.length) % v.length]; };
+async function saveEat(ds){ const t = S.eat[ds] || '', y = ymd(ds), chunks = [];
+  for (let i = 0; i < Math.max(1, t.length); i += 3800) chunks.push(t.slice(i, i + 3800));
+  await Promise.all(chunks.map((c, i) => Store.set(i ? `e_${y}_${i}` : `e_${y}`, c)));
+  const extra = (await Store.keys()).filter(k => k.startsWith(`e_${y}_`) && +k.split('_')[2] >= chunks.length); if (extra.length) await Store.remove(extra); }
+const noteText = ds => { let t = S.eat[ds] || ''; if (S.good[ds] && !t.includes(S.good[ds])) t = (t ? t + '\n' : '') + S.good[ds]; return t; };
+
+/* ---------- цикл ---------- */
+function cycleDay(ds){ const st = (S.cfg.cyc || []).filter(x => x <= ds).sort(); if (!st.length) return null;
+  const L = S.cfg.clen || 28, n = diff(st[st.length-1], ds) + 1;
+  if (n > L * 4) return null; return ((n - 1) % L) + 1; }
+function cyclePredicted(ds){ const st = (S.cfg.cyc || []).filter(x => x <= ds).sort(); if (!st.length) return false;
+  return diff(st[st.length-1], ds) + 1 > (S.cfg.clen || 28); }
+function tender(ds){ const n = cycleDay(ds), L = S.cfg.clen || 28; if (!n) return null;
+  if (n <= 3) return 'period'; if (n >= L - 6) return 'pre'; return null; }
+
+/* ---------- девочка ---------- */
+const BLOOM = [
+  ['blush','Румянец','с первым записанным днём'],
+  ['lips','Красная помада и стрелки','за неделю, где выполнены все тренировки'],
+  ['street','Итальянская улочка','за неделю, где набраны все шаги'],
+  ['bouquet','Красные розы','когда волна «Dolce» пройдёт сама'],
+  ['shades','Очки на макушке','за 7 вечеров с ответом «Как ты?»'],
+  ['hearts','Сердечки','за 5 дней с удовольствием не про еду'],
+  ['reddress','Красное платье','с первыми итогами спринта'],
+  ['hoops','Золотые серьги-кольца','после двух спринтов вместе'],
+  ['heels','Туфли на каблуке','за спринт, где обе недели со всеми тренировками'],
+  ['bag','Сумочка','после трёх спринтов вместе'],
+  ['skirt','Твоя юбка','когда контрольная вещь сядет свободно']
+];
+function blooms(){
+  const u = {}, days = Object.values(S.days), cfg = S.cfg;
+  const allTr = x => x.s >= cfg.s && x.p >= cfg.p && x.c >= cmGoal();
+  if (days.some(d => d && (d.k || d.st || (d.w || []).length || d.m))) u.blush = 1;
+  for (let w = cfg.start; w <= today(); w = addDays(w, 7)) { const x = weekStats(w);
+    if (allTr(x)) u.lips = 1; if (x.steps >= cfg.steps) u.street = 1; }
+  for (let n = 0; sprintStart(n) <= addDays(today(), -13); n++) { const a = sprintStart(n);
+    if (allTr(weekStats(a)) && allTr(weekStats(addDays(a, 7)))) u.heels = 1; }
+  if (days.some(d => (d.u || []).some(x => x[2] === 'p'))) u.bouquet = 1;
+  if (days.filter(d => d.m).length >= 7) u.shades = 1;
+  if (Object.values(S.good).filter(Boolean).length + Object.values(S.days).filter(d => (d.pl || []).length).length >= 5) u.hearts = 1;
+  if (S.meas.some(m => m.n >= 1)) u.reddress = 1;
+  if (sprintOf(today()) >= 2) u.hoops = 1;
+  if (sprintOf(today()) >= 3) u.bag = 1;
+  if (S.meas.some(m => Object.values(fitsOf(m)).includes('free'))) u.skirt = 1;
+  return u;
+}
+function shapeF(){ // меняется только по итогам спринтов и никогда не идёт назад
+  const st = measFor(0); if (!st || !st.w) return 0;
+  const res = S.meas.filter(m => m.n >= 1 && m.w).map(m => m.w); if (!res.length) return 0;
+  if (!S.cfg.goal) return 0; const range = st.w - S.cfg.goal; if (range <= 0) return 0;
+  return Math.max(0, Math.min(1, (st.w - Math.min(...res)) / range));
+}
+function girlSVG(f, u){
+  const L = (a,b) => a + (b - a) * f, cx = 100;
+  const sh = L(22,19.5), wa = L(20.5,14), hi = L(29,21), th = L(12.5,9), ar = L(8,5.6);
+  const lg = (id, stops, x2='1', y2='0') => `<linearGradient id="${id}" x1="0" y1="0" x2="${x2}" y2="${y2}">${stops.map(([o,c,a]) => `<stop offset="${o}" stop-color="${c}"${a != null ? ` stop-opacity="${a}"` : ''}/>`).join('')}</linearGradient>`;
+  let d = `<defs>
+    ${lg('gSkin', [[0,'#E8B9A2'],[.35,'#F8DCCB'],[.65,'#F6D4C1'],[1,'#DFAB93']])}
+    ${lg('gSkinV', [[0,'#F8DCCB'],[1,'#E9BCA5']], '0', '1')}
+    <radialGradient id="gFace" cx=".45" cy=".38" r=".7"><stop offset="0" stop-color="#FCE7DA"/><stop offset=".7" stop-color="#F4D0BC"/><stop offset="1" stop-color="#E6B59D"/></radialGradient>
+    ${lg('gHair', [[0,'#BE9670'],[1,'#8E6B4C']], '0', '1')}
+    <radialGradient id="gBun" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#C9A27C"/><stop offset="1" stop-color="#8A6849"/></radialGradient>
+    ${lg('gDress', [[0,'#D98E99'],[.3,'#EFB6BD'],[.55,'#EAAAB3'],[1,'#CF8591']])}
+    ${lg('gRed', [[0,'#8E1624'],[.3,'#D0303F'],[.55,'#C42636'],[1,'#86131F']])}
+    ${lg('gHeel', [[0,'#D0303F'],[1,'#8E1624']], '0', '1')}
+    ${lg('gSkirt', [[0,'#9E5663'],[.35,'#C27884'],[.6,'#B86C79'],[1,'#95505D']])}
+    ${lg('gTop', [[0,'#EADDD5'],[.35,'#FFFFFF'],[.7,'#FBF4F0'],[1,'#E6D6CD']])}
+    ${lg('gShoe', [[0,'#C98390'],[1,'#9E5563']], '0', '1')}
+    ${lg('gSneak', [[0,'#FFFFFF'],[1,'#E7DEDA']], '0', '1')}
+    ${lg('gBag', [[0,'#F7E39E'],[1,'#DDBE58']], '0', '1')}
+    <radialGradient id="gBg" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#FCEDEB"/><stop offset="1" stop-color="#F3D6D6"/></radialGradient>
+    <radialGradient id="gBlush" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E88F9C" stop-opacity=".55"/><stop offset="1" stop-color="#E88F9C" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gShadow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7A4E50" stop-opacity=".28"/><stop offset="1" stop-color="#7A4E50" stop-opacity="0"/></radialGradient>
+    <clipPath id="gc"><circle cx="100" cy="128" r="94"/></clipPath></defs>`;
+  let g = `<circle cx="100" cy="128" r="94" fill="url(#gBg)"/>`;
+  if (u.street) g += `<g clip-path="url(#gc)"><rect x="0" y="20" width="200" height="200" fill="#FFF3E6"/>
+    ${[22,78,134].map(x => `<rect x="${x}" y="46" width="44" height="120" fill="#F7E1DF"/><path d="M${x+6} 100v-22a16 16 0 0 1 32 0v22z" fill="#F1CFCF"/><rect x="${x+2}" y="72" width="5" height="28" fill="#B7C4A8"/><rect x="${x+37}" y="72" width="5" height="28" fill="#B7C4A8"/><path d="M${x} 116h44l-4 10h-36z" fill="#E2A2AA"/>`).join('')}
+    <rect x="0" y="206" width="200" height="30" fill="#F1E3DC"/></g>`;
+  if (u.hearts) g += [[38,70,1],[160,62,.8],[168,150,.9],[30,160,.7]].map(([x,y,k]) => `<path transform="translate(${x} ${y}) scale(${k})" d="M0 3c-2-4-8-3-8 1 0 4 8 8 8 8s8-4 8-8c0-4-6-5-8-1z" fill="#E2A2AA"/>`).join('');
+  g += `<ellipse cx="${cx}" cy="237" rx="${24 + hi * .3}" ry="5" fill="url(#gShadow)"/>`;
+  const leg = sgn => `<path d="M${cx + sgn*2.5} 174L${cx + sgn*(2.5+th)} 174Q${cx + sgn*(3+th*.95)} 200 ${cx + sgn*(3+th*.7)} 231L${cx + sgn*4} 231Q${cx + sgn*2.8} 200 ${cx + sgn*2.5} 174Z" fill="url(#gSkin)"/>`;
+  g += leg(-1) + leg(1);
+  const shoe = sgn => { const x = cx + sgn * (3.5 + th * .36);
+    return u.heels ? `<path d="M${x-3.5} 229.5q-5 1-6.5 6.5h13l-1.5-3q-2-3.5-5-3.5z" fill="url(#gHeel)"/><path d="M${x+5} 233v4.5" stroke="#8E1624" stroke-width="1.6" stroke-linecap="round"/><path d="M${x-8} 235.6q5-1.6 10-1" stroke="#fff" stroke-width=".6" opacity=".5"/>`
+                      : `<path d="M${x-7.5} 235.5q0-5 5-5.5h5q5 .5 5 5.5z" fill="url(#gShoe)"/><path d="M${x-4} 231.5q4-1 8 0" stroke="#fff" stroke-width=".8" opacity=".6"/>`; };
+  g += shoe(-1) + shoe(1);
+  const hx = sgn => cx + sgn * (sh + 7);
+  const arm = sgn => `<path d="M${cx + sgn*(sh-2)} 82Q${cx + sgn*(sh+6)} 115 ${hx(sgn)} 148" stroke="url(#gSkin)" stroke-width="${(ar*1.8).toFixed(1)}" stroke-linecap="round" fill="none"/>
+    <ellipse cx="${hx(sgn)}" cy="150" rx="${(ar*.85).toFixed(1)}" ry="${(ar*1.05).toFixed(1)}" fill="url(#gSkinV)"/>`;
+  g += arm(-1) + arm(1);
+  g += `<rect x="${cx-5}" y="60" width="10" height="18" rx="3" fill="url(#gSkin)"/><ellipse cx="${cx}" cy="66" rx="6" ry="3" fill="#D9A48C" opacity=".55"/>`;
+  if (u.skirt) {
+    g += `<path d="M${cx-sh} 78Q${cx} 72 ${cx+sh} 78L${cx+wa} 120L${cx-wa} 120Z" fill="url(#gTop)"/>`;
+    g += `<path d="M${cx-wa-1} 118L${cx+wa+1} 118L${cx+hi+10} 184Q${cx} 190 ${cx-hi-10} 184Z" fill="url(#gSkirt)"/>
+      <path d="M${cx-6} 122L${cx-11} 184M${cx+7} 122L${cx+13} 184" stroke="#8E4A57" stroke-width="1" opacity=".35"/>
+      <path d="M${cx-wa-1} 119H${cx+wa+1}" stroke="#8E4A57" stroke-width="2" opacity=".5"/>`;
+  } else {
+    const dz = u.reddress ? 'url(#gRed)' : 'url(#gDress)', dl = u.reddress ? '#6E0F1A' : '#B96C79';
+    g += `<path d="M${cx-sh} 78Q${cx} 72 ${cx+sh} 78L${cx+wa} 118L${cx+hi+13} 186Q${cx} 192 ${cx-hi-13} 186L${cx-wa} 118Z" fill="${dz}"/>
+      <path d="M${cx-5} 121L${cx-12} 187M${cx+6} 121L${cx+14} 187M${cx-15} 125L${cx-26} 185" stroke="${dl}" stroke-width="1" opacity=".3"/>
+      ${u.reddress ? `<path d="M${cx+wa} 118L${cx-6} 124L${cx-2} 186" stroke="${dl}" stroke-width="1.2" opacity=".45" fill="none"/>` : `<path d="M${cx-wa} 118H${cx+wa}" stroke="${dl}" stroke-width="2.4"/><path d="M${cx-wa} 116.8H${cx+wa}" stroke="#fff" stroke-width=".6" opacity=".4"/>`}`;
+  }
+  g += u.reddress && !u.skirt ? `<path d="M${cx-8} 76Q${cx} 97 ${cx+8} 76Z" fill="#F4D0BC"/>` : `<path d="M${cx-6.5} 76Q${cx} 87 ${cx+6.5} 76Z" fill="#F4D0BC"/>`;
+  g += [-1,1].map(sgn => `<ellipse cx="${cx + sgn*(sh-1)}" cy="81" rx="${(ar+2.4).toFixed(1)}" ry="${(ar+1.6).toFixed(1)}" fill="${u.skirt ? 'url(#gTop)' : u.reddress ? 'url(#gRed)' : 'url(#gDress)'}"/>`).join('');
+  /* голова */
+  g += `<g transform="translate(${cx} 66) scale(1.16) translate(${-cx} -66)">`;
+  g += `<circle cx="${cx}" cy="28" r="9.5" fill="url(#gBun)"/><path d="M${cx-5} 23q4-4 9-1" stroke="#D9B48E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <ellipse cx="${cx-15.5}" cy="52" rx="2.6" ry="3.6" fill="#EDC1AB"/><ellipse cx="${cx+15.5}" cy="52" rx="2.6" ry="3.6" fill="#EDC1AB"/>
+    <ellipse cx="${cx}" cy="50" rx="15" ry="17" fill="url(#gFace)"/>
+    <path d="M${cx-16} 50Q${cx-17.5} 32 ${cx} 32.5Q${cx+17.5} 32 ${cx+16} 50Q${cx+13} 40 ${cx+4} 38.5Q${cx-2} 41 ${cx-8} 40Q${cx-13} 42 ${cx-16} 50Z" fill="url(#gHair)"/>
+    <path d="M${cx-10} 36q6-3 13-1" stroke="#D9B48E" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".8"/>
+    <path d="M${cx-9.5} 46.2q3.2-1.6 6.2 0M${cx+3.3} 46.2q3.2-1.6 6.2 0" stroke="#8C6A4C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    ${[-1,1].map(sgn => { const ex = cx + sgn*6.3; return `<path d="M${ex-3.6} 51.5Q${ex} 48.4 ${ex+3.6} 51.5Q${ex} 53.8 ${ex-3.6} 51.5Z" fill="#fff"/>
+      <circle cx="${ex}" cy="51.2" r="1.9" fill="#7A6453"/><circle cx="${ex}" cy="51.2" r=".9" fill="#2E2320"/><circle cx="${ex+.7}" cy="50.5" r=".55" fill="#fff"/>
+      <path d="M${ex-3.8} 51.4Q${ex} 48 ${ex+3.9} 51.1" stroke="#3E2E2A" stroke-width="1" fill="none" stroke-linecap="round"/>`; }).join('')}
+    <path d="M${cx-.6} 53.5Q${cx-1.8} 57.5 ${cx-.5} 58.3Q${cx+1} 58.8 ${cx+1.6} 58" stroke="#D39E86" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <path d="M${cx-4} 61.6Q${cx-2} 60.3 ${cx} 61Q${cx+2} 60.3 ${cx+4} 61.6Q${cx} 62.4 ${cx-4} 61.6Z" fill="#D07F8B"/>
+    <path d="M${cx-4} 61.6Q${cx} 65.2 ${cx+4} 61.6Q${cx} 62.6 ${cx-4} 61.6Z" fill="#E0939E"/><path d="M${cx-1.4} 63.4h2.2" stroke="#fff" stroke-width=".6" opacity=".6" stroke-linecap="round"/>`;
+  if (u.blush) g += `<ellipse cx="${cx-9}" cy="57.5" rx="4.5" ry="3" fill="url(#gBlush)"/><ellipse cx="${cx+9}" cy="57.5" rx="4.5" ry="3" fill="url(#gBlush)"/>`;
+  if (u.lips) g += `<path d="M${cx-4} 61.6Q${cx-2} 60.1 ${cx} 60.9Q${cx+2} 60.1 ${cx+4} 61.6Q${cx} 62.4 ${cx-4} 61.6Z" fill="#B3202F"/><path d="M${cx-4} 61.6Q${cx} 65.4 ${cx+4} 61.6Q${cx} 62.6 ${cx-4} 61.6Z" fill="#D0303F"/><path d="M${cx-1.2} 63.5h2" stroke="#fff" stroke-width=".6" opacity=".6" stroke-linecap="round"/>
+    <path d="M${cx-10.2} 51.3L${cx-12} 50.2M${cx+10.3} 51L${cx+12.1} 49.9" stroke="#2E2320" stroke-width="1.1" stroke-linecap="round"/>`;
+  if (u.hoops) g += `<circle cx="${cx-15.5}" cy="58.5" r="3.4" fill="none" stroke="#D9B84E" stroke-width="1.1"/><circle cx="${cx+15.5}" cy="58.5" r="3.4" fill="none" stroke="#D9B84E" stroke-width="1.1"/>`;
+  if (u.shades) g += `<path d="M${cx-13} 37.5Q${cx} 34 ${cx+13} 37.5" stroke="#2E2320" stroke-width="1" fill="none"/><ellipse cx="${cx-6.5}" cy="36.5" rx="5.2" ry="3.4" fill="#3A2A28"/><ellipse cx="${cx+6.5}" cy="36.5" rx="5.2" ry="3.4" fill="#3A2A28"/><path d="M${cx-9} 35.3q2-1 4 0M${cx+4} 35.3q2-1 4 0" stroke="#fff" stroke-width=".7" opacity=".5"/>`;
+  g += '</g>';
+  if (u.bag) { const x = hx(-1); g += `<path d="M${x-6} 154q6-9 12 0" stroke="#C9A640" stroke-width="1.5" fill="none"/><rect x="${x-9}" y="153" width="18" height="14" rx="3.5" fill="url(#gBag)"/><path d="M${x-9} 157h18" stroke="#C9A640" stroke-width=".8" opacity=".6"/>`; }
+  if (u.bouquet) { const x = hx(1); g += `<path d="M${x} 150L${x+4} 128M${x} 150L${x+11} 133M${x} 150L${x-2} 130" stroke="#8FA67E" stroke-width="1.5"/><ellipse cx="${x+9}" cy="138" rx="4" ry="2" fill="#B7C4A8" transform="rotate(-30 ${x+9} 138)"/>
+    <circle cx="${x+4}" cy="126" r="5" fill="#C42636"/><circle cx="${x+12}" cy="131" r="4.5" fill="#D0303F"/><circle cx="${x-3}" cy="128" r="4" fill="#A81E2D"/><path d="M${x+2} 125q2-2 4 0M${x+10} 130q2-2 4 0M${x-5} 127q2-2 4 0" stroke="#fff" stroke-width=".6" opacity=".45" fill="none"/>`; }
+  return `<svg viewBox="0 0 200 240" role="img" aria-label="Иллюстрация девушки">${d}${g}</svg>`;
+}
+
+/* ---------- пропорции картинок мудборда ---------- */
+const AR = {};
+function photoRatio(p){ if (AR[p.id]) return AR[p.id];
+  const im = new Image(); im.onload = () => { AR[p.id] = im.naturalHeight / im.naturalWidth; if (S.tab === 'board') render(); }; im.src = p.src;
+  return 1.25; }
+
+/* ---------- спринты ---------- */
+const sprintOf = ds => Math.max(0, Math.floor(diff(S.cfg.start, ds) / 14));
+const sprintStart = n => addDays(S.cfg.start, n * 14);
+const cardioMin = d => d ? (d.cm || ((d.w || []).includes('c') ? 30 : 0)) : 0;
+const cmGoal = () => S.cfg.cmin || 130;
+const REASON = {h:'голод', t:'усталость', s:'грусть', a:'злость или тревога', l:'одиночество', b:'скука', w:'просто хотелось сладкого', p:'компания или праздник', y:'просто было вкусно'};
+function weekStats(from){
+  let s = 0, p = 0, c = 0, steps = 0, kSum = 0, kDays = 0, est = false, urges = 0, passed = 0, tu = 0, bs = 0, as = 0, ns = 0; const why = {};
+  for (let i = 0; i < 7; i++) { const dsx = addDays(from, i), d = S.days[dsx]; if (!d) continue;
+    const w = d.w || []; if (w.includes('s')) s++; if (w.includes('p')) p++; c += cardioMin(d);
+    steps += d.st || 0; if (d.e) est = true; if (d.k) { kSum += d.k; kDays++; }
+    (d.u || []).forEach(u => { if (u[1] === 'h') return; urges++; if (tender(dsx)) tu++; if (u[3] && u[4]) { bs += u[3]; as += u[4]; ns++; } why[u[1]] = (why[u[1]] || 0) + 1; if (u[2] === 'p') passed++; }); }
+  const top = Object.keys(why).sort((a,b) => why[b] - why[a])[0];
+  return {s, p, c, steps, kDays, est, urges, passed, top, tu, bAvg: ns ? Math.round(bs / ns) : 0, aAvg: ns ? Math.round(as / ns) : 0, kAvg: kDays ? Math.round(kSum / kDays) : null};
+}
+const FIT = {no:'пока не сходится', almost:'почти застёгивается', yes:'застегнулась!'};
+const FIT2 = {tight:'давят', less:'давят меньше', free:'свободно'};
+const FRANK = {tight:0, less:1, free:2};
+const OLDFIT = {no:'tight', almost:'less', yes:'free'};
+const ctrlItems = () => (S.cfg.items && S.cfg.items.length) ? S.cfg.items : ['Брюки', S.cfg.item || 'Юбка'];
+function fitsOf(m){ if (!m) return {}; if (m.fits) return m.fits; if (m.fit) return {[S.cfg.item || 'Юбка']: OLDFIT[m.fit]}; return {}; }
+const fitLine = m => Object.entries(fitsOf(m)).filter(([,v]) => v).map(([k,v]) => `${esc(k)} — ${FIT2[v]}`).join(', ');
+const wins = (from, to) => Object.keys(S.days).filter(ds => (!from || ds >= from) && (!to || ds <= to)).reduce((a, ds) => a + (S.days[ds].u || []).filter(u => u[2] === 'p').length, 0);
+const MOODS = [['light','легко','#F3DD8C'],['good','хорошо','#B7C4A8'],['meh','так себе','#F1CFCF'],['tired','устала','#D9C3BE'],['sad','грустно','#C9B6D3']];
+const measFor = n => S.meas.find(m => m.n === n);
+
+const KIND = [
+[
+"Sii dolce con te stessa",
+"Будь нежна к себе",
+"сИи дОльче кон тэ стЭсса",
+"Говори с собой так, как говорила бы с лучшей подругой."
+],
+[
+"Mi voglio bene",
+"Я себя люблю",
+"ми вОльо бЭне",
+"Скажи это вслух хотя бы раз сегодня. Даже если звучит непривычно."
+],
+[
+"Ama te stessa",
+"Люби себя",
+"Ама тэ стЭсса",
+"Не за что-то и не когда-нибудь потом. Просто сейчас."
+],
+[
+"Prenditi cura di te",
+"Позаботься о себе",
+"прЭндити кУра ди тэ",
+"Что бы сегодня сделало тебе хорошо? Сделай это для себя."
+],
+[
+"Me lo merito",
+"Я это заслуживаю",
+"ме ло мЭрито",
+"Отдых, красивые вещи, внимание, любовь — ты их заслуживаешь."
+],
+[
+"Oggi scelgo me",
+"Сегодня я выбираю себя",
+"Оджи шЭльго ме",
+"Одно маленькое решение в свою пользу — и день уже хороший."
+],
+[
+"Credi in te stessa",
+"Верь в себя",
+"крЭди ин тэ стЭсса",
+"Ты уже сделала много того, во что когда-то не верила."
+],
+[
+"Sei più forte di quanto pensi",
+"Ты сильнее, чем думаешь",
+"сэй пьЮ фОрте ди куАнто пЭнси",
+"Вспомни, с чем ты уже справилась."
+],
+[
+"Segui il tuo cuore",
+"Следуй за своим сердцем",
+"сЭгуи иль тУо куОре",
+"Прислушайся сегодня к тому, чего хочется по-настоящему."
+],
+[
+"Al cuor non si comanda",
+"Сердцу не прикажешь",
+"аль куОр нон си комАнда",
+"Твои чувства имеют право быть. Любые."
+],
+[
+"L'amore vince tutto",
+"Любовь побеждает всё",
+"ламОре вИнче тУтто",
+"И любовь к себе тоже."
+],
+[
+"Chi trova un amico trova un tesoro",
+"Кто нашёл друга, нашёл сокровище",
+"ки трОва ун амИко трОва ун тезОро",
+"Напиши сегодня кому-то, кого любишь. Просто так."
+],
+[
+"Sognare non costa nulla",
+"Мечтать ничего не стоит",
+"соньЯре нон кОста нУлла",
+"Позволь себе сегодня помечтать смело, без «а вдруг не выйдет»."
+],
+[
+"Volere è potere",
+"Хотеть — значит мочь",
+"волЕре э потЕре",
+"Большие мечты начинаются с простого «я хочу»."
+],
+[
+"Il mondo è di chi se lo prende",
+"Мир принадлежит тем, кто его берёт",
+"иль мОндо э ди ки се ло прЭнде",
+"Что сегодня можно взять себе — возможность, идею, радость?"
+],
+[
+"Chi non risica non rosica",
+"Кто не рискует, тот не выигрывает",
+"ки нон рИзика нон рОзика",
+"Маленькая смелость сегодня — большой шаг к мечте."
+],
+[
+"Ogni lasciata è persa",
+"Каждый упущенный шанс потерян",
+"Оньи лашАта э пЭрса",
+"Если давно хотела что-то попробовать — может, сегодня?"
+],
+[
+"Il meglio deve ancora venire",
+"Лучшее ещё впереди",
+"иль мЭльо дЭве анкОра венИре",
+"Правда впереди."
+],
+[
+"Chi va piano va sano e va lontano",
+"Кто идёт медленно, идёт здоровым и далеко",
+"ки ва пьЯно ва сАно э ва лонтАно",
+"Мечты не любят спешки. Твой темп — правильный."
+],
+[
+"Roma non fu fatta in un giorno",
+"Рим построили не за один день",
+"рОма нон фу фАтта ин ун джОрно",
+"Всё красивое строится постепенно. Твоя жизнь тоже."
+],
+[
+"Chi ben comincia è a metà dell'opera",
+"Кто хорошо начал, сделал половину дела",
+"ки бэн комИнча э а метА делл'Опера",
+"Начни день с чего-то приятного для себя."
+],
+[
+"Il tempo è galantuomo",
+"Время — благородный человек",
+"иль тЭмпо э галантуОмо",
+"Время всё расставит по местам. Можно не торопить."
+],
+[
+"Dopo la pioggia viene il sereno",
+"После дождя приходит ясная погода",
+"дОпо ла пьОджа вьЕне иль серЕно",
+"Если сейчас грустно — это пройдёт. Солнце вернётся."
+],
+[
+"Non c'è rosa senza spine",
+"Нет розы без шипов",
+"нон чэ рОза сЭнца спИне",
+"Трудные дни — тоже часть красивой жизни."
+],
+[
+"La felicità è fatta di piccole cose",
+"Счастье состоит из мелочей",
+"ла феличитА э фАтта ди пИкколе кОзе",
+"Заметь сегодня три маленьких радости."
+],
+[
+"Goditi il momento",
+"Наслаждайся моментом",
+"гОдити иль момЭнто",
+"Солнце в окне, любимая музыка, тёплый плед — это и есть жизнь."
+],
+[
+"Dolce far niente",
+"Сладкое ничегонеделание",
+"дОльче фар ньЕнте",
+"Отдых без чувства вины — очень по-итальянски."
+],
+[
+"La bellezza salverà il mondo",
+"Красота спасёт мир",
+"ла беллЕцца сальверА иль мОндо",
+"Фраза Достоевского, которую очень любят итальянцы. Окружи себя сегодня чем-то красивым."
+],
+[
+"Ogni giorno è un nuovo inizio",
+"Каждый день — новое начало",
+"Оньи джОрно э ун нуОво инИцио",
+"Не нужно ждать понедельника, чтобы начать что-то хорошее."
+],
+[
+"Andrà tutto bene",
+"Всё будет хорошо",
+"андрА тУтто бЭне",
+"Правда будет."
+],
+[
+"La vita è bella",
+"Жизнь прекрасна",
+"ла вИта э бЭлла",
+"И ты в ней тоже."
+],
+[
+"Coraggio!",
+"Смелее!",
+"корАджо",
+"Ты справляешься лучше, чем тебе кажется."
+]
+];
+const IT = [
+  ['Sii dolce con te stessa','Будь нежна к себе','сИи дОльче кон тэ стЭсса'],
+  ['Dolce far niente','Сладкое ничегонеделание','дОльче фар ньЕнте'],
+  ['Piano piano si va lontano','Потихоньку уйдёшь далеко','пьЯно пьЯно си ва лонтАно'],
+  ['Ogni giorno è un nuovo inizio','Каждый день — новое начало','Оньи джОрно э ун нуОво инИцио'],
+  ['Sono fiera di me','Я горжусь собой','сОно фьЕра ди ме'],
+  ['Mi voglio bene','Я себя люблю','ми вОльо бЭне'],
+  ['Una cosa alla volta','По одному делу за раз','Уна кОза Алла вОльта'],
+  ['Che bella giornata!','Какой прекрасный день!','ке бЭлла джорнАта'],
+  ['Ho bisogno di riposare','Мне нужно отдохнуть','о бизОньо ди рипозАре'],
+  ['Un passo alla volta','Шаг за шагом','ун пАссо Алла вОльта'],
+  ['Andrà tutto bene','Всё будет хорошо','андрА тУтто бЭне'],
+  ['Sono stanca, e va bene così','Я устала, и это нормально','сОно стАнка, э ва бЭне козИ'],
+  ['Mi sento leggera','Я чувствую лёгкость','ми сЭнто леджЕра'],
+  ['Con calma','Спокойно, не торопясь','кон кАльма'],
+  ['Me lo merito','Я это заслуживаю','ме ло мЭрито'],
+  ['Oggi scelgo me','Сегодня я выбираю себя','Оджи шЭльго ме'],
+  ['Coraggio!','Смелее!','корАджо'],
+  ['Respira piano','Дыши медленно','респИра пьЯно'],
+  ['La vita è bella','Жизнь прекрасна','ла вИта э бЭлла'],
+  ['Il vestito mi sta benissimo','Платье мне очень идёт','иль вестИто ми ста бенИссимо'],
+  ['Che bello!','Как здорово!','ке бЭлло'],
+  ['Bellissima','Прекраснейшая','беллИссима']
+];
+
+/* ---------- экран ---------- */
+function greet(){ const h = new Date().getHours(); return h < 5 ? 'Buonanotte' : h < 12 ? 'Buongiorno' : h < 18 ? 'Buon pomeriggio' : 'Buonasera'; }
+const $app = document.getElementById('app');
+function render(){
+  const t = today(), n = sprintOf(t), st = sprintStart(n), dayN = diff(st, t) + 1;
+  const end = addDays(st, 13);
+  const wStart = dayN <= 7 ? st : addDays(st, 7), wNo = dayN <= 7 ? 1 : 2;
+  const kind = KIND[(diff('2026-01-01', t) + 7) % KIND.length];
+  let dots = ''; for (let i = 0; i < 14; i++) { const ds = addDays(st, i);
+    dots += `<i class="${ds < t ? 'past' : ds === t ? 'now' : ''} ${i === 7 ? 'wk' : ''}"></i>`; }
+
+  /* мудборд */
+  // ровная «кирпичная» раскладка: картинки по очереди уходят в более короткую колонку, слишком длинные скрины мягко обрезаются
+  const cols = [[], []], hgt = [0, 0];
+  S.photos.forEach(p => { const r = Math.min(1.5, Math.max(0.75, photoRatio(p))); const c = hgt[0] <= hgt[1] ? 0 : 1;
+    cols[c].push(`<button class="pin" data-act="viewpin" data-v="${p.id}" aria-label="Открыть картинку" style="aspect-ratio:1/${r.toFixed(3)}"><img src="${p.src}" alt=""></button>`); hgt[c] += r; });
+  if (S.photos.length < 12) { const c = hgt[0] <= hgt[1] ? 0 : 1; cols[c].push(`<button class="pin add plus" data-act="photo" aria-label="Добавить картинку">+</button>`); }
+  const board = `<section class="card board"><div class="pins">${cols.map(c => `<div class="pcol">${c.join('')}</div>`).join('')}</div></section>`;
+
+  /* итоги спринта */
+  const resN = dayN === 14 ? n + 1 : n;
+  const needResult = resN >= 1 && !measFor(resN) && !(S.cfg.skip || []).includes(resN);
+  const resultCard = needResult ? `<section class="card"><h2>Итоги спринта ${resN}</h2>
+      <p class="sub">Утром, до завтрака: примерка контрольных вещей и весы. Потом — наблюдения и копилка побед.</p>
+      <button class="btn full" data-act="result" data-v="${resN}">Открыть итоги</button></section>` : '';
+
+  /* день */
+  const v = S.view, d = S.days[v] || {}, w = d.w || [];
+  const minView = addDays(t, -13);
+  const isWe = [0,6].includes(parse(v).getDay());
+  const kPct = d.k ? Math.min(100, d.k / S.cfg.kcal * 100) : 0;
+  const weChips = isWe ? `<div class="chips" style="margin-bottom:10px">${[['light','Как в будни'],['more','Чуть больше'],['fest','Праздник']].map(([k,l],i) => `<button class="chip ${d.e===k?'on':''}" data-act="we" data-v="${k}" data-i="${i}" aria-pressed="${d.e===k}">${l}</button>`).join('')}</div>` : '';
+  const kNote = d.e ? `Примерно ${num(d.k,0)} ккал. Примерно — тоже честно, главное записать` :
+    !d.k ? (isWe ? 'Выбери, каким был день, или впиши точную цифру, если знаешь' : `План — до ${num(S.cfg.kcal,0)} ккал`) :
+    d.k <= S.cfg.kcal ? `Осталось ${num(S.cfg.kcal - d.k,0)} ккал` : 'Чуть больше плана. Считается неделя целиком, а не один день';
+  const chip = (k, label) => `<button class="chip ${w.includes(k)?'on':''}" data-act="w" data-v="${k}" aria-pressed="${w.includes(k)}">${label}</button>`;
+  const bu = blooms(), got = BLOOM.filter(b => bu[b.id || b[0]]), next = BLOOM.find(b => !bu[b[0]]);
+  const lastFit = [...S.meas].sort((a,b) => b.n - a.n).find(m => fitLine(m));
+  const bellaCard = `<section class="card bella" data-act="bella" role="button" tabindex="0" style="cursor:pointer">${girlSVG(shapeF(), bu)}
+    <div><h2>${esc(S.cfg.girl)}</h2>
+      ${S.cfg.why ? `<p class="hand">${esc(S.cfg.why)}</p>` : `<button class="linkbtn" data-act="moti" style="margin:6px 0">Написать слова для себя</button>`}
+      <div class="bloom"><span>расцвело ${got.length} из ${BLOOM.length}</span><i><b style="width:${Math.round(got.length / BLOOM.length * 100)}%"></b></i></div>
+      ${lastFit ? `<p class="small muted" style="margin:6px 0 0">${fitLine(lastFit)}</p>` : ''}</div></section>`;
+  const isDone = !!d.done && S.editing !== v;
+  const rit = S.cfg.rit || [], rdone = d.r || [];
+  const WHEN = [['m','Утро'],['e','Вечер'],['n','На ночь']];
+  const PI = [['калории', d.k], ['шаги', d.st], ['настроение', d.m], ['сон', d.sl != null], ['удовольствие', (d.pl || []).length]];
+  if (rit.length) PI.unshift(['ритуалы', rit.every(x => rdone.includes(x.id))]);
+  const prog = {all: PI.length, done: PI.filter(x => x[1]).length, left: PI.filter(x => !x[1]).map(x => x[0])};
+  const ritChips = rit.map(x => `<button class="rcheck ${rdone.includes(x.id) ? 'on' : ''}" data-act="rit" data-v="${x.id}" role="checkbox" aria-checked="${rdone.includes(x.id)}"><i>${rdone.includes(x.id) ? '✓' : ''}</i>${esc(x.t)}</button>`).join('');
+  const ritField = `<div class="field"><div class="head" style="margin-bottom:6px"><label style="margin:0">Ритуалы${rit.length ? ` <span class="muted">· ${rit.filter(x => rdone.includes(x.id)).length} из ${rit.length}</span>` : ''}</label><button class="linkbtn small" data-act="rit-edit">${rit.length ? 'настроить' : 'добавить'}</button></div>
+    ${rit.length ? `<div class="rchecks">${ritChips}</div>` : '<p class="note" style="margin:0">Витамины, уход, движение — отмечать одним касанием.</p>'}</div>`;
+
+  const TR = {s:'силовая', p:'пилатес', c:'кардио'};
+  const moodL = (MOODS.find(m => m[0] === d.m) || [])[1];
+  const doneRow = (k, val) => val ? `<div class="drow"><span>${k}</span><b>${val}</b></div>` : '';
+  const doneCard = `<section class="card donecard">
+    <div class="head"><h2>${v === t ? 'Сегодня' : fmtD(v)} <span class="okmark">записан ✓</span></h2>
+      <div class="daynav"><button data-act="day" data-v="-1" ${v <= addDays(t, -13) ? 'disabled' : ''} aria-label="Предыдущий день">‹</button>
+      <button data-act="day" data-v="1" ${v >= t ? 'disabled' : ''} aria-label="Следующий день">›</button></div></div>
+    ${rit.length ? `<div class="field" style="margin-top:4px"><div class="rchecks">${ritChips}</div></div>` : ''}
+    ${doneRow('Калории', d.k ? `${d.e ? 'около ' : ''}${num(d.k,0)}` : '')}${doneRow('Шаги', d.st ? num(d.st,0) : '')}
+    ${doneRow('Тренировка', [...(d.w || []).filter(x => x !== 'c').map(x => TR[x]), cardioMin(d) ? `кардио ${cardioMin(d)} мин` : ''].filter(Boolean).join(', '))}${doneRow('Настроение', moodL)}${doneRow('Сон', d.sl === 1 ? 'выспалась' : d.sl === 0 ? 'не выспалась' : '')}${doneRow('Удовольствие', (d.pl || []).map(([id, sc]) => { const x = S.pm.find(p => p.id === id); return x ? `${esc(x.t)} ${sc}/10` : ''; }).filter(Boolean).join(', '))}
+    ${noteText(v) ? `<div class="drow" style="display:block"><span>Заметки</span><p style="margin:4px 0 0;white-space:pre-wrap">${esc(noteText(v))}</p></div>` : ''}
+    <button class="linkbtn" style="margin-top:12px" data-act="edit-day">Изменить</button>
+  </section>`;
+  const moods = MOODS.map(([k,l,c]) => `<button class="mood ${d.m===k?'on':''}" data-act="mood" data-v="${k}" aria-pressed="${d.m===k}"><i style="background:${c}"></i>${l}</button>`).join('');
+
+  /* неделя */
+  const ws = weekStats(wStart);
+  const pips = (have, need) => { let h = ''; for (let i = 0; i < Math.max(need, have); i++) h += `<i class="${i < have ? 'on' : ''}"></i>`; return h; };
+  const goal = (label, have, need) => `<div class="goal"><span class="t">${label}${have >= need ? ' <span class="heart">♡</span>' : ''}</span><span class="pips">${pips(have, need)}</span></div>`;
+  const stepPct = Math.min(100, ws.steps / S.cfg.steps * 100);
+  const kLine = ws.kDays ? `В среднем ${ws.est ? 'около ' : ''}${num(ws.kAvg,0)} ккал в день, ориентир — до ${num(S.cfg.kcal,0)}` : 'Калории пока не заполнены';
+  const uLine = ws.urges ? `Тянуло заесть ${ws.urges} ${plural(ws.urges,'раз','раза','раз')}, чаще всего — ${REASON[ws.top]}. ${ws.passed ? `${ws.passed} ${plural(ws.passed,'раз','раза','раз')} волна прошла сама.` : ''}${ws.tu ? ` Из них ${ws.tu} — в дни перед месячными или в первые дни цикла.` : ''}${ws.bAvg && ws.aAvg < ws.bAvg ? ` В среднем волна спадала с ${ws.bAvg} до ${ws.aAvg}.` : ''}` : '';
+
+  /* история */
+  const sorted = [...S.meas].sort((a,b) => a.n - b.n);
+  const hist = sorted.filter(m => m.n > 0).map(m => {
+    const prev = sorted.find(x => x.n === m.n - 1);
+    const dW = prev && prev.w != null && m.w != null ? Math.round((m.w - prev.w) * 10) / 10 : null;
+    const ch = dW == null ? '' : dW < 0 ? `−${num(-dW)} кг` : dW > 0 ? `+${num(dW)} кг` : 'без изменений';
+    return `<li><div class="top"><b>Спринт ${m.n}</b><span>${num(m.w)} кг${m.wa ? `, ${num(m.wa)} см` : ''}</span></div>
+      <div class="small muted">${ch}${fitLine(m) ? `${ch ? '. ' : ''}${fitLine(m)}` : ''}</div>${S.notes[m.n] ? `<div class="hand">${esc(S.notes[m.n])}</div>` : ''}
+      <button class="linkbtn" style="margin-top:6px" data-act="res-view" data-v="${m.n}">Открыть итоги</button></li>`; }).join('');
+  const startM = measFor(0);
+
+  const sprintsCard = `<section class="card">
+    <h2>Мои спринты</h2>
+    <p class="small" style="margin:0 0 6px">Копилка побед: <b>${wins()}</b> ${plural(wins(),'волна пережита','волны пережиты','волн пережито')}</p>
+    <p class="sub">${startM ? `Старт ${fmtD(startM.d)}: ${num(startM.w)} кг${startM.wa ? `, талия ${num(startM.wa)} см` : ''}` : 'Стартовый вес ещё не записан'}</p>
+    ${hist ? `<ul class="hist">${hist}</ul>` : `<p class="note" style="margin:0">Здесь появятся итоги после первого спринта, ${fmtD(addDays(sprintStart(0), 14))}.</p>`}
+  </section>`;
+  /* закономерности */
+  const ev = []; Object.keys(S.days).forEach(ds => { const d = S.days[ds]; const wd = parse(ds).getDay();
+    (d.u || []).forEach(u => { if (u[1] !== 'h') ev.push({h:u[0], r:u[1], we: wd === 0 || wd === 6, k:'u'}); });
+    (d.x || []).forEach(x => ev.push({h:x[0], r:x[1], we: wd === 0 || wd === 6, k:'x'})); });
+  const slot = h => h < 12 ? 'утром' : h < 15 ? 'в обед' : h < 18 ? 'после обеда' : h < 22 ? 'вечером' : 'поздно вечером';
+  const topOf = arr => { const c = {}; arr.forEach(x => c[x] = (c[x] || 0) + 1); const k = Object.keys(c).sort((a,b) => c[b]-c[a])[0]; return k ? [k, c[k]] : null; };
+  const tSlot = topOf(ev.map(e => slot(e.h))), tWhy = topOf(ev.map(e => e.r)), weN = ev.filter(e => e.we).length;
+  const xs = ev.filter(e => e.k === 'x'), tX = topOf(xs.map(e => e.r));
+  const patCard = `<section class="card"><h2>Когда тянет</h2>
+    ${ev.length >= 3 ? `<ul class="pat">
+      <li>Чаще всего — <b>${tSlot[0]}</b> (${tSlot[1]} из ${ev.length})</li>
+      <li>Главная причина — <b>${REASON[tWhy[0]]}</b></li>
+      <li>${weN > ev.length * 2 / 7 * 1.3 ? 'На выходных тянет заметно чаще, чем в будни' : weN < ev.length * 2 / 7 * .7 ? 'В будни тянет чаще, чем на выходных' : 'В будни и на выходных примерно одинаково'}</li>
+      ${tX ? `<li>Перед эпизодами переедания чаще всего — ${REASON[tX[0]]}</li>` : ''}</ul>
+      <p class="note">Это не оценка, а карта: теперь понятно, где подстелить соломку.</p>`
+    : '<p class="note" style="margin:0">Когда наберётся хотя бы несколько записей в «Тянет заесть», здесь появится карта: когда и почему тянет чаще всего.</p>'}
+  </section>`;
+  const rated = pmSorted(S.pm.filter(x => x.n)).slice(0, 5);
+  const pmCard = `<section class="card"><div class="head"><h2>Что радует</h2><button class="linkbtn small" data-act="pm">меню</button></div>
+    ${rated.length ? `<ul class="pat">${rated.map(x => `<li style="display:flex;justify-content:space-between;gap:10px"><span>${esc(x.t)}</span><span class="muted">♡ ${num(pAvg(x))} · ${x.n} ${plural(x.n,'раз','раза','раз')}</span></li>`).join('')}</ul>
+      <p class="note">Средняя оценка удовольствия по твоим отметкам. Сверху — то, что радует сильнее всего.</p>`
+      : '<p class="note" style="margin:0">Когда начнёшь отмечать удовольствия из меню, здесь появится твой личный рейтинг радостей не про еду.</p>'}</section>`;
+  const exCard = `<section class="card"><h2>Упражнения</h2>
+    <p class="sub">Короткие техники из психологии привычек и зависимостей. Можно попробовать в спокойный момент, чтобы в трудный они были под рукой.</p>
+    <div class="reasons">${EX.map(e => `<button class="reason" data-act="ex-open-tab" data-v="${e.id}">${e.t}<small>${e.o}</small></button>`).join('')}</div></section>`;
+  const head = `<header><div class="hello">${ART.flower}<div><div class="brand">Dolce Cura</div><h1>${greet()}${S.cfg.name ? ', ' + esc(S.cfg.name) : ''}</h1><div class="date">${WD[parse(t).getDay()]}, ${fmtD(t)}</div></div></div>
+    <button class="gear" data-act="settings" aria-label="Настройки">⚙︎</button></header>
+  <div class="tabs" role="tablist">${[['day','Мой день'],['sprints','Спринты'],['board','Мудборд']].map(([k,l]) => `<button role="tab" data-act="tab" data-v="${k}" class="${(S.tab || 'day') === k ? 'on' : ''}" aria-selected="${(S.tab || 'day') === k}">${l}</button>`).join('')}</div>`;
+  setTimeout(() => { const n = document.getElementById('notes'); if (n) noteGrow(n); }, 0);
+  if (S.tab === 'board') { $app.innerHTML = head + board; return; }
+  if (S.tab === 'sprints') { $app.innerHTML = head + sprintsCard + pmCard + patCard + exCard; return; }
+  $app.innerHTML = `
+  ${head}
+  ${resultCard}
+  ${bellaCard}
+  <section class="card sprint top">${ART.lemons}
+    <div class="small muted">Спринт ${n + 1} · ${fmtD(st)} — ${fmtD(end)}</div><div class="n">день ${dayN} из 14</div>
+    <div class="dots" aria-hidden="true">${dots}</div>
+    ${dayN === 14 ? '<p class="small" style="margin:8px 0 0">Последний день спринта — сегодня подводим итоги ♡</p>' : ''}
+    <button class="wordsrow" data-act="words"><span class="muted">Parole del giorno</span> <span class="wl">${dayWords().map(w => esc(w[0])).join(', ')}</span> <span class="muted">›</span></button>
+  </section>
+  ${isDone ? doneCard : `<section class="card daycard">
+    <div class="head"><h2>${v === t ? 'Сегодня' : fmtD(v)}<span class="prog">${prog.done} из ${prog.all}</span></h2>
+      <div class="daynav"><button data-act="day" data-v="-1" ${v <= minView ? 'disabled' : ''} aria-label="Предыдущий день">‹</button>
+      <button data-act="day" data-v="1" ${v >= t ? 'disabled' : ''} aria-label="Следующий день">›</button></div></div>
+    ${ritField}
+    <h3>Еда и движение</h3>
+    <div class="field"><label for="k">${isWe ? 'Калории, можно примерно' : 'Калории'}</label>
+      ${weChips}<div class="inrow"><input class="inp" id="k" data-f="k" inputmode="numeric" placeholder="—" value="${d.k ?? ''}"><span class="unit">ккал</span></div>
+      <div class="soft"><i style="width:${kPct}%"></i></div><p class="note">${kNote}</p></div>
+    <div class="field"><label for="st">Шаги</label><div class="inrow"><input class="inp" id="st" data-f="st" inputmode="numeric" placeholder="—" value="${d.st ?? ''}"><span class="unit">шагов</span></div></div>
+    <div class="field"><label>Тренировка</label><div class="chips">${chip('s','Силовая')}${chip('p','Пилатес')}
+      <label class="chip cpill ${cardioMin(d) ? 'on' : ''}" for="cm">Кардио <input id="cm" data-f="cm" inputmode="numeric" placeholder="—" value="${d.cm ?? (cardioMin(d) || '')}" aria-label="Кардио, минут"> мин</label></div>
+      <p class="note">Кардио — сумма минут за день, быстрая прогулка тоже считается.</p></div>
+    <h3>Заметки</h3>
+    <textarea class="inp notes" id="notes" data-n="1" placeholder="Еда, мысли, что было приятного — своими словами">${esc(noteText(v))}</textarea>
+    <h3>Как ты?</h3>
+    <div class="moods" style="margin-top:10px">${moods}</div>
+    <div class="field"><label>Сон</label><div class="chips">${[[1,'Выспалась'],[0,'Не выспалась']].map(([k,l]) => `<button class="chip ${d.sl===k?'on':''}" data-act="sleep" data-v="${k}" aria-pressed="${d.sl===k}">${l}</button>`).join('')}</div></div>
+    <div class="field"><div class="head" style="margin-bottom:6px"><label style="margin:0">Удовольствие не про еду</label><button class="linkbtn small" data-act="pm">меню</button></div>
+      ${(d.pl || []).length ? `<div class="chips">${d.pl.map(([id, sc]) => { const x = S.pm.find(p => p.id === id); return x ? `<span class="chip on" style="cursor:default">${esc(x.t)} · ${sc}/10</span>` : ''; }).join('')}<button class="chip" data-act="pm">+ из меню</button><button class="chip" data-act="pm-quick">+ своё</button></div>`
+        : `<div class="chips"><button class="chip" data-act="pm">Выбрать из меню</button><button class="chip" data-act="pm-quick">+ своё</button></div>`}</div>
+    <button class="btn full closeday" style="margin:20px 0 0" data-act="close-day">Записать день ♡</button>
+    ${prog.left.length ? `<p class="left">Ещё не отмечено: ${prog.left.join(', ')}. Можно записать и так.</p>` : '<p class="left">Всё отмечено ♡</p>'}
+  </section>`}
+  <section class="card wk">
+    <div class="head"><h2>Неделя ${wNo}</h2><span class="small muted">${fmtD(wStart)} — ${fmtD(addDays(wStart, 6))}</span></div>
+    ${goal('Силовые', ws.s, S.cfg.s)}${goal('Пилатес', ws.p, S.cfg.p)}
+    <div class="goal"><span class="t">Кардио${ws.c >= cmGoal() ? ' <span class="heart">♡</span>' : ''}</span><span class="v">${num(ws.c,0)} из ${num(cmGoal(),0)} мин</span>
+      <div class="soft"><i style="width:${Math.min(100, ws.c / cmGoal() * 100)}%"></i></div></div>
+    <div class="goal"><span class="t">Шаги${ws.steps >= S.cfg.steps ? ' <span class="heart">♡</span>' : ''}</span><span class="v">${num(ws.steps,0)} из ${num(S.cfg.steps,0)}</span>
+      <div class="soft"><i style="width:${stepPct}%"></i></div></div>
+    ${ws.kDays ? `<p class="mini">Калории: в среднем ${ws.est ? 'около ' : ''}${num(ws.kAvg,0)}, ориентир до ${num(S.cfg.kcal,0)}</p>` : ''}
+    ${ws.urges ? `<p class="mini" style="margin-top:2px">Тянуло ${ws.urges} ${plural(ws.urges,'раз','раза','раз')}, справилась ${ws.passed} ${plural(ws.passed,'раз','раза','раз')} ♡</p>` : ''}
+  </section>
+  ${cloudOk ? '' : `<p class="foot">Сейчас это превью: данные хранятся в браузере. В Телеграме они будут в облаке бота.</p>`}`;
+}
+
+/* ---------- окна ---------- */
+const $layer = document.getElementById('layer');
+let timer = null;
+function modal(html){ stopTimer(); $layer.innerHTML = `<div class="modal" data-act="bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`; }
+const close = () => { stopTimer(); $layer.innerHTML = ''; };
+function toast(t){ const e = document.createElement('div'); e.className = 'toast'; e.textContent = t; document.body.appendChild(e); setTimeout(() => e.remove(), 2400); }
+const val = id => { const x = document.getElementById(id); if (!x) return null; const v = parseFloat(String(x.value).replace(/\s/g,'').replace(',', '.')); return isNaN(v) ? null : v; };
+
+const dayPhrase = () => KIND[(diff('2026-01-01', today()) % KIND.length + KIND.length) % KIND.length];
+function morningModal(){
+  modal(`<div class="morning">${ART.flower}<p class="muted small" style="margin:6px 0 0">${greet()}${S.cfg.name ? ', ' + esc(S.cfg.name) : ''}</p>
+    <p class="q" style="font-style:italic;margin:6px 0 12px">Parole del giorno</p>
+    <div id="mwords" style="text-align:left">${wordsList(true)}</div>
+    ${tender(today()) === 'pre' ? '<p class="small muted" style="margin:12px 0 0">Сейчас дни перед месячными. Сегодня можно особенно бережно.</p>' : ''}
+    <div style="height:16px"></div>
+    <button class="btn full" data-act="morning-ok">Grazie ♡</button></div>`);
+}
+function onboarding(){
+  modal(`<h2>Benvenuta в Dolce Cura</h2><p class="lead">Это трекер нежной заботы о себе. Две недели — один спринт. В конце каждого встаёшь на весы, а между ними просто отмечаешь день.</p>
+    <div class="field"><label for="o_d">Первый день спринта</label><input class="inp" id="o_d" type="date" value="${today()}"></div>
+    <div class="two field"><div><label for="o_w">Вес на старте, кг</label><input class="inp" id="o_w" inputmode="decimal" placeholder="например, 70"></div>
+      <div><label for="o_wa">Талия, см</label><input class="inp" id="o_wa" inputmode="decimal" placeholder="по желанию"></div></div>
+    <div class="two field"><div><label for="o_n">Как тебя зовут</label><input class="inp" id="o_n" maxlength="20"></div>
+      <div><label for="o_g">Цель по весу, кг</label><input class="inp" id="o_g" inputmode="decimal" placeholder="по желанию"></div></div>
+    <button class="btn full" style="margin-top:20px" data-act="onb">Поехали</button>`);
+}
+let RS = {};
+const prevMeas = n => [...S.meas].filter(m => m.n < n).sort((a,b) => b.n - a.n)[0];
+function resultModal(n){
+  RS = {n, fits: {}};
+  const prev = prevMeas(n), pf = fitsOf(prev);
+  modal(`<h2>Итоги спринта ${n}</h2><p class="lead">Шаг 1 из 3. Примерка. Как сидят контрольные вещи?</p>
+    ${ctrlItems().map((it, i) => `<div class="field"><label>${esc(it)}${pf[it] ? ` <span class="muted">· в прошлый раз: ${FIT2[pf[it]]}</span>` : ''}</label>
+      <div class="chips">${Object.entries(FIT2).map(([k,l]) => `<button class="chip" data-act="fit2" data-i="${i}" data-v="${k}">${l}</button>`).join('')}</div></div>`).join('')}
+    <button class="btn full" style="margin-top:18px" data-act="res-2">Дальше</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="res-skip" data-v="${n}">Пропустить в этот раз</button>`);
+}
+function resultStep2(){
+  const tn = tender(today()), prev = prevMeas(RS.n);
+  modal(`<h2>Итоги спринта ${RS.n}</h2><p class="lead">Шаг 2 из 3. Весы — утром, до завтрака. Любая цифра — просто информация.</p>
+    ${tn ? `<div class="tip">${tn === 'pre' ? 'Сейчас дни перед месячными' : 'Сейчас первые дни цикла'}: вес в это время часто выше из-за воды. Можно взвеситься через пару дней — итоги подождут.</div>` : ''}
+    <div class="two"><div class="field"><label for="r_w">Вес, кг${prev && prev.w ? ` <span class="muted">· было ${num(prev.w)}</span>` : ''}</label><input class="inp" id="r_w" inputmode="decimal"></div>
+      <div class="field"><label for="r_wa">Талия, см</label><input class="inp" id="r_wa" inputmode="decimal" placeholder="по желанию"></div></div>
+    <div class="field"><label for="r_n">Что получилось хорошо?</label><textarea class="inp" id="r_n" placeholder="по желанию"></textarea></div>
+    <button class="btn full" style="margin-top:18px" data-act="res-save">Показать итоги</button>`);
+}
+function sprintDays(n){ const a = sprintStart(n - 1), out = []; for (let i = 0; i < 14; i++) { const ds = addDays(a, i); if (ds > today()) break; out.push(ds); } return out; }
+function observations(n){
+  const days = sprintDays(n).filter(ds => S.days[ds]);
+  const urg = ds => (S.days[ds].u || []).filter(u => u[1] !== 'h').length;
+  const total = days.reduce((a, ds) => a + urg(ds), 0);
+  const out = [];
+  const cmp = (A, B, textA, textB, what) => {
+    if (A.length < 3 || B.length < 3) return `${what}: мало данных для вывода — нужно хотя бы по 3 дня каждого вида.`;
+    const a = A.reduce((x, ds) => x + urg(ds), 0) / A.length, b = B.reduce((x, ds) => x + urg(ds), 0) / B.length;
+    const f = x => num(Math.round(x * 10) / 10);
+    if (Math.abs(a - b) < 0.3) return `${what}: заметной разницы нет (${f(a)} и ${f(b)} раза в день).`;
+    return a > b ? `${what}: в дни, когда ${textA}, тянуло чаще — ${f(a)} раза в день против ${f(b)}.` : `${what}: в дни, когда ${textB}, тянуло чаще — ${f(b)} раза в день против ${f(a)}.`;
+  };
+  if (!total) out.push('Тяг в этом спринте не записано, поэтому сравнивать пока нечего.');
+  else {
+    out.push(cmp(days.filter(ds => S.days[ds].sl === 0), days.filter(ds => S.days[ds].sl === 1), 'не выспалась', 'выспалась', 'Сон и тяга'));
+    const moved = ds => (S.days[ds].w || []).length || cardioMin(S.days[ds]);
+    out.push(cmp(days.filter(moved), days.filter(ds => !moved(ds)), 'была тренировка', 'тренировки не было', 'Тренировки и тяга'));
+    if ((S.cfg.cyc || []).length) out.push(cmp(days.filter(ds => tender(ds)), days.filter(ds => !tender(ds)), 'дни перед месячными или первые дни цикла', 'остальные дни цикла', 'Цикл и тяга'));
+    else out.push('Цикл и тяга: отсчёт цикла не начат, данных нет.');
+  }
+  const m = measFor(n);
+  if (m && m.w && tender(m.d)) out.push('Цикл и вес: взвешивание выпало на дни перед месячными или первые дни цикла — вес мог быть выше из-за воды.');
+  return out;
+}
+function topHelpers(n){ const c = {};
+  sprintDays(n).forEach(ds => ((S.days[ds] || {}).u || []).forEach(u => { if (u[2] === 'p' && u[6]) c[u[6]] = (c[u[6]] || 0) + 1; }));
+  return Object.keys(c).sort((a, b) => c[b] - c[a]).slice(0, 3).map(id => { const x = S.lib.find(l => l.id === id); return x ? `${esc(x.t)} (${c[id]})` : null; }).filter(Boolean);
+}
+function achievements(n){
+  const m = measFor(n), prev = prevMeas(n), out = [];
+  if (m && prev && m.w && prev.w) { const dw = Math.round((prev.w - m.w) * 10) / 10; if (dw >= 0.5) out.push(`Минус ${num(dw)} кг`); }
+  const cf = fitsOf(m), pf = fitsOf(prev);
+  Object.keys(cf).forEach(k => { if (cf[k] && pf[k] && FRANK[cf[k]] > FRANK[pf[k]]) out.push(cf[k] === 'free' ? `${k} ${/юбк/i.test(k) ? 'сидит' : 'сели'} свободнее` : `${k} ${/юбк/i.test(k) ? 'давит' : 'давят'} меньше`);
+    else if (cf[k] === 'free' && !pf[k]) out.push(`${k} — свободно`); });
+  const a = sprintStart(n - 1), wv = wins(a, addDays(a, 13)); if (wv) out.push(`${wv} ${plural(wv,'волна пережита','волны пережиты','волн пережито')}`);
+  const allTr = x => x.s >= S.cfg.s && x.p >= S.cfg.p && x.c >= cmGoal();
+  if (allTr(weekStats(a)) && allTr(weekStats(addDays(a, 7)))) out.push('Все тренировки обеих недель');
+  return out;
+}
+function resultSummary(n, fresh){
+  const m = measFor(n), prev = prevMeas(n);
+  const dW = m && prev && m.w && prev.w ? Math.round((m.w - prev.w) * 10) / 10 : null;
+  const wLine = !m || !m.w ? 'В этот раз без весов.' : dW == null ? `${num(m.w)} кг` : dW < 0 ? `${num(m.w)} кг — минус ${num(-dW)} кг за спринт` : dW > 0 ? `${num(m.w)} кг — плюс ${num(dW)} кг за спринт. Одна цифра не приговор: смотрим на путь.` : `${num(m.w)} кг — без изменений`;
+  const cf = fitsOf(m), pf = fitsOf(prev);
+  const fits = Object.keys(cf).filter(k => cf[k]).map(k => `<li>${esc(k)}: ${pf[k] && pf[k] !== cf[k] ? `${FIT2[pf[k]]} → ` : ''}<b>${FIT2[cf[k]]}</b></li>`).join('');
+  const a = sprintStart(n - 1), wv = wins(a, addDays(a, 13)), th = topHelpers(n), ach = achievements(n);
+  modal(`<h2>Итоги спринта ${n}</h2>${fresh ? '<p class="lead">Шаг 3 из 3. Вот что получилось.</p>' : ''}
+    ${ach.length ? `<div class="ach">${ach.map(x => `<span>♡ ${esc(x)}</span>`).join('')}</div>` : '<div class="ach"><span>♡ Ты подвела итоги — это уже забота о себе</span></div>'}
+    <h3 class="rh">Примерка</h3>${fits ? `<ul class="pat">${fits}</ul>` : '<p class="note" style="margin:0">Без примерки в этот раз.</p>'}
+    <h3 class="rh">Вес</h3><p style="margin:0">${wLine}</p>
+    <h3 class="rh">Копилка побед</h3><p style="margin:0">В этом спринте ты справилась с тягой <b>${wv}</b> ${plural(wv,'раз','раза','раз')}. Всего в копилке — ${wins()}.</p>
+    ${th.length ? `<p class="small muted" style="margin:6px 0 0">Твои топ-приёмы: ${th.join(', ')}</p>` : ''}
+    <h3 class="rh">Наблюдения</h3><ul class="pat">${observations(n).map(x => `<li>${x}</li>`).join('')}</ul>
+    <p class="note">Это наблюдения по твоим данным, а не закон: совпадение не всегда причина.</p>
+    <button class="btn full" style="margin-top:16px" data-act="${fresh ? 'res-next' : 'bg-close'}">${fresh ? `Начать спринт ${n + 1} ♡` : 'Закрыть'}</button>`);
+}
+function settings(){
+  const c = S.cfg;
+  modal(`<h2>Настройки</h2><button class="btn ghost full" style="margin:0 0 10px" data-act="help">Как пользоваться Dolce Cura</button>
+    <div class="field" style="margin-top:6px"><label for="c_n">Как к тебе обращаться</label><input class="inp" id="c_n" value="${esc(c.name)}"></div>
+    <details class="grp"><summary>Цели</summary><p class="note">Если неделя тяжёлая, это нормально — снизь планку.</p>
+      <div class="two"><div class="field"><label for="c_k">Калории в день, до</label><input class="inp" id="c_k" inputmode="numeric" value="${c.kcal}"></div>
+      <div class="field"><label for="c_st">Шаги в неделю</label><input class="inp" id="c_st" inputmode="numeric" value="${c.steps}"></div>
+      <div class="field"><label for="c_s">Силовых в неделю</label><input class="inp" id="c_s" inputmode="numeric" value="${c.s}"></div>
+      <div class="field"><label for="c_p">Пилатеса в неделю</label><input class="inp" id="c_p" inputmode="numeric" value="${c.p}"></div>
+      <div class="field"><label for="c_c">Кардио в неделю, мин</label><input class="inp" id="c_c" inputmode="numeric" value="${c.cmin || 130}"></div>
+      <div class="field"><label for="c_g">Цель по весу для Bella, кг</label><input class="inp" id="c_g" inputmode="decimal" value="${c.goal || ''}"></div></div>
+      <div class="field"><label>Выходные примерно, ккал: как в будни, чуть больше, праздник</label>
+      <div class="three"><input class="inp" id="c_e0" inputmode="numeric" value="${c.we[0]}"><input class="inp" id="c_e1" inputmode="numeric" value="${c.we[1]}"><input class="inp" id="c_e2" inputmode="numeric" value="${c.we[2]}"></div></div>
+      <div class="field"><label for="c_d">Старт первого спринта</label><input class="inp" id="c_d" type="date" value="${c.start}"></div></details>
+    <details class="grp"><summary>Цикл</summary>
+      <div class="field cycset"><p class="small" style="margin:0 0 8px">${cycleDay(today()) ? `Сегодня день ${cycleDay(today())}${cyclePredicted(today()) ? ' (по прогнозу)' : ''}` : 'Отсчёт пока не начат'}</p>
+      <button class="chip ${(c.cyc || []).includes(today()) ? 'on' : ''}" data-act="cyc">${(c.cyc || []).includes(today()) ? 'Начались сегодня ✓' : 'Месячные начались сегодня'}</button>
+      <div class="inrow" style="margin-top:10px"><input class="inp" id="cycn" inputmode="numeric" placeholder="день цикла" style="max-width:130px"><button class="btn ghost" data-act="cycset">Поправить</button></div></div>
+      <div class="field"><label for="c_cl">Средняя длина цикла, дней (из «Здоровья»)</label><input class="inp" id="c_cl" inputmode="numeric" value="${c.clen || 28}"></div></details>
+    <details class="grp"><summary>Итальянский</summary>
+      <div class="field"><label>Слов в день</label><div class="chips">${[3,4,5].map(k => `<button class="chip ${(c.wpd || 4) === k ? 'on' : ''}" data-act="wpd" data-v="${k}">${k}</button>`).join('')}</div></div>
+      <button class="btn ghost full" style="margin-top:12px" data-act="vocab">Мой словарь</button>
+      ${(S.known || []).length ? `<button class="btn ghost full" style="margin-top:8px" data-act="known-reset">Вернуть знакомые слова (${S.known.length})</button>` : ''}</details>
+    <details class="grp"><summary>Ритуалы, слова, переключалки</summary>
+      <button class="btn ghost full" style="margin-top:10px" data-act="rit-edit">Ритуалы</button>
+      <button class="btn ghost full" style="margin-top:8px" data-act="pm">Меню удовольствий</button>
+      <button class="btn ghost full" style="margin-top:8px" data-act="moti">Мои слова и контрольные вещи</button>
+      <button class="btn ghost full" style="margin-top:8px" data-act="mysw">Мои переключалки</button></details>
+    <details class="grp"><summary>Прочее</summary>
+      <button class="btn ghost full" style="margin-top:10px" data-act="export">Резервная копия</button></details>
+    <button class="btn full" style="margin-top:16px" data-act="set-save">Сохранить</button>`);
+}
+
+/* ---------- Dolce: переключалка ---------- */
+let itIdx = Math.floor(Math.random() * IT.length);
+const itCard = () => { if (S.vocab.length) { const [w, tr] = S.vocab[itIdx % S.vocab.length];
+    return `<div class="it">${ART.tile}<p class="ph">${esc(w)}</p><p class="tr">${esc(tr)}</p><p class="pr">повтори вслух три раза</p></div>`; }
+  const [ph, tr, pr] = IT[itIdx % IT.length];
+  return `<div class="it">${ART.tile}<p class="ph">${ph}</p><p class="tr">${tr}</p><p class="pr">[${pr}]</p></div>`; };
+const TIPS = {
+  t: 'Усталость часто маскируется под голод. Телу сейчас нужен отдых, а не сахар.',
+  s: 'Грусти можно дать место. Еда утешит на минуту, а забота о себе — надольше.',
+  b: 'Скуке нужно что-то новое, а не еда.',
+  a: 'Злость и тревога дают много энергии. Её лучше выпустить через тело, чем заесть.',
+  l: 'Одиночество — это голод по людям, а не по еде.',
+  w: 'Это просто волна: она поднимется, дойдёт до пика и спадёт.'
+};
+const SW = {
+  t: [['t1','Полежать 10 минут, ноги на стену'],['t2','Умыться прохладной водой'],['t3','Маска для лица или крем для рук'],['t4','Чай в самой красивой чашке'],['t5','Выйти на балкон или к окну и подышать']],
+  s: [['s1','Отправить голосовое близкому человеку'],['s2','Любимый плейлист погромче'],['s3','Плед и одна серия любимого сериала'],['s4','Записать, что сейчас чувствую'],['s5','Обнять себя и сказать: мне грустно, и это нормально']],
+  b: [['b1','Выучить 5 итальянских слов'],['b2','Собрать образ из своего шкафа'],['b3','Добавить картинку на мудборд'],['b4','Накрасить ногти'],['b5','Разобрать одну полку или ящик']],
+  a: [['a1','Пять медленных выдохов: вдох на 4, выдох на 6'],['a2','Выписать на бумагу всё, что злит'],['a3','Быстрая прогулка на 10 минут'],['a4','Минуту потрясти руками и плечами'],['a5','Умыться холодной водой']],
+  l: [['l1','Написать подруге «привет, как ты?»'],['l2','Позвонить кому-то родному'],['l3','Выйти туда, где есть люди: кафе, парк'],['l4','Записать голосовое близкому'],['l5','Завернуться в плед с любимым фильмом']],
+  w: [['w1','Чай с корицей или мятой'],['w2','Почистить зубы'],['w3','Мятная жвачка'],['w4','Пройтись 10 минут вокруг дома'],['w5','Стакан воды и вернуться к делу']]
+};
+const WAVE = [
+  'Заметь, где в теле живёт желание: во рту, в животе, в руках?',
+  'Дыши медленно: вдох на четыре счёта, выдох на шесть.',
+  'Назови его: «Я замечаю, что хочу сладкого». Это просто ощущение, не приказ.',
+  'Волна поднимается. Ты не обязана ничего с ней делать — только наблюдать.',
+  'Возможно, сейчас пик. Дальше будет спад.',
+  'Проверь: волна стала хоть чуть-чуть ниже?',
+  'Ещё немного. Ты справляешься.',
+  'Почти всё. Как ты сейчас?'
+];
+let U = {};
+const swText = id => { if (id && id.startsWith('P:')) { const x = S.pm.find(p => p.id === id.slice(2)); return x ? x.t : ''; } if (id && id.startsWith('L:')) { const x = S.lib.find(l => l.id === id.slice(2)); return x ? x.t : ''; } for (const k in SW) { const x = SW[k].find(o => o[0] === id); if (x) return x[1]; } const m = (S.cfg.mysw || []).find(o => o[0] === id); return m ? m[1] : ''; };
+function pickSwitches(r){
+  const st = S.cfg.swst || {};
+  const pool = [...SW[r], ...(S.cfg.mysw || [])];
+  return pool.map(o => { const [t, p] = st[o[0]] || [0, 0]; return [o, (p + 1) / (t + 2) + Math.random() * .35 + (o[0].startsWith('m') ? .15 : 0)]; })
+    .sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0]);
+}
+function dolceStart(){
+  U = {};
+  const tn = tender(today());
+  modal(`<h2>Хочется dolce?</h2>${tn ? `<div class="tip">${tn === 'pre' ? 'Сейчас дни перед месячными. В это время тяга к сладкому у многих сильнее — это гормоны, а не слабость.' : 'Сейчас первые дни цикла. Телу нужно больше тепла и отдыха — и тяга может быть сильнее обычного.'} Будь к себе особенно мягкой.</div>` : ''}<p class="lead">По-итальянски dolce — не только «сладкий», но и «нежный». Сначала честно: что сейчас на самом деле?</p>
+    <div class="reasons">
+      <button class="reason" data-act="why" data-v="h">Голод<small>давно не ела, живот урчит</small></button>
+      <button class="reason" data-act="why" data-v="t">Устала<small>нет сил, хочется «топлива»</small></button>
+      <button class="reason" data-act="why" data-v="s">Грустно<small>хочется утешиться</small></button>
+      <button class="reason" data-act="why" data-v="b">Скучно<small>руки ищут занятие</small></button>
+      <button class="reason" data-act="why" data-v="a">Злюсь или тревожно<small>внутри всё кипит или сжимается</small></button>
+      <button class="reason" data-act="why" data-v="l">Одиноко<small>хочется, чтобы кто-то был рядом</small></button>
+      <button class="reason" data-act="why" data-v="w">Просто хочу сладкого<small>например, после обеда</small></button>
+    </div>
+    <button class="btn ghost full" style="margin-top:12px" data-act="over">Я уже переела</button>
+    <button class="linkbtn" style="margin-top:14px" data-act="mysw">Мои переключалки</button>`);
+}
+const scale = act => `<div class="scale">${Array.from({length:10}, (_, i) => `<button class="chip" data-act="${act}" data-v="${i+1}">${i+1}</button>`).join('')}</div>`;
+function intensityBefore(){
+  modal(`<h2>Насколько сильно?</h2><p class="lead">Оцени тягу прямо сейчас: 1 — еле заметно, 10 — очень сильно. Потом сравним.</p>${scale('ib')}`);
+}
+function chooseSwitch(showStd){
+  const lib = [...S.lib].sort((a, b) => b.n - a.n).slice(0, 4);
+  const useLib = lib.length && !showStd;
+  const opts = useLib ? [] : pickSwitches(U.r);
+  const pms = ['b','w','s','l'].includes(U.r) ? pmSorted(S.pm.filter(x => x.d !== 'we')).slice(0, 3) : [];
+  modal(`<h2>Пока идёт волна</h2><div class="tip">${TIPS[U.r]}</div><p class="lead" style="margin-bottom:10px">Что попробуешь?</p>
+    ${pms.length ? `<p class="small muted" style="margin:0 0 6px">Из твоего меню удовольствий</p><div class="reasons" style="margin-bottom:12px">${pms.map(x => `<button class="reason" data-act="opt" data-v="P:${x.id}">${esc(x.t)}${pAvg(x) != null ? `<small>♡ ${num(pAvg(x))}</small>` : ''}</button>`).join('')}</div>` : ''}
+    <div class="reasons lib">${useLib ? lib.map(x => `<button class="reason" data-act="opt" data-v="L:${x.id}">${esc(x.t)}<small>помогало ${x.n} ${plural(x.n,'раз','раза','раз')}</small></button>`).join('') : ''}
+    ${opts.map(o => `<button class="reason" data-act="opt" data-v="${o[0]}">${esc(o[1])}${o[0].startsWith('m') ? '<small>моя переключалка</small>' : ''}</button>`).join('')}
+    <button class="reason" data-act="opt" data-v="">Просто посёрфить волну<small>дышать и наблюдать</small></button></div>
+    <div class="row" style="display:flex;gap:16px;margin-top:12px">${useLib ? '<button class="linkbtn" data-act="stdopts">Другие варианты</button>' : ''}<button class="linkbtn" data-act="ex-list" data-v="dolce">Упражнение</button></div>`);
+}
+function logUrge(r, o, b, a, opt, helper){
+  const t = today(), d = S.days[t] || {}; const u = (d.u || []).slice(-9);
+  u.push([new Date().getHours(), r, o, b || 0, a || 0, opt || '', helper || '']); S.days[t] = Object.assign({}, d, {u}); return saveDays(t);
+}
+function stopTimer(){ if (timer) { clearInterval(timer); timer = null; } }
+function surf(){
+  const total = 600; let left = total;
+  const opt = U.opt ? swText(U.opt) : '';
+  modal(`<h2>Сёрфинг</h2>${opt ? `<p class="lead" style="margin-bottom:8px">Пока идёт волна: <b style="color:var(--cocoa)">${esc(opt)}</b></p>` : '<p class="lead" style="margin-bottom:8px">Просто дыши и наблюдай. Волна пройдёт сама.</p>'}
+    <div class="wave" aria-hidden="true"><svg viewBox="0 0 600 90" preserveAspectRatio="none"><path class="w2" d="M0 55 Q 75 25 150 55 T 300 55 T 450 55 T 600 55 T 750 55 T 900 55 T 1050 55 T 1200 55 V90 H0Z"/><path class="w1" d="M0 60 Q 75 35 150 60 T 300 60 T 450 60 T 600 60 T 750 60 T 900 60 T 1050 60 T 1200 60 V90 H0Z"/></svg>
+      <div class="wave-t" id="wt">10:00</div></div>
+    <p class="wave-p" id="wp">${WAVE[0]}</p>
+    <div id="itbox">${itCard()}</div>
+    <button class="btn ghost full" data-act="nextit">Ещё фраза</button>
+    <button class="btn full" style="margin-top:10px" data-act="wave-end">Волна закончилась</button>`);
+  timer = setInterval(() => {
+    left--; const tx = document.getElementById('wt'), wp = document.getElementById('wp');
+    if (!tx) { stopTimer(); return; }
+    tx.textContent = left > 0 ? `${Math.floor(left / 60)}:${pad(left % 60)}` : 'готово';
+    const k = Math.min(WAVE.length - 1, Math.floor((total - left) / 75)); if (wp.textContent !== WAVE[k]) wp.textContent = WAVE[k];
+    if (left <= 0) { stopTimer(); haptic(); }
+  }, 1000);
+}
+
+function petals(){ if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for (let i = 0; i < 28; i++) { const e = document.createElement('i'); e.className = 'petal';
+    e.style.left = Math.random() * 100 + 'vw'; e.style.animationDelay = Math.random() * .8 + 's'; e.style.background = ['#F1CFCF','#E2A2AA','#F7E1DF','#F3DD8C'][i % 4];
+    document.body.appendChild(e); setTimeout(() => e.remove(), 3600); } }
+const EX = [
+  {id:'tape', t:'Перемотай плёнку', o:'приём из программ профилактики срывов', s:[
+    'Представь, что ты прямо сейчас съедаешь то, чего хочется. Первые минуты — вкусно. Побудь в этом честно.',
+    'Теперь перемотай на 15 минут вперёд. Как ты себя чувствуешь? Что думаешь о себе?',
+    'Перемотай на вечер. Как прошёл остаток дня после этого?',
+    'А теперь другая плёнка: волна прошла, ты не съела. Как ты чувствуешь себя через 15 минут? Вечером?',
+    'Какая из двух плёнок тебе ближе сейчас? Любой выбор — твой. Ты просто смотришь на него ясно.']},
+  {id:'ground', t:'5-4-3-2-1', o:'заземление, техника из КПТ и ДБТ при тревоге', s:[
+    'Назови про себя 5 вещей, которые видишь вокруг.',
+    '4 вещи, которые можешь потрогать. Коснись их.',
+    '3 звука, которые слышишь прямо сейчас.',
+    '2 запаха — или вспомни два любимых.',
+    '1 вкус во рту. И один медленный выдох. Ты здесь, и ты в порядке.']},
+  {id:'balance', t:'Весы решения', o:'«баланс решений» из мотивационного интервьюирования', s:[
+    'Что хорошего будет, если съесть это сейчас? Честно: удовольствие, утешение, отдых.',
+    'А что не очень хорошее в этом варианте?',
+    'Что хорошего, если не есть и сделать что-то другое?',
+    'Что в этом варианте трудного?',
+    'Посмотри на обе чаши. Ты не обязана выбирать «правильно» — ты выбираешь осознанно.']},
+  {id:'chain', t:'Цепочка событий', o:'«анализ цепочки» из ДБТ — лучше после эпизода, в спокойный момент', s:[
+    'Вспомни момент, когда захотелось заесть. Что произошло прямо перед этим?',
+    'Что ты чувствовала в теле? Усталость, пустоту, напряжение?',
+    'Какая мысль крутилась? Например, «я заслужила» или «всё равно уже».',
+    'Где в этой цепочке было самое слабое звено, которое можно разорвать в следующий раз?',
+    'Что ты сделаешь в следующий раз в этой точке? Одно маленькое действие.']},
+  {id:'opposite', t:'Противоположное действие', o:'техника из ДБТ для сильных эмоций', s:[
+    'Назови эмоцию, которая сейчас тянет к еде: грусть, тревога, злость, скука.',
+    'Что эта эмоция «велит» сделать? Например, грусть — спрятаться и утешиться едой.',
+    'Сделай маленькое противоположное действие: грусть — выйти на свет и написать кому-то; тревога — замедлиться и подышать; злость — мягко отойти и подвигаться.',
+    'Делай это 5 минут, даже если не хочется. Эмоция может стать тише.']}
+];
+let EXS = {};
+function exList(from){ EXS = {from};
+  modal(`<h2>Упражнения</h2><p class="lead">Короткие техники из психологии привычек и зависимостей. Выбери одно.</p>
+    <div class="reasons">${EX.map(e => `<button class="reason" data-act="ex-open" data-v="${e.id}">${e.t}<small>${e.o}</small></button>`).join('')}</div>`); }
+function exStep(){ const e = EX.find(x => x.id === EXS.id), i = EXS.i, last = i === e.s.length - 1;
+  modal(`<h2>${e.t}</h2><p class="small muted" style="margin:0 0 12px">Шаг ${i + 1} из ${e.s.length}</p>
+    <div class="tip" style="font-size:16px">${e.s[i]}</div>
+    <button class="btn full" style="margin-top:6px" data-act="${last ? 'ex-done' : 'ex-next'}">${last ? 'Готово' : 'Дальше'}</button>`); }
+/* ---------- меню удовольствий ---------- */
+const PDUR = [['5','на 5 минут'],['30','на полчаса'],['we','на выходные']];
+const PSEED = {
+  '5': ['Танец под одну песню','Маска для лица','Голосовое подруге','Пять итальянских слов','Свеча или любимый парфюм'],
+  '30': ['Ванна','Прогулка новым маршрутом','Итальянский фильм или подкаст','Собрать образ из шкафа','Купить себе цветы'],
+  'we': ['Выставка или музей','Кофе с подругой','Красивое место в городе','Книжный клуб']
+};
+const pAvg = x => x.n ? Math.round(x.sum / x.n * 10) / 10 : null;
+const savePm = () => Store.set('pm', S.pm);
+function pmSorted(list){ return [...list].sort((a, b) => (pAvg(b) ?? -1) - (pAvg(a) ?? -1)); }
+function pmModal(){
+  const has = S.pm.length;
+  modal(`<h2>Меню удовольствий</h2><p class="lead">Маленькие радости не про еду. Сделала — отметь и оцени, насколько было приятно. Со временем станет видно, что радует тебя по-настоящему.</p>
+    ${PDUR.map(([k, l]) => { const items = pmSorted(S.pm.filter(x => x.d === k)); return `<div class="field"><label>${l[0].toUpperCase() + l.slice(1)}</label>
+      ${items.length ? `<div class="pmlist">${items.map(x => `<div class="pmrow"><button class="pmdo" data-act="pm-do" data-v="${x.id}">${esc(x.t)}${pAvg(x) != null ? `<small>♡ ${num(pAvg(x))} · ${x.n} ${plural(x.n,'раз','раза','раз')}</small>` : '<small>ещё не пробовала</small>'}</button><button class="x" data-act="pm-del" data-v="${x.id}" aria-label="Удалить">×</button></div>`).join('')}</div>` : ''}
+      ${(ideas => ideas.length ? `<div class="chips" style="margin-top:${items.length ? 8 : 0}px">${ideas.map(t => `<button class="chip ghostchip" data-act="pm-seed" data-d="${k}" data-t="${esc(t)}">+ ${esc(t)}</button>`).join('')}</div>` : '')(PSEED[k].filter(t => !S.pm.some(x => x.t === t)))}</div>`; }).join('')}
+    <div class="field"><label for="pm_t">Своё</label><input class="inp" id="pm_t" maxlength="40" placeholder="например, полить цветы и послушать джаз">
+      <div class="chips" style="margin-top:8px">${PDUR.map(([k, l], i) => `<button class="chip ${i === 0 ? 'on' : ''}" data-act="pm-dur" data-v="${k}">${l}</button>`).join('')}</div></div>
+    <button class="btn full" style="margin-top:12px" data-act="pm-add">Добавить в меню</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="pm-quick">Уже сделала что-то своё — отметить сразу</button>
+    <button class="btn ghost full" style="margin-top:8px" data-act="bg-close">Готово</button>`);
+}
+function pmRate(id){ const x = S.pm.find(p => p.id === id); if (!x) return;
+  modal(`<h2>${esc(x.t)}</h2><p class="lead">Насколько было приятно? 0 — никак, 10 — очень.</p>
+    <div class="scale" style="grid-template-columns:repeat(6,1fr)">${Array.from({length: 11}, (_, i) => `<button class="chip" data-act="pm-score" data-id="${id}" data-v="${i}">${i}</button>`).join('')}</div>`); }
+/* ---------- действия ---------- */
+async function patchDay(p){ const v = S.view; S.days[v] = Object.assign({}, S.days[v] || {}, p); render(); await saveDays(v); }
+async function compress(file, steps=[[640,.7],[540,.62],[440,.55],[360,.5]], limit=56000){
+  const url = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+  const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+  let out = '';
+  for (const [side, q] of steps) {
+    const k = Math.min(1, side / Math.max(img.width, img.height)), cv = document.createElement('canvas');
+    cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    out = cv.toDataURL('image/jpeg', q); if (out.length < limit) break;
+  }
+  return out;
+}
+const A = {
+  bg: (b, e) => { if (e.target === b) close(); },
+  day: b => { const n = addDays(S.view, +b.dataset.v); if (n <= today() && n >= addDays(today(), -13)) { S.view = n; S.editing = null; render(); } },
+  w: b => { const k = b.dataset.v, cur = (S.days[S.view] || {}).w || []; haptic();
+    patchDay({w: cur.includes(k) ? cur.filter(x => x !== k) : [...cur, k]}); },
+  we: b => { const d = S.days[S.view] || {}, k = b.dataset.v; haptic();
+    patchDay(d.e === k ? {e:null, k:null} : {e:k, k:S.cfg.we[+b.dataset.i]}); },
+  rit: b => { const d = S.days[S.view] || {}, id = b.dataset.v, r = d.r || []; haptic();
+    patchDay({r: r.includes(id) ? r.filter(x => x !== id) : [...r, id]}); },
+  'rit-edit': () => { const rit = S.cfg.rit || [];
+    modal(`<h2>Ритуалы</h2><p class="lead">То, что делаешь каждый день. Названия видишь только ты — они хранятся в облаке Телеграма, а не в коде.</p>
+      ${rit.length ? `<ul class="myl">${rit.map(x => `<li><span>${esc(x.t)}</span><button class="x" data-act="rit-del" data-v="${x.id}" aria-label="Удалить">×</button></li>`).join('')}</ul>` : ''}
+      <input class="inp" id="rit_t" maxlength="30" placeholder="например, витамин D">
+      <button class="btn full" style="margin-top:14px" data-act="rit-add">Добавить</button>
+      <button class="btn ghost full" style="margin-top:8px" data-act="bg-close">Готово</button>`); },
+  'rit-when': b => { b.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); },
+  'rit-add': async () => { const t = document.getElementById('rit_t').value.trim().slice(0,30); if (!t) { toast('Впиши название'); return; }
+    const w = 'm';
+    S.cfg.rit = [...(S.cfg.rit || []), {id: Date.now().toString(36).slice(-5), t, w}].slice(0, 12); await saveCfg(); render(); A['rit-edit'](); },
+  'rit-del': async b => { S.cfg.rit = (S.cfg.rit || []).filter(x => x.id !== b.dataset.v); await saveCfg(); render(); A['rit-edit'](); },
+  vocab: () => modal(`<h2>Мой итальянский</h2><p class="lead">Вставь слова с занятия — каждое с новой строки, через тире: <i>parola — слово</i>. Они заменят фразы дня, а ещё будут появляться в «Тянет заесть».</p>
+    <textarea class="inp" id="voc" style="min-height:220px" placeholder="ciao — привет&#10;grazie — спасибо">${esc(S.vocabRaw)}</textarea>
+    <button class="btn full" style="margin-top:14px" data-act="vocab-save">Сохранить</button>`),
+  'vocab-save': async () => { const t = document.getElementById('voc').value.replace(/\r/g,'').trim().slice(0, 30000);
+    await saveVocab(t); close(); render(); toast(S.vocab.length ? `Слов в словаре: ${S.vocab.length} ♡` : 'Словарь пуст — снова будут фразы дня'); },
+  known: async b => { S.known = [...new Set([...(S.known || []), b.dataset.v])]; await Store.set('known', S.known); toast('Отлично, это слово больше не покажу ♡');
+    render(); const m = document.getElementById('mwords'); if (m) m.innerHTML = wordsList(true); },
+  wpd: async b => { S.cfg.wpd = +b.dataset.v; await saveCfg(); render(); settings(); },
+  'known-reset': async () => { S.known = []; await Store.set('known', []); render(); settings(); toast('Все слова снова в ротации'); },
+  sleep: b => { const d = S.days[S.view] || {}, k = +b.dataset.v; haptic(); patchDay({sl: d.sl === k ? null : k}); },
+  mood: b => { const d = S.days[S.view] || {}, k = b.dataset.v; haptic(); patchDay({m: d.m === k ? null : k}); },
+  settings, result: b => resultModal(+b.dataset.v),
+  fitpick: b => { b.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b && !b.classList.contains('on'))); },
+  fit2: b => { const it = ctrlItems()[+b.dataset.i]; const on = !b.classList.contains('on');
+    b.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b && on)); RS.fits[it] = on ? b.dataset.v : null; },
+  'res-2': () => resultStep2(),
+  'res-view': b => resultSummary(+b.dataset.v, false),
+  'res-next': () => { close(); petals(); scrollTo({top: 0, behavior: 'smooth'}); toast('Новый спринт начался ♡'); },
+  tab: b => { S.tab = b.dataset.v; render(); scrollTo(0, 0); },
+  photo: () => { if (S.photos.length >= 12) { toast('На доске уже 12 картинок — убери одну, чтобы добавить новую'); return; } document.getElementById('file').click(); },
+  viewpin: b => modal(`<div class="viewer"><img src="${S.photos.find(p => p.id === b.dataset.v).src}" alt="Моя картинка">
+    <div class="two"><button class="btn ghost" data-act="bg-close">Закрыть</button><button class="btn ghost" data-act="delpin" data-v="${b.dataset.v}">Убрать с доски</button></div></div>`),
+  'bg-close': () => close(),
+  delpin: async b => { await deletePhoto(b.dataset.v); close(); render(); },
+  moti: () => modal(`<h2>Мои слова</h2><p class="lead">Они будут под твоей доской каждый раз, когда откроешь трекер.</p>
+    <div class="field"><label>Контрольные вещи для примерки в конце спринта</label>
+      ${[0,1,2].map(i => `<input class="inp" id="m_i${i}" style="margin-top:${i ? 8 : 0}px" value="${esc(ctrlItems()[i] || '')}" placeholder="${['Брюки','Юбка','Вторая юбка, по желанию'][i]}">`).join('')}</div>
+    <div class="field"><label for="m_w">Слова для себя</label><textarea class="inp" id="m_w" placeholder="например, хочу летом надеть эту юбку и чувствовать себя лёгкой">${esc(S.cfg.why)}</textarea></div>
+    <button class="btn full" style="margin-top:16px" data-act="moti-save">Сохранить</button>`),
+  'moti-save': async () => { S.cfg.items = [0,1,2].map(i => document.getElementById('m_i' + i).value.trim().slice(0,24)).filter(Boolean);
+    if (!S.cfg.items.length) S.cfg.items = ['Брюки','Юбка'];
+    S.cfg.why = document.getElementById('m_w').value.trim().slice(0,160); await saveCfg(); close(); render(); },
+  dolce: () => dolceStart(),
+  bella: () => { const bu = blooms();
+    modal(`<h2>${esc(S.cfg.girl)}</h2><p class="lead">Её образ расцветает от того, что ты делаешь для себя, а не от весов. Силуэт меняется только в день итогов спринта, чуть-чуть, и никогда не идёт назад.</p>
+      <ul class="bl">${BLOOM.map(b => `<li class="${bu[b[0]] ? '' : 'no'}"><i>${bu[b[0]] ? '♡' : '·'}</i><span>${b[1]}<small>${bu[b[0]] ? 'уже есть' : b[2]}</small></span></li>`).join('')}</ul>
+      <div class="field"><label for="gname">Как её зовут</label><input class="inp" id="gname" value="${esc(S.cfg.girl)}"></div>
+      <button class="btn full" style="margin-top:14px" data-act="gname-save">Готово</button>`); },
+  'gname-save': async () => { S.cfg.girl = document.getElementById('gname').value.trim().slice(0,20) || 'Bella'; await saveCfg(); close(); render(); },
+  cyc: async () => { const v = today(); let c = S.cfg.cyc || [];
+    c = c.includes(v) ? c.filter(x => x !== v) : [...c.filter(x => Math.abs(diff(x, v)) > 10), v].sort().slice(-12);
+    S.cfg.cyc = c; haptic(); await saveCfg(); render(); settings(); toast(c.includes(v) ? 'Записала: день 1 ♡' : 'Отменила'); },
+  cycset: async () => { const n = val('cycn');
+    if (!n || n < 1 || n > 60) { toast('Впиши день цикла числом'); return; }
+    const start = addDays(today(), -(Math.round(n) - 1));
+    S.cfg.cyc = [...(S.cfg.cyc || []).filter(x => Math.abs(diff(x, start)) > 10), start].sort().slice(-12);
+    await saveCfg(); render(); settings(); toast(`Запомнила: день ${Math.round(n)}. Дальше считаю сама ♡`); },
+  'morning-ok': async () => { S.cfg.seen = today(); await saveCfg(); close(); },
+  why: async b => { const r = b.dataset.v;
+    if (r === 'h') { await logUrge('h', 'e');
+      modal(`<h2>Это голод, и это нормально</h2><div class="tip">Голод не нужно пережидать. Поешь по-человечески, лучше что-то с белком: творог, яйцо, кусочек курицы из рациона. Это не срыв, это забота.</div>${itCard()}<button class="btn full" data-act="bg-close">Пойду поем</button>`); return; }
+    U = {r}; intensityBefore(); },
+  ib: b => { U.b = +b.dataset.v; chooseSwitch(); },
+  opt: b => { U.opt = b.dataset.v; surf(); },
+  nextit: () => { itIdx++; document.getElementById('itbox').innerHTML = itCard(); },
+  stdopts: () => chooseSwitch(true),
+  pm: () => pmModal(),
+  'pm-quick': () => modal(`<h2>Что было приятного?</h2><p class="lead">Своими словами — и сразу оценка. Это попадёт и в сегодняшний день, и в твоё меню удовольствий.</p>
+    <input class="inp" id="pq_t" maxlength="40" placeholder="например, посидела на солнце с книгой">
+    <div class="chips" style="margin-top:10px">${PDUR.map(([k, l], i) => `<button class="chip ${i === 0 ? 'on' : ''}" data-act="pm-dur" data-v="${k}">${l}</button>`).join('')}</div>
+    <p class="small muted" style="margin:14px 0 8px">Насколько было приятно? 0 — никак, 10 — очень.</p>
+    <div class="scale" style="grid-template-columns:repeat(6,1fr)">${Array.from({length: 11}, (_, i) => `<button class="chip" data-act="pm-quick-save" data-v="${i}">${i}</button>`).join('')}</div>`),
+  'pm-quick-save': async b => { const t = document.getElementById('pq_t').value.trim().slice(0,40); if (!t) { toast('Сначала впиши, что это было'); return; }
+    const dd = (document.querySelector('[data-act="pm-dur"].on') || {}).dataset?.v || '5', sc = +b.dataset.v;
+    let x = S.pm.find(p => p.t.toLowerCase() === t.toLowerCase());
+    if (!x) { x = {id: Date.now().toString(36).slice(-5), t, d: dd, n: 0, sum: 0}; S.pm = [...S.pm, x].slice(-40); }
+    x.n++; x.sum += sc; await savePm();
+    const v = S.view, d = S.days[v] || {}; S.days[v] = Object.assign({}, d, {pl: [...(d.pl || []), [x.id, sc]].slice(-8)}); await saveDays(v);
+    haptic(); close(); render(); toast(sc >= 7 ? 'Записала. Похоже, это твоё ♡' : 'Записала ♡'); },
+  'pm-seed': async b => { S.pm.push({id: Date.now().toString(36).slice(-5) + Math.random().toString(36).slice(2,4), t: b.dataset.t, d: b.dataset.d, n: 0, sum: 0}); await savePm(); b.remove(); toast('В меню ♡'); },
+  'pm-dur': b => { b.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); },
+  'pm-add': async () => { const t = document.getElementById('pm_t').value.trim().slice(0,40); if (!t) { toast('Впиши, что радует'); return; }
+    const d = (document.querySelector('[data-act="pm-dur"].on') || {}).dataset?.v || '5';
+    S.pm = [...S.pm, {id: Date.now().toString(36).slice(-5), t, d, n: 0, sum: 0}].slice(-40); await savePm(); pmModal(); },
+  'pm-del': async b => { S.pm = S.pm.filter(x => x.id !== b.dataset.v); await savePm(); pmModal(); },
+  'pm-do': b => pmRate(b.dataset.v),
+  'pm-score': async b => { const x = S.pm.find(p => p.id === b.dataset.id); if (!x) return; const sc = +b.dataset.v;
+    x.n++; x.sum += sc; await savePm();
+    const v = S.view, d = S.days[v] || {}; S.days[v] = Object.assign({}, d, {pl: [...(d.pl || []), [x.id, sc]].slice(-8)}); await saveDays(v);
+    haptic(); close(); render(); toast(sc >= 7 ? 'Записала. Похоже, это твоё ♡' : 'Записала ♡'); },
+  words: () => modal(`<h2>Parole del giorno</h2><p class="lead">«Знаю» — и слово сменится на новое.</p><div id="mwords">${wordsList(true)}</div>
+    <button class="btn full" style="margin-top:16px" data-act="bg-close">Grazie</button>`),
+  'ex-list': b => exList(b.dataset.v || ''),
+  'ex-open': b => { EXS.id = b.dataset.v; EXS.i = 0; exStep(); },
+  'ex-open-tab': b => { EXS = {from: '', id: b.dataset.v, i: 0}; exStep(); },
+  'ex-next': () => { EXS.i++; exStep(); },
+  'ex-done': () => { if (EXS.from === 'dolce') { U.opt = ''; A['wave-end'](); } else { close(); toast('Grazie ♡'); } },
+  'wave-end': () => modal(`<h2>Прошло?</h2><p class="lead">Честно, без оценок.</p>
+    <div class="two"><button class="btn" data-act="passed" data-v="1">Да</button><button class="btn ghost" data-act="passed" data-v="0">Нет</button></div>`),
+  passed: async b => {
+    if (b.dataset.v === '0') { await logUrge(U.r, 'a', U.b, 0, U.opt);
+      const st = S.cfg.swst || {}; if (U.opt && !U.opt.startsWith('L:')) { const [t, p] = st[U.opt] || [0, 0]; st[U.opt] = [t + 1, p]; S.cfg.swst = st; saveCfg(); }
+      modal(`<h2>Тогда съешь спокойно</h2><p class="lead">Так бывает, и это нормально. Выбери то, что правда хочется, положи на красивую тарелку и ешь медленно, без телефона и без вины. Одна порция dolce ничего не ломает.</p><button class="btn full" data-act="bg-close">Хорошо</button>`);
+      render(); return; }
+    const pre = U.opt ? swText(U.opt) : '';
+    const lib = [...S.lib].sort((a, b) => b.n - a.n).filter(x => x.t.toLowerCase().trim() !== pre.toLowerCase().trim()).slice(0, 6);
+    modal(`<h2>Что помогло?</h2><p class="lead">Своими словами. В следующий раз твои приёмы будут первыми.</p>
+      ${lib.length ? `<div class="chips" style="margin-bottom:10px">${lib.map(x => `<button class="chip" data-act="helped-pick" data-t="${esc(x.t)}">${esc(x.t)}</button>`).join('')}</div>` : ''}
+      <input class="inp" id="helped" maxlength="60" value="${esc(pre)}" placeholder="например, вышла на балкон и подышала">
+      <button class="btn full" style="margin-top:14px" data-act="helped-save">Сохранить</button>
+      <button class="btn ghost full" style="margin-top:8px" data-act="helped-skip">Не знаю, пропустить</button>`); },
+  'helped-pick': b => { document.getElementById('helped').value = b.dataset.t; },
+  'helped-save': async () => { const t = document.getElementById('helped').value.trim().slice(0,60);
+    let id = '';
+    if (t) { const key = t.toLowerCase().replace(/\s+/g, ' ');
+      let x = S.lib.find(l => l.t.toLowerCase().replace(/\s+/g, ' ') === key);
+      if (x) x.n++; else { x = {id: Date.now().toString(36).slice(-5), t, n: 1}; S.lib.push(x); }
+      S.lib = S.lib.sort((a, b) => b.n - a.n).slice(0, 30); id = x.id; await Store.set('lib', S.lib); }
+    await A.winDone(id); },
+  'helped-skip': async () => { await A.winDone(''); },
+  winDone: async id => {
+    const st = S.cfg.swst || {}; if (U.opt && !U.opt.startsWith('L:')) { const [t, p] = st[U.opt] || [0, 0]; st[U.opt] = [t + 1, p + 1]; S.cfg.swst = st; saveCfg(); }
+    await logUrge(U.r, 'p', U.b, 0, U.opt, id); haptic();
+    const w = wins();
+    modal(`<h2>Brava!</h2><p class="lead">Волна прошла, а ты осталась собой. В копилке побед уже <b>${w}</b> ${plural(w,'волна','волны','волн')}.</p>${itCard()}<button class="btn full" data-act="bg-close">Grazie</button>`);
+    render(); },
+  'close-day': async () => { const v = S.view;
+    S.days[v] = Object.assign({}, S.days[v] || {}, {done: 1}); S.editing = null; await saveDays(v); haptic();
+    const cnt = Object.values(S.days).filter(x => x && x.done).length;
+    petals();
+    const ph = IT[Math.floor(Math.random() * IT.length)];
+    modal(`<div class="celebr">${ART.flower}<p class="big">Giornata completata</p><p style="margin:0 0 4px">День записан ♡</p>
+      <p class="small muted" style="margin:0 0 16px">Это твой ${cnt}-й записанный день. Каждый из них — забота о себе.</p>
+      <div class="it">${ART.tile}<p class="ph">${ph[0]}</p><p class="tr">${ph[1]}</p></div>
+      <button class="btn full" data-act="day-ok">Grazie</button></div>`); render(); },
+  'day-ok': () => { close(); scrollTo({top: 0, behavior: 'smooth'}); },
+  'edit-day': () => { S.editing = S.view; render(); },
+  over: () => { U = {};
+    modal(`<h2>Это эпизод, а не провал</h2>
+      <div class="tip">Один раз съесть больше — это не «всё испорчено». Не нужно ничего компенсировать: следующий приём пищи — как обычно, без наказаний и пропусков. Ты по-прежнему на своём пути.</div>
+      <p class="lead" style="margin-bottom:10px">Что было перед этим? Это просто подсказка на будущее.</p>
+      <div class="chips">${['t','s','a','l','b','h','p','y'].map(k => `<button class="chip" data-act="over-why" data-v="${k}">${REASON[k][0].toUpperCase() + REASON[k].slice(1)}</button>`).join('')}</div>`); },
+  'over-why': async b => { const t = today(), d = S.days[t] || {}; const x = (d.x || []).slice(-4);
+    x.push([new Date().getHours(), b.dataset.v]); S.days[t] = Object.assign({}, d, {x}); await saveDays(t);
+    modal(`<h2>Записала</h2><p class="lead">${b.dataset.v === 'y' ? 'Вкусная еда — это нормально, и удовольствие от неё тоже.' : `Перед этим была ${REASON[b.dataset.v]}. Это ценная подсказка, а не повод себя ругать.`} Будь к себе сейчас так же добра, как была бы к подруге.</p>
+      <div class="it">${ART.tile}<p class="ph">Sii dolce con te stessa</p><p class="tr">Будь нежна к себе</p></div>
+      <button class="btn full" data-act="bg-close">Grazie</button>
+      <button class="btn ghost full" style="margin-top:8px" data-act="ex-open-tab" data-v="chain">Разобрать цепочку событий</button>`); render(); },
+  help: () => modal(`<h2>Как пользоваться</h2><p class="lead">Всё сохраняется само — кнопки «Сохранить» нет. Когда цифра записалась, появляется «Сохранено ✓».</p>
+    <div class="help">
+    <details><summary>Бот</summary>
+      <p>Бот — будильник: сам пишет тебе, но на сообщения не отвечает и не видит, что ты внесла в приложение.</p>
+      <ul><li><b>9:00</b> — итальянская фраза дня с переводом и произношением.</li>
+      <li><b>21:00</b> — мягкое напоминание записать день. В пятницу — совет про выходные, в воскресенье — отметить выходные хотя бы примерно.</li>
+      <li><b>Последний день спринта</b> — напоминание открыть итоги.</li>
+      <li><b>Кнопка Dolce Cura</b> слева от поля ввода открывает приложение.</li></ul>
+      <p>В Apps Script: <b>pause</b> выключает напоминания (отпуск, болезнь), <b>resume</b> включает обратно.</p></details>
+    <details><summary>Мой день</summary>
+      <ul><li><b>Bella</b> — её образ собирается из твоих заботливых дел, силуэт меняется только по итогам спринтов. Нажми на неё, чтобы увидеть, что уже есть и что будет дальше.</li>
+      <li><b>Спринт</b> — день из 14 и фраза дня.</li>
+      <li><b>Ритуалы</b> — простой список с галочками: витамины, уход, движение. Настраиваются прямо в карточке «Сегодня».</li>
+      <li><b>Сегодня</b> — калории, шаги, силовая и пилатес, кардио в минутах. На выходных можно просто выбрать «как в будни», «чуть больше» или «праздник». Стрелки ‹ › — вернуться до двух недель назад.</li>
+      <li><b>Заметки</b> — одно поле без ограничений: еда, мысли, что было приятного. Сохраняется само.</li>
+      <li><b>Как ты?</b> — настроение, сон и удовольствие не про еду. Лучше вечером.</li>
+      <li><b>Неделя</b> — тренировки, шаги, среднее по калориям и итоги «Тянет заесть».</li></ul></details>
+    <details><summary>Спринты</summary>
+      <ul><li><b>Мои спринты</b> — копилка побед и итоги каждого спринта: примерка, вес, наблюдения. «Открыть итоги» показывает их снова.</li>
+      <li><b>Когда тянет</b> — карта: в какое время, почему, будни или выходные.</li>
+      <li><b>Упражнения</b> — пять коротких техник из психологии привычек: «Перемотай плёнку», «5-4-3-2-1», «Весы решения», «Цепочка событий», «Противоположное действие». Они же есть в «Тянет заесть».</li></ul></details>
+    <details><summary>Мудборд</summary>
+      <p>До 12 картинок, которые вдохновляют. Нажми на картинку, чтобы открыть крупно или убрать.</p></details>
+    <details><summary>Тянет заесть</summary>
+      <ol><li><b>Что на самом деле?</b> Голод — тогда просто нормально поесть. Или усталость, грусть, злость и тревога, одиночество, скука, «просто хочу сладкого».</li>
+      <li><b>Насколько сильно?</b> От 1 до 10.</li>
+      <li><b>Что попробуешь?</b> Сначала твои приёмы, которые уже помогали, и планы «если — то». «Другие варианты» — стандартные подсказки.</li>
+      <li><b>Сёрфинг</b> — волна, таймер на 10 минут и подсказки.</li>
+      <li><b>Прошло?</b> Да или нет. Если да — напиши своими словами, что помогло. Эти приёмы в следующий раз будут первыми, а победа попадёт в копилку.</li></ol>
+      <p><b>«Я уже переела»</b> — не отчёт, а поддержка: следующий приём пищи как обычно, без наказаний.</p>
+      <p>Свои переключалки добавляются в ⚙︎ → «Мои переключалки».</p></details>
+    <details><summary>Раз в две недели</summary>
+      <p>В последний день спринта появится карточка «Итоги спринта». Утром, до завтрака: примерка контрольных вещей (давят / давят меньше / свободно), весы, потом экран итогов — вес, копилка побед, твои топ-приёмы, наблюдения по сну, тренировкам и циклу, мягкие ачивки. Если это дни перед месячными, можно взвеситься через пару дней — карточка подождёт.</p></details>
+    <details><summary>Цикл</summary>
+      <p>Всё про цикл — в ⚙︎. Один раз впиши, какой сегодня день, дальше приложение считает само по средней длине. Когда начнутся месячные, нажми там «Месячные начались сегодня». Данные используются в итогах спринта и подсказках.</p></details>
+    <details><summary>Если что-то не так</summary>
+      <ul><li>Не видно обновлений — в приложении «…» → Reload Page.</li>
+      <li>Внизу надпись «Сейчас это превью» — данные не попадают в облако Телеграма, открой приложение через кнопку в боте.</li>
+      <li>Раз в месяц полезно сохранить ⚙︎ → «Резервная копия» себе в «Избранное».</li></ul></details>
+    </div>
+    <button class="btn full" style="margin-top:14px" data-act="bg-close">Понятно</button>`),
+  mysw: () => { const my = S.cfg.mysw || [];
+    modal(`<h2>Мои переключалки</h2><p class="lead">То, что помогает именно тебе. Они будут появляться среди вариантов, а те, после которых чаще «отпускает», — чаще.</p>
+      ${my.length ? `<ul class="myl">${my.map(o => `<li><span>${esc(o[1])}</span><button class="x" data-act="mysw-del" data-v="${o[0]}" aria-label="Удалить">×</button></li>`).join('')}</ul>` : ''}
+      <div class="inrow"><input class="inp" id="mysw_in" maxlength="60" placeholder="например, полить цветы" style="max-width:none"><button class="btn" data-act="mysw-add">Добавить</button></div>
+      <button class="btn ghost full" style="margin-top:14px" data-act="bg-close">Готово</button>`); },
+  'mysw-add': async () => { const v = document.getElementById('mysw_in').value.trim(); if (!v) return;
+    S.cfg.mysw = [...(S.cfg.mysw || []), ['m' + Date.now().toString(36).slice(-5), v.slice(0,60)]].slice(-12); await saveCfg(); A.mysw(); },
+  'mysw-del': async b => { S.cfg.mysw = (S.cfg.mysw || []).filter(o => o[0] !== b.dataset.v); await saveCfg(); A.mysw(); },
+  onb: async () => {
+    const d = document.getElementById('o_d').value || today(), w = val('o_w'), wa = val('o_wa');
+    Object.assign(S.cfg, {onb:true, start:d, name: document.getElementById('o_n').value.trim().slice(0,20), goal: val('o_g') || null});
+    if (w) { S.meas = S.meas.filter(m => m.n !== 0); S.meas.push({n:0, d, w, wa}); }
+    S.cfg.seen = today(); await Promise.all([saveCfg(), Store.set('meas', S.meas)]); render();
+    modal(`<div class="morning">${ART.flower}<p class="muted small" style="margin:6px 0 0">Первый день</p>
+      <p class="q">Не нужно всё сразу. Просто начни — и будь к себе нежной по дороге.</p><button class="btn full" data-act="bg-close">Начинаем ♡</button></div>`);
+  },
+  'res-save': async () => {
+    const n = RS.n, w = val('r_w'), wa = val('r_wa'), note = document.getElementById('r_n').value.trim().slice(0,200);
+    S.meas = S.meas.filter(m => m.n !== n); S.meas.push({n, d: today(), w, wa, fits: RS.fits});
+    if (note) S.notes[n] = note;
+    await Promise.all([Store.set('meas', S.meas), Store.set('notes', S.notes)]); render(); resultSummary(n, true);
+  },
+  'res-skip': async b => { S.cfg.skip = [...(S.cfg.skip || []), +b.dataset.v]; await saveCfg(); close(); render(); },
+  'set-save': async () => {
+    const c = S.cfg;
+    Object.assign(c, {name: document.getElementById('c_n').value.trim() || c.name, kcal: val('c_k') || c.kcal, steps: val('c_st') || c.steps,
+      s: val('c_s') ?? c.s, p: val('c_p') ?? c.p, cmin: val('c_c') || c.cmin || 130, start: document.getElementById('c_d').value || c.start,
+      we: [val('c_e0') || c.we[0], val('c_e1') || c.we[1], val('c_e2') || c.we[2]], goal: val('c_g') || c.goal || null, clen: Math.min(45, Math.max(20, val('c_cl') || c.clen || 28))});
+    await saveCfg(); close(); render(); toast('Сохранено');
+  },
+  export: () => { const data = JSON.stringify({cfg:S.cfg, days:S.days, good:S.good, meas:S.meas, notes:S.notes});
+    modal(`<h2>Резервная копия</h2><p class="lead">Скопируй и сохрани себе в «Избранное». Картинки в копию не входят.</p><textarea class="inp" readonly style="min-height:140px;font-size:12px">${esc(data)}</textarea>`); }
+};
+let noteTimer = null;
+function noteGrow(el){ el.style.height = 'auto'; el.style.height = Math.max(96, el.scrollHeight + 2) + 'px'; }
+document.addEventListener('input', e => { if (e.target.id !== 'notes') return; noteGrow(e.target);
+  const v = S.view; S.eat[v] = e.target.value; if (S.good[v] && !e.target.value.includes(S.good[v])) { S.good[v] = ''; saveMonth(v, 'g', S.good); }
+  clearTimeout(noteTimer); noteTimer = setTimeout(() => saveEat(v), 800); });
+document.addEventListener('focusout', e => { if (e.target.id === 'notes') { clearTimeout(noteTimer); saveEat(S.view); toast('Сохранено ✓'); } });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'notes') return; if (e.key === 'Enter' && e.target.matches && e.target.matches('input.inp')) e.target.blur(); });
+document.addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (b && A[b.dataset.act]) A[b.dataset.act](b, e); });
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.id === 'file') { const f = el.files && el.files[0]; el.value = ''; if (!f) return;
+    try { const src = await compress(f); await savePhoto(src); render(); toast('Картинка на доске'); }
+    catch (err) { toast('Не получилось загрузить, попробуй другую картинку'); } return; }
+  if (el.dataset.g) { const v = S.view; S.good[v] = el.value.trim().slice(0,80); await saveMonth(v, 'g', S.good); toast('Записала ♡'); return; }
+  const f = el.dataset.f; if (!f) return;
+  const v = parseFloat(String(el.value).replace(/\s/g,'').replace(',', '.'));
+  const p = {[f]: isNaN(v) ? null : Math.round(v)}; if (f === 'k') p.e = null; if (f === 'cm') p.w = ((S.days[S.view] || {}).w || []).filter(x => x !== 'c'); await patchDay(p); toast('Сохранено ✓');
+});
+
+(async () => {
+  try { await load(); } catch (e) { console.error(e); }
+  if (!S.cfg.start) S.cfg.start = today();
+  document.getElementById('fab').hidden = false;
+  render();
+  if (!S.cfg.onb) onboarding();
+  else if (/[?&]go=dolce/.test(location.search) || (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param === 'dolce')) dolceStart();
+  else if (new Date().getHours() < 13 && S.cfg.seen !== today()) morningModal();
+})();
+</script>
+</body>
+</html>
